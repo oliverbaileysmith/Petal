@@ -1,0 +1,3 @@
+[submodule "Petal/external/spdlog"]
+	path = Petal/external/spdlog
+	url = https://github.com/gabime/spdlog
