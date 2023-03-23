@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Core.h"
+#include "Petal/Core.h"
 
 namespace ptl
 {

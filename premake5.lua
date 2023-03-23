@@ -3,8 +3,7 @@ workspace "Petal"
 	configurations
 	{
 		"Debug",
-		"Release",
-		"Dist"
+		"Release"
 	}
 
 	startproject "Sandbox"
@@ -27,7 +26,8 @@ project "Petal"
 
 	includedirs
 	{
-		"%{prj.name}/external/spdlog/include"
+		"%{prj.name}/external/spdlog/include",
+		"%{prj.name}/src"
 	}
 
 	filter "system:windows"
@@ -53,10 +53,6 @@ project "Petal"
 	filter "configurations:Release"
 		optimize "On"
 		defines "PTL_RELEASE"
-
-	filter "configurations:Dist"
-		optimize "On"
-		defines "PTL_DIST"
 
 project "Sandbox"
 	location "%{prj.name}"
@@ -100,7 +96,3 @@ project "Sandbox"
 	filter "configurations:Release"
 		optimize "On"
 		defines "PTL_RELEASE"
-
-	filter "configurations:Dist"
-		optimize "On"
-		defines "PTL_DIST"
