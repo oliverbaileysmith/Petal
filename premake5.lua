@@ -30,12 +30,24 @@ project "Petal"
 	includedirs
 	{
 		"%{prj.name}/src",
-		"%{prj.name}/external/spdlog/include"
+		"%{prj.name}/external/spdlog/include",
+		"%{prj.name}/external/GLFW/include"
+	}
+
+	libdirs
+	{
+		"%{prj.name}/external/GLFW/lib-vc2022"
+	}
+
+	links
+	{
+		"opengl32.lib",
+		"glfw3.lib"
 	}
 
 	filter "system:windows"
 		cppdialect "C++20"
-		staticruntime "On"
+		staticruntime "Off"
 		systemversion "latest"
 
 		defines
@@ -50,10 +62,12 @@ project "Petal"
 		}
 
 	filter "configurations:Debug"
+		runtime "Debug"
 		symbols "On"
 		defines "PTL_DEBUG"
 
 	filter "configurations:Release"
+		runtime "Release"
 		optimize "On"
 		defines "PTL_RELEASE"
 
