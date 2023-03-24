@@ -18,6 +18,9 @@ project "Petal"
 	targetdir ("bin/" .. outputDir .. "/%{prj.name}")
 	objdir ("bin-int/" .. outputDir .. "/%{prj.name}")
 
+	pchheader "ptlpch.h"
+	pchsource "%{prj.name}/src/ptlpch.cpp"
+
 	files
 	{
 		"%{prj.name}/src/**.h",

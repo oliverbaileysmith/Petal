@@ -1,3 +1,4 @@
+#include "ptlpch.h"
 #include "Petal/Log.h"
 
 #include "spdlog/sinks/stdout_color_sinks.h"
