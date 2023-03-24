@@ -29,8 +29,8 @@ project "Petal"
 
 	includedirs
 	{
-		"%{prj.name}/external/spdlog/include",
-		"%{prj.name}/src"
+		"%{prj.name}/src",
+		"%{prj.name}/external/spdlog/include"
 	}
 
 	filter "system:windows"
