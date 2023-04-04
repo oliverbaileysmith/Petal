@@ -1,14 +1,11 @@
 #include "ptlpch.h"
 #include "Petal/Application.h"
 
-#include "Petal/Events/MouseEvent.h"
-#include "Petal/Log.h"
-
 namespace ptl
 {
 	Application::Application()
 	{
-
+		m_Window = std::unique_ptr<Window>(Window::Create());
 	}
 
 	Application::~Application()
@@ -18,9 +15,9 @@ namespace ptl
 
 	void Application::Run()
 	{
-		MouseMoveEvent e(500.0f, 500.0f);
-		PTL_CORE_INFO(e);
-
-		while (true);
+		while (m_Running)
+		{
+			m_Window->OnUpdate();
+		}
 	}
 }

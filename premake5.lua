@@ -64,7 +64,11 @@ project "Petal"
 	filter "configurations:Debug"
 		runtime "Debug"
 		symbols "On"
-		defines "PTL_DEBUG"
+		defines
+		{
+			"PTL_DEBUG",
+			"PTL_ENABLE_ASSERTS"
+		}
 
 	filter "configurations:Release"
 		runtime "Release"
@@ -108,7 +112,11 @@ project "Sandbox"
 
 	filter "configurations:Debug"
 		symbols "On"
-		defines "PTL_DEBUG"
+		defines
+		{
+			"PTL_DEBUG",
+			"PTL_ENABLE_ASSERTS"
+		}
 
 	filter "configurations:Release"
 		optimize "On"

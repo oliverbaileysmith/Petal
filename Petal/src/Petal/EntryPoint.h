@@ -8,7 +8,7 @@ int main(int argc, char** argv)
 {
 	ptl::Log::Init();
 
-	PTL_CORE_TRACE("Initialized Log!");
+	PTL_CORE_TRACE("Initialized Log");
 
 	ptl::Application *app = ptl::CreateApplication();
 	app->Run();
