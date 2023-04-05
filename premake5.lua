@@ -10,6 +10,11 @@ workspace "Petal"
 
 outputDir = "%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}"
 
+includeDir = {}
+includeDir["glad"] = "Petal/external/glad/include"
+
+include "Petal/external/glad"
+
 project "Petal"
 	location "%{prj.name}"
 	kind "SharedLib"
@@ -31,7 +36,8 @@ project "Petal"
 	{
 		"%{prj.name}/src",
 		"%{prj.name}/external/spdlog/include",
-		"%{prj.name}/external/GLFW/include"
+		"%{prj.name}/external/GLFW/include",
+		"%{includeDir.glad}"
 	}
 
 	libdirs
@@ -42,7 +48,8 @@ project "Petal"
 	links
 	{
 		"opengl32.lib",
-		"glfw3.lib"
+		"glfw3.lib",
+		"glad"
 	}
 
 	filter "system:windows"
@@ -53,7 +60,8 @@ project "Petal"
 		defines
 		{
 			"PTL_PLATFORM_WINDOWS",
-			"PTL_BUILD_DLL"
+			"PTL_BUILD_DLL",
+			"GLFW_INCLUDE_NONE"
 		}
 
 		postbuildcommands

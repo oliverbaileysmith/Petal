@@ -6,6 +6,8 @@
 #include "Petal/Events/KeyEvent.h"
 #include "Petal/Events/MouseEvent.h"
 
+#include <glad/glad.h>
+
 namespace ptl
 {
 	static bool s_GLFWInitialized = false;
@@ -79,6 +81,12 @@ namespace ptl
 
 		m_Window = glfwCreateWindow(m_Data.Width, m_Data.Height, m_Data.Title.c_str(), nullptr, nullptr);
 		glfwMakeContextCurrent(m_Window);
+
+		// Load glad
+
+		int32_t status = gladLoadGLLoader((GLADloadproc)glfwGetProcAddress);
+		PTL_CORE_ASSERT(status, "Could not initialize glad");
+
 		glfwSetWindowUserPointer(m_Window, &m_Data);
 		SetVSync(true);
 		
