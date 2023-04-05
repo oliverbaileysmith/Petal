@@ -1,11 +1,30 @@
 #include <Petal.h>
 
+class ExampleLayer : public ptl::Layer
+{
+public:
+	ExampleLayer()
+		: Layer("Example")
+	{
+	}
+
+	virtual void OnUpdate() override
+	{
+		PTL_TRACE("ExampleLayer::OnUpdate");
+	}
+
+	virtual void OnEvent(ptl::Event& event) override
+	{
+		PTL_TRACE("{0}", event);
+	}
+};
+
 class Sandbox : public ptl::Application
 {
 public:
 	Sandbox()
 	{
-
+		PushLayer(new ExampleLayer());
 	}
 
 	~Sandbox()

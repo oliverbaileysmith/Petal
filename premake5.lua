@@ -64,6 +64,7 @@ project "Petal"
 	filter "configurations:Debug"
 		runtime "Debug"
 		symbols "On"
+		buildoptions "/MDd"
 		defines
 		{
 			"PTL_DEBUG",
@@ -73,6 +74,7 @@ project "Petal"
 	filter "configurations:Release"
 		runtime "Release"
 		optimize "On"
+		buildoptions "/MD"
 		defines "PTL_RELEASE"
 
 project "Sandbox"
@@ -112,6 +114,7 @@ project "Sandbox"
 
 	filter "configurations:Debug"
 		symbols "On"
+		buildoptions "/MDd"
 		defines
 		{
 			"PTL_DEBUG",
@@ -120,4 +123,5 @@ project "Sandbox"
 
 	filter "configurations:Release"
 		optimize "On"
+		buildoptions "/MD"
 		defines "PTL_RELEASE"
