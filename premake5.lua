@@ -12,8 +12,10 @@ outputDir = "%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}"
 
 includeDir = {}
 includeDir["glad"] = "Petal/external/glad/include"
+includeDir["ImGui"] = "Petal/external/imgui"
 
 include "Petal/external/glad"
+include "Petal/external/imgui"
 
 project "Petal"
 	location "%{prj.name}"
@@ -37,7 +39,8 @@ project "Petal"
 		"%{prj.name}/src",
 		"%{prj.name}/external/spdlog/include",
 		"%{prj.name}/external/GLFW/include",
-		"%{includeDir.glad}"
+		"%{includeDir.glad}",
+		"%{includeDir.ImGui}"
 	}
 
 	libdirs
@@ -49,7 +52,8 @@ project "Petal"
 	{
 		"opengl32.lib",
 		"glfw3.lib",
-		"glad"
+		"glad",
+		"ImGui"
 	}
 
 	filter "system:windows"
