@@ -5,8 +5,13 @@
 
 namespace ptl
 {
+	Application* Application::s_Instance = nullptr;
+
 	Application::Application()
 	{
+		PTL_CORE_ASSERT(!s_Instance, "Application already exists")
+		s_Instance = this;
+
 		m_Window = std::unique_ptr<Window>(Window::Create());
 		m_Window->SetEventCallback(BIND_EVENT_FN(Application::OnEvent));
 	}
@@ -45,21 +50,35 @@ namespace ptl
 	void Application::PushLayer(Layer* layer)
 	{
 		m_LayerStack.PushLayer(layer);
+		layer->Init();
 	}
 
 	void Application::PopLayer(Layer* layer)
 	{
 		m_LayerStack.PopLayer(layer);
+		layer->ShutDown();
 	}
 
 	void Application::PushOverlay(Layer* overlay)
 	{
 		m_LayerStack.PushOverlay(overlay);
+		overlay->Init();
 	}
 
 	void Application::PopOverlay(Layer* overlay)
 	{
 		m_LayerStack.PopOverlay(overlay);
+		overlay->ShutDown();
+	}
+
+	Application& Application::Get()
+	{
+		return *s_Instance;
+	}
+
+	Window& Application::GetWindow()
+	{
+		return *m_Window;
 	}
 
 	bool Application::OnWindowClose(WindowCloseEvent& event)
