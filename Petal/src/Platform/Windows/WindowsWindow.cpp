@@ -139,6 +139,14 @@ namespace ptl
 				}
 			});
 
+		glfwSetCharCallback(m_Window, [](GLFWwindow* window, uint32_t keyCode)
+			{
+				WindowData& data = *(WindowData*)glfwGetWindowUserPointer(window);
+
+				KeyTypeEvent event(keyCode);
+				data.EventCallback(event);
+			});
+
 		glfwSetMouseButtonCallback(m_Window, [](GLFWwindow* window, int32_t button, int32_t action, int32_t mods)
 			{
 				WindowData& data = *(WindowData*)glfwGetWindowUserPointer(window);

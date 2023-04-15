@@ -61,4 +61,24 @@ namespace ptl
 			return ss.str();
 		}
 	};
+
+	class PTL_API KeyTypeEvent : public KeyEvent
+	{
+	public:
+		KeyTypeEvent(const int32_t keyCode)
+			: KeyEvent(keyCode)
+		{
+		}
+		~KeyTypeEvent() = default;
+
+		static EventType GetStaticType() { return EventType::KeyType; }
+		virtual EventType GetEventType() const override { return GetStaticType(); }
+		virtual const char* GetName() const override { return "KeyTypeEvent"; }
+		virtual std::string ToString() const override
+		{
+			std::stringstream ss;
+			ss << "KeyTypeEvent: " << m_KeyCode;
+			return ss.str();
+		}
+	};
 }

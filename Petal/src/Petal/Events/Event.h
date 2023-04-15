@@ -10,7 +10,7 @@ namespace ptl
 		None,
 		AppTick, AppUpdate, AppRender,
 		WindowClose, WindowResize, WindowFocus, WindowUnfocus, WindowMove,
-		KeyPress, KeyRelease,
+		KeyPress, KeyRelease, KeyType,
 		MouseButtonPress, MouseButtonRelease, MouseMove, MouseScroll
 	};
 	
