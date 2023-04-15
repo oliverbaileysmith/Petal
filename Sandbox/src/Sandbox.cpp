@@ -10,7 +10,6 @@ public:
 
 	virtual void OnUpdate() override
 	{
-		PTL_TRACE("ExampleLayer::OnUpdate");
 	}
 
 	virtual void OnEvent(ptl::Event& event) override

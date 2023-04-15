@@ -106,7 +106,8 @@ project "Sandbox"
 	includedirs
 	{
 		"Petal/src",
-		"Petal/external/spdlog/include"
+		"Petal/external/spdlog/include",
+		"%{includeDir.ImGui}"
 	}
 
 	links
