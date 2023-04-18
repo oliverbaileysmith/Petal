@@ -34,6 +34,7 @@ namespace ptl
 		virtual void SetEventCallback(const std::function<void(Event&)>) = 0;
 		virtual void SetVSync(bool enabled) = 0;
 
+		virtual void* GetNativeWindow() const = 0;
 		virtual uint32_t GetWidth() const = 0;
 		virtual uint32_t GetHeight() const = 0;
 		virtual bool GetVSync() const = 0;

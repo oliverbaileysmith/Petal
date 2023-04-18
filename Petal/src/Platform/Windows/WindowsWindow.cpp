@@ -43,6 +43,11 @@ namespace ptl
 		m_Data.VSync = enabled;
 	}
 
+	void* WindowsWindow::GetNativeWindow() const
+	{
+		return m_Window;
+	}
+
 	uint32_t WindowsWindow::GetWidth() const
 	{
 		return m_Data.Width;

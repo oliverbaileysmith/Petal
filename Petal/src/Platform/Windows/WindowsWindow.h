@@ -17,6 +17,7 @@ namespace ptl
 		virtual void SetEventCallback(const std::function<void(Event&)> eventCallback) override;
 		virtual void SetVSync(bool enabled) override;
 
+		virtual void* GetNativeWindow() const override;
 		virtual uint32_t GetWidth() const override;
 		virtual uint32_t GetHeight() const override;
 		virtual bool GetVSync() const override;
