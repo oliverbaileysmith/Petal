@@ -8,19 +8,20 @@ workspace "Petal"
 
 	startproject "Sandbox"
 
-outputDir = "%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}"
+	outputDir = "%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}"
 
-includeDir = {}
-includeDir["glad"] = "Petal/external/glad/include"
-includeDir["ImGui"] = "Petal/external/imgui"
+	includeDir = {}
+	includeDir["glad"] = "Petal/external/glad/include"
+	includeDir["ImGui"] = "Petal/external/imgui"
 
-include "Petal/external/glad"
-include "Petal/external/imgui"
+	include "Petal/external/glad"
+	include "Petal/external/imgui"
 
 project "Petal"
 	location "%{prj.name}"
 	kind "SharedLib"
 	language "C++"
+	staticruntime "Off"
 
 	targetdir ("bin/" .. outputDir .. "/%{prj.name}")
 	objdir ("bin-int/" .. outputDir .. "/%{prj.name}")
@@ -58,7 +59,6 @@ project "Petal"
 
 	filter "system:windows"
 		cppdialect "C++20"
-		staticruntime "Off"
 		systemversion "latest"
 
 		defines
@@ -70,13 +70,12 @@ project "Petal"
 
 		postbuildcommands
 		{
-			("{COPY} %{cfg.buildtarget.relpath} ../bin/" .. outputDir .. "/Sandbox")
+			("{COPY} %{cfg.buildtarget.relpath} \"../bin/" .. outputDir .. "/Sandbox/\"")
 		}
 
 	filter "configurations:Debug"
 		runtime "Debug"
 		symbols "On"
-		buildoptions "/MDd"
 		defines
 		{
 			"PTL_DEBUG",
@@ -86,13 +85,13 @@ project "Petal"
 	filter "configurations:Release"
 		runtime "Release"
 		optimize "On"
-		buildoptions "/MD"
 		defines "PTL_RELEASE"
 
 project "Sandbox"
 	location "%{prj.name}"
 	kind "ConsoleApp"
 	language "C++"
+	staticruntime "Off"
 
 	targetdir ("bin/" .. outputDir .. "/%{prj.name}")
 	objdir ("bin-int/" .. outputDir .. "/%{prj.name}")
@@ -117,7 +116,6 @@ project "Sandbox"
 
 	filter "system:windows"
 		cppdialect "C++20"
-		staticruntime "On"
 		systemversion "latest"
 
 		defines
@@ -126,8 +124,8 @@ project "Sandbox"
 		}
 
 	filter "configurations:Debug"
+		runtime "Debug"
 		symbols "On"
-		buildoptions "/MDd"
 		defines
 		{
 			"PTL_DEBUG",
@@ -135,6 +133,6 @@ project "Sandbox"
 		}
 
 	filter "configurations:Release"
+		runtime "Release"
 		optimize "On"
-		buildoptions "/MD"
 		defines "PTL_RELEASE"
