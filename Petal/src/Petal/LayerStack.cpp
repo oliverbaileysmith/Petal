@@ -17,6 +17,7 @@ namespace ptl
 	void LayerStack::PushLayer(Layer* layer)
 	{
 		m_LayerInsertPos = m_Layers.emplace(m_LayerInsertPos, layer);
+		layer->Init();
 	}
 
 	void LayerStack::PopLayer(Layer* layer)
@@ -28,11 +29,13 @@ namespace ptl
 			m_Layers.erase(it);
 			m_LayerInsertPos--;
 		}
+		layer->ShutDown();
 	}
 
 	void LayerStack::PushOverlay(Layer* overlay)
 	{
 		m_Layers.emplace_back(overlay);
+		overlay->Init();
 	}
 
 	void LayerStack::PopOverlay(Layer* overlay)
@@ -43,6 +46,7 @@ namespace ptl
 		{
 			m_Layers.erase(it);
 		}
+		overlay->ShutDown();
 	}
 
 	std::vector<Layer*>::iterator LayerStack::begin()

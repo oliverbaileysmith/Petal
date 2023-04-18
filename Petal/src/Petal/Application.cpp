@@ -49,25 +49,21 @@ namespace ptl
 	void Application::PushLayer(Layer* layer)
 	{
 		m_LayerStack.PushLayer(layer);
-		layer->Init();
 	}
 
 	void Application::PopLayer(Layer* layer)
 	{
 		m_LayerStack.PopLayer(layer);
-		layer->ShutDown();
 	}
 
 	void Application::PushOverlay(Layer* overlay)
 	{
 		m_LayerStack.PushOverlay(overlay);
-		overlay->Init();
 	}
 
 	void Application::PopOverlay(Layer* overlay)
 	{
 		m_LayerStack.PopOverlay(overlay);
-		overlay->ShutDown();
 	}
 
 	Application& Application::Get()
