@@ -31,7 +31,7 @@ namespace ptl
 
 		static EventType GetStaticType() { return EventType::MouseButtonPress; }
 		virtual EventType GetEventType() const override { return GetStaticType(); }
-		virtual const char *GetName() const override { return "MouseButtonPressEvent"; }
+		virtual const char* GetName() const override { return "MouseButtonPressEvent"; }
 		virtual std::string ToString() const override
 		{
 			std::stringstream ss;
@@ -51,7 +51,7 @@ namespace ptl
 
 		static EventType GetStaticType() { return EventType::MouseButtonRelease; }
 		virtual EventType GetEventType() const override { return GetStaticType(); }
-		virtual const char *GetName() const override { return "MouseButtonReleaseEvent"; }
+		virtual const char* GetName() const override { return "MouseButtonReleaseEvent"; }
 		virtual std::string ToString() const override
 		{
 			std::stringstream ss;
@@ -74,7 +74,7 @@ namespace ptl
 
 		static EventType GetStaticType() { return EventType::MouseMove; }
 		virtual EventType GetEventType() const override { return GetStaticType(); }
-		virtual const char *GetName() const override { return "MouseMoveEvent"; }
+		virtual const char* GetName() const override { return "MouseMoveEvent"; }
 		virtual std::string ToString() const override
 		{
 			std::stringstream ss;
@@ -101,7 +101,7 @@ namespace ptl
 
 		static EventType GetStaticType() { return EventType::MouseScroll; }
 		virtual EventType GetEventType() const override { return GetStaticType(); }
-		virtual const char *GetName() const override { return "MouseScrollEvent"; }
+		virtual const char* GetName() const override { return "MouseScrollEvent"; }
 		virtual std::string ToString() const override
 		{
 			std::stringstream ss;

@@ -12,7 +12,7 @@ namespace ptl
 
 		static EventType GetStaticType() { return EventType::WindowClose; }
 		virtual EventType GetEventType() const override { return GetStaticType(); }
-		virtual const char *GetName() const override { return "WindowCloseEvent"; }
+		virtual const char* GetName() const override { return "WindowCloseEvent"; }
 	};
 
 	class PTL_API WindowResizeEvent : public Event
@@ -29,7 +29,7 @@ namespace ptl
 
 		static EventType GetStaticType() { return EventType::WindowResize; }
 		virtual EventType GetEventType() const override { return GetStaticType(); }
-		virtual const char *GetName() const override { return "WindowResizeEvent"; }
+		virtual const char* GetName() const override { return "WindowResizeEvent"; }
 		virtual std::string ToString() const override
 		{
 			std::stringstream ss;
@@ -50,7 +50,7 @@ namespace ptl
 
 		static EventType GetStaticType() { return EventType::WindowFocus; }
 		virtual EventType GetEventType() const override { return GetStaticType(); }
-		virtual const char *GetName() const override { return "WindowFocusEvent"; }
+		virtual const char* GetName() const override { return "WindowFocusEvent"; }
 	};
 
 	class PTL_API WindowUnfocusEvent : public Event
@@ -61,7 +61,7 @@ namespace ptl
 
 		static EventType GetStaticType() { return EventType::WindowUnfocus; }
 		virtual EventType GetEventType() const override { return GetStaticType(); }
-		virtual const char *GetName() const override { return "WindowUnfocusEvent"; }
+		virtual const char* GetName() const override { return "WindowUnfocusEvent"; }
 	};
 
 	class PTL_API WindowMoveEvent : public Event
@@ -78,7 +78,7 @@ namespace ptl
 
 		static EventType GetStaticType() { return EventType::WindowMove; }
 		virtual EventType GetEventType() const override { return GetStaticType(); }
-		virtual const char *GetName() const override { return "WindowMoveEvent"; }
+		virtual const char* GetName() const override { return "WindowMoveEvent"; }
 		virtual std::string ToString() const override
 		{
 			std::stringstream ss;

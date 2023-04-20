@@ -12,7 +12,7 @@ namespace ptl
 
 		static EventType GetStaticType() { return EventType::AppTick; }
 		virtual EventType GetEventType() const override { return GetStaticType(); }
-		virtual const char *GetName() const override { return "AppTickEvent"; }
+		virtual const char* GetName() const override { return "AppTickEvent"; }
 	};
 
 	class PTL_API AppUpdateEvent : public Event
@@ -23,7 +23,7 @@ namespace ptl
 
 		static EventType GetStaticType() { return EventType::AppUpdate; }
 		virtual EventType GetEventType() const override { return GetStaticType(); }
-		virtual const char *GetName() const override { return "AppUpdateEvent"; }
+		virtual const char* GetName() const override { return "AppUpdateEvent"; }
 	};
 
 	class PTL_API AppRenderEvent : public Event
@@ -34,6 +34,6 @@ namespace ptl
 
 		static EventType GetStaticType() { return EventType::AppRender; }
 		virtual EventType GetEventType() const override { return GetStaticType(); }
-		virtual const char *GetName() const override { return "AppRenderEvent"; }
+		virtual const char* GetName() const override { return "AppRenderEvent"; }
 	};
 }

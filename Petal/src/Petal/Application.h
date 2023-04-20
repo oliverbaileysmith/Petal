@@ -37,5 +37,5 @@ namespace ptl
 	};
 
 	// To be defined in client application
-	Application *CreateApplication();
+	Application* CreateApplication();
 }

@@ -33,7 +33,7 @@ public:
 	}
 };
 
-ptl::Application *ptl::CreateApplication()
+ptl::Application* ptl::CreateApplication()
 {
 	return new Sandbox();
 }

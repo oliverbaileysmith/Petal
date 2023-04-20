@@ -31,7 +31,7 @@ namespace ptl
 
 		static EventType GetStaticType() { return EventType::KeyPress; }
 		virtual EventType GetEventType() const override { return GetStaticType(); }
-		virtual const char *GetName() const override { return "KeyPressEvent"; }
+		virtual const char* GetName() const override { return "KeyPressEvent"; }
 		virtual std::string ToString() const override
 		{
 			std::stringstream ss;
@@ -53,7 +53,7 @@ namespace ptl
 
 		static EventType GetStaticType() { return EventType::KeyRelease; }
 		virtual EventType GetEventType() const override { return GetStaticType(); }
-		virtual const char *GetName() const override { return "KeyReleaseEvent"; }
+		virtual const char* GetName() const override { return "KeyReleaseEvent"; }
 		virtual std::string ToString() const override
 		{
 			std::stringstream ss;
