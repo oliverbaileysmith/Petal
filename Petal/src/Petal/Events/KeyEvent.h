@@ -2,28 +2,30 @@
 
 #include "Petal/Events/Event.h"
 
+#include "Petal/KeyCodes.h"
+
 namespace ptl
 {
 	class PTL_API KeyEvent : public Event
 	{
 	protected:
-		KeyEvent(const int32_t keyCode)
+		KeyEvent(const KeyCode keyCode)
 			: m_KeyCode(keyCode)
 		{
 		}
 		~KeyEvent() = default;
 
 	public:
-		int32_t GetKeyCode() const { return m_KeyCode; }
+		KeyCode GetKeyCode() const { return m_KeyCode; }
 
 	protected:
-		int32_t m_KeyCode;
+		KeyCode m_KeyCode;
 	};
 
 	class PTL_API KeyPressEvent : public KeyEvent
 	{
 	public:
-		KeyPressEvent(const int32_t keyCode, bool isRepeat = false)
+		KeyPressEvent(const KeyCode keyCode, bool isRepeat = false)
 			: KeyEvent(keyCode), m_IsRepeat(isRepeat)
 		{
 		}
@@ -45,7 +47,7 @@ namespace ptl
 	class PTL_API KeyReleaseEvent : public KeyEvent
 	{
 	public:
-		KeyReleaseEvent(const int32_t keyCode)
+		KeyReleaseEvent(const KeyCode keyCode)
 			: KeyEvent(keyCode)
 		{
 		}
@@ -65,7 +67,7 @@ namespace ptl
 	class PTL_API KeyTypeEvent : public KeyEvent
 	{
 	public:
-		KeyTypeEvent(const int32_t keyCode)
+		KeyTypeEvent(const KeyCode keyCode)
 			: KeyEvent(keyCode)
 		{
 		}

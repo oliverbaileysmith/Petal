@@ -31,7 +31,8 @@ namespace ptl
 		bool OnMouseMoveEvent(MouseMoveEvent& event);
 		bool OnMouseScrollEvent(MouseScrollEvent& event);
 
-        ImGuiKey GetImGuiKeyCode(int32_t keyCode);
+        ImGuiKey PtlToImGuiKeyCode(KeyCode keyCode);
+		ImGuiMouseButton PtlToImGuiMouseButtonCode(MouseButtonCode button);
 
 	private:
 		float m_Time = 0.0f;

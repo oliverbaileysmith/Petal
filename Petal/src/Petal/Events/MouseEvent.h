@@ -2,28 +2,30 @@
 
 #include "Petal/Events/Event.h"
 
+#include "Petal/MouseButtonCodes.h"
+
 namespace ptl
 {
 	class PTL_API MouseButtonEvent : public Event
 	{
 	protected:
-		MouseButtonEvent(const int32_t mouseButton)
+		MouseButtonEvent(const MouseButtonCode mouseButton)
 			: m_MouseButton(mouseButton)
 		{
 		}
 		~MouseButtonEvent() = default;
 
 	public:
-		int32_t GetMouseButton() const { return m_MouseButton; }
+		MouseButtonCode GetMouseButton() const { return m_MouseButton; }
 
 	protected:
-		int32_t m_MouseButton;
+		MouseButtonCode m_MouseButton;
 	};
 
 	class PTL_API MouseButtonPressEvent : public MouseButtonEvent
 	{
 	public:
-		MouseButtonPressEvent(const int32_t mouseButton)
+		MouseButtonPressEvent(const MouseButtonCode mouseButton)
 			: MouseButtonEvent(mouseButton)
 		{
 		}
@@ -43,7 +45,7 @@ namespace ptl
 	class PTL_API MouseButtonReleaseEvent : public MouseButtonEvent
 	{
 	public:
-		MouseButtonReleaseEvent(const int32_t mouseButton)
+		MouseButtonReleaseEvent(const MouseButtonCode mouseButton)
 			: MouseButtonEvent(mouseButton)
 		{
 		}

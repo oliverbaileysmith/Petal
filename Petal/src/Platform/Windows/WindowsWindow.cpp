@@ -1,6 +1,8 @@
 #include "ptlpch.h"
 #include "WindowsWindow.h"
 
+#include "Platform/Windows/WindowsInput.h"
+
 #include "Petal/Events/ApplicationEvent.h"
 #include "Petal/Events/WindowEvent.h"
 #include "Petal/Events/KeyEvent.h"
@@ -125,19 +127,19 @@ namespace ptl
 				{
 					case GLFW_PRESS:
 					{
-						KeyPressEvent event(key, 0);
+						KeyPressEvent event(WindowsInput::GLFWToPtlKeyCode(key), 0);
 						data.EventCallback(event);
 						break;
 					}
 					case GLFW_RELEASE:
 					{
-						KeyReleaseEvent event(key);
+						KeyReleaseEvent event(WindowsInput::GLFWToPtlKeyCode(key));
 						data.EventCallback(event);
 						break;
 					}
 					case GLFW_REPEAT:
 					{
-						KeyPressEvent event(key, 1);
+						KeyPressEvent event(WindowsInput::GLFWToPtlKeyCode(key), 1);
 						data.EventCallback(event);
 						break;
 					}
@@ -148,7 +150,7 @@ namespace ptl
 			{
 				WindowData& data = *(WindowData*)glfwGetWindowUserPointer(window);
 
-				KeyTypeEvent event(keyCode);
+				KeyTypeEvent event(WindowsInput::GLFWToPtlKeyCode(keyCode));
 				data.EventCallback(event);
 			});
 
@@ -160,13 +162,13 @@ namespace ptl
 				{
 					case GLFW_PRESS:
 					{
-						MouseButtonPressEvent event(button);
+						MouseButtonPressEvent event(WindowsInput::GLFWToPtlMouseButtonCode(button));
 						data.EventCallback(event);
 						break;
 					}
 					case GLFW_RELEASE:
 					{
-						MouseButtonReleaseEvent event(button);
+						MouseButtonReleaseEvent event(WindowsInput::GLFWToPtlMouseButtonCode(button));
 						data.EventCallback(event);
 						break;
 					}
