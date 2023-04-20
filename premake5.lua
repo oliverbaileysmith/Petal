@@ -11,8 +11,11 @@ workspace "Petal"
 	outputDir = "%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}"
 
 	includeDir = {}
+	includeDir["spdlog"] = "Petal/external/spdlog/include"
+	includeDir["GLFW"] = "Petal/external/GLFW/include"
 	includeDir["glad"] = "Petal/external/glad/include"
 	includeDir["ImGui"] = "Petal/external/imgui"
+	includeDir["glm"] = "Petal/external/glm"
 
 	include "Petal/external/glad"
 	include "Petal/external/imgui"
@@ -38,10 +41,11 @@ project "Petal"
 	includedirs
 	{
 		"%{prj.name}/src",
-		"%{prj.name}/external/spdlog/include",
-		"%{prj.name}/external/GLFW/include",
+		"%{includeDir.spdlog}",
+		"%{includeDir.GLFW}",
 		"%{includeDir.glad}",
-		"%{includeDir.ImGui}"
+		"%{includeDir.ImGui}",
+		"%{includeDir.glm}"
 	}
 
 	libdirs
@@ -105,8 +109,9 @@ project "Sandbox"
 	includedirs
 	{
 		"Petal/src",
-		"Petal/external/spdlog/include",
-		"%{includeDir.ImGui}"
+		"%{includeDir.spdlog}",
+		"%{includeDir.ImGui}",
+		"%{includeDir.glm}"
 	}
 
 	links
