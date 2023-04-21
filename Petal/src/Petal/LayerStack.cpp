@@ -5,7 +5,6 @@ namespace ptl
 {
 	LayerStack::LayerStack()
 	{
-		m_LayerInsertPos = m_Layers.begin();
 	}
 
 	LayerStack::~LayerStack()
@@ -16,7 +15,8 @@ namespace ptl
 
 	void LayerStack::PushLayer(Layer* layer)
 	{
-		m_LayerInsertPos = m_Layers.emplace(m_LayerInsertPos, layer);
+		m_Layers.emplace(m_Layers.begin() + m_LayerInsertPos, layer);
+		m_LayerInsertPos++;
 		layer->Init();
 	}
 

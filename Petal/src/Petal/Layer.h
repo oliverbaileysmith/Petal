@@ -15,6 +15,7 @@ namespace ptl
 		virtual void ShutDown();
 		virtual void OnUpdate();
 		virtual void OnEvent(Event& event);
+		virtual void OnImGuiRender();
 
 		const std::string& GetName() const;
 

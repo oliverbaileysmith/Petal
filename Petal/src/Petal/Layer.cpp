@@ -28,6 +28,10 @@ namespace ptl
 	{
 	}
 
+	void Layer::OnImGuiRender()
+	{
+	}
+
 	const std::string& Layer::GetName() const
 	{
 		return m_Name;

@@ -20,21 +20,9 @@ namespace ptl
 		virtual void ShutDown() override;
 		virtual void OnUpdate() override;
 		virtual void OnEvent(Event& event) override;
+		virtual void OnImGuiRender() override;
 
-	private:
-		bool OnWindowResizeEvent(WindowResizeEvent& event);
-		bool OnKeyPressEvent(KeyPressEvent& event);
-		bool OnKeyReleaseEvent(KeyReleaseEvent& event);
-		bool OnKeyTypeEvent(KeyTypeEvent& event);
-		bool OnMouseButtonPressEvent(MouseButtonPressEvent& event);
-		bool OnMouseButtonReleaseEvent(MouseButtonReleaseEvent& event);
-		bool OnMouseMoveEvent(MouseMoveEvent& event);
-		bool OnMouseScrollEvent(MouseScrollEvent& event);
-
-        ImGuiKey PtlToImGuiKeyCode(KeyCode keyCode);
-		ImGuiMouseButton PtlToImGuiMouseButtonCode(MouseButtonCode button);
-
-	private:
-		float m_Time = 0.0f;
+		void Begin();
+		void End();
 	};
 }

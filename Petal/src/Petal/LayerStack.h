@@ -23,6 +23,6 @@ namespace ptl
 	
 	private:
 		std::vector<Layer*> m_Layers;
-		std::vector<Layer*>::iterator m_LayerInsertPos;
+		uint32_t m_LayerInsertPos = 0;
 	};
 }
