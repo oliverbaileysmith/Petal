@@ -4,7 +4,7 @@
 
 namespace ptl
 {
-	class PTL_API AppTickEvent : public Event
+	class AppTickEvent : public Event
 	{
 	public:
 		AppTickEvent() = default;
@@ -15,7 +15,7 @@ namespace ptl
 		virtual const char* GetName() const override { return "AppTickEvent"; }
 	};
 
-	class PTL_API AppUpdateEvent : public Event
+	class AppUpdateEvent : public Event
 	{
 	public:
 		AppUpdateEvent() = default;
@@ -26,7 +26,7 @@ namespace ptl
 		virtual const char* GetName() const override { return "AppUpdateEvent"; }
 	};
 
-	class PTL_API AppRenderEvent : public Event
+	class AppRenderEvent : public Event
 	{
 	public:
 		AppRenderEvent() = default;

@@ -6,7 +6,7 @@
 
 namespace ptl
 {
-	class PTL_API MouseButtonEvent : public Event
+	class MouseButtonEvent : public Event
 	{
 	protected:
 		MouseButtonEvent(const MouseButtonCode mouseButton)
@@ -22,7 +22,7 @@ namespace ptl
 		MouseButtonCode m_MouseButton;
 	};
 
-	class PTL_API MouseButtonPressEvent : public MouseButtonEvent
+	class MouseButtonPressEvent : public MouseButtonEvent
 	{
 	public:
 		MouseButtonPressEvent(const MouseButtonCode mouseButton)
@@ -42,7 +42,7 @@ namespace ptl
 		}
 	};
 
-	class PTL_API MouseButtonReleaseEvent : public MouseButtonEvent
+	class MouseButtonReleaseEvent : public MouseButtonEvent
 	{
 	public:
 		MouseButtonReleaseEvent(const MouseButtonCode mouseButton)
@@ -62,7 +62,7 @@ namespace ptl
 		}
 	};
 
-	class PTL_API MouseMoveEvent : public Event
+	class MouseMoveEvent : public Event
 	{
 	public:
 		MouseMoveEvent(float x, float y)
@@ -89,7 +89,7 @@ namespace ptl
 		float m_Y;
 	};
 
-	class PTL_API MouseScrollEvent : public Event
+	class MouseScrollEvent : public Event
 	{
 	public:
 		MouseScrollEvent(float xOffset, float yOffset)

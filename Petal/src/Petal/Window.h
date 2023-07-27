@@ -23,7 +23,7 @@ namespace ptl
 		}
 	};
 
-	class PTL_API Window
+	class Window
 	{
 	public:
 		Window() = default;

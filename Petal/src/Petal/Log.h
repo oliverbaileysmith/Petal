@@ -9,7 +9,7 @@
 
 namespace ptl
 {
-	class PTL_API Log
+	class Log
 	{
 	public:
 		static void Init();

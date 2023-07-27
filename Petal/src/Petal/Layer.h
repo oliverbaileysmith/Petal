@@ -5,7 +5,7 @@
 
 namespace ptl
 {
-	class PTL_API Layer
+	class Layer
 	{
 	public:
 		Layer(const std::string& name = "Layer");

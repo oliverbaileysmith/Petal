@@ -7,7 +7,7 @@
 
 namespace ptl
 {
-	class PTL_API LayerStack
+	class LayerStack
 	{
 	public:
 		LayerStack();

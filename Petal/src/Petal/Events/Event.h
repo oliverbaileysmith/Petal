@@ -14,7 +14,7 @@ namespace ptl
 		MouseButtonPress, MouseButtonRelease, MouseMove, MouseScroll
 	};
 
-	class PTL_API Event
+	class Event
 	{
 		friend class EventDispatcher;
 

@@ -6,7 +6,7 @@
 
 namespace ptl
 {
-	class PTL_API KeyEvent : public Event
+	class KeyEvent : public Event
 	{
 	protected:
 		KeyEvent(const KeyCode keyCode)
@@ -22,7 +22,7 @@ namespace ptl
 		KeyCode m_KeyCode;
 	};
 
-	class PTL_API KeyPressEvent : public KeyEvent
+	class KeyPressEvent : public KeyEvent
 	{
 	public:
 		KeyPressEvent(const KeyCode keyCode, bool isRepeat = false)
@@ -44,7 +44,7 @@ namespace ptl
 		bool m_IsRepeat;
 	};
 
-	class PTL_API KeyReleaseEvent : public KeyEvent
+	class KeyReleaseEvent : public KeyEvent
 	{
 	public:
 		KeyReleaseEvent(const KeyCode keyCode)
@@ -64,7 +64,7 @@ namespace ptl
 		}
 	};
 
-	class PTL_API KeyTypeEvent : public KeyEvent
+	class KeyTypeEvent : public KeyEvent
 	{
 	public:
 		KeyTypeEvent(const KeyCode keyCode)

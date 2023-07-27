@@ -21,11 +21,9 @@ public:
 
 	virtual void OnImGuiRender() override
 	{
-		// TODO: Make this work by statically linking OR by setting ImGui context obtained in Petal DLL
-
-		/*ImGui::Begin("Test");
+		ImGui::Begin("Test");
 		ImGui::Text("Hello");
-		ImGui::End();*/
+		ImGui::End();
 	}
 };
 

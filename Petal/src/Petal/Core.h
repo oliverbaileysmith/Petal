@@ -1,14 +1,8 @@
 #pragma once
 
-#ifdef PTL_PLATFORM_WINDOWS
-	#ifdef PTL_BUILD_DLL
-		#define PTL_API __declspec(dllexport)
-	#else
-		#define PTL_API __declspec(dllimport)
-	#endif
-#else
+#ifndef PTL_PLATFORM_WINDOWS
 	#error Petal only supports Windows!
-#endif
+#endif //PTL_PLATFORM_WINDOWS
 
 #ifdef PTL_ENABLE_ASSERTS
 	#define PTL_ASSERT(x, ...) { if(!(x)) { PTL_CRITICAL("Assertion failed: {0}", __VA_ARGS__); __debugbreak(); } }
@@ -16,6 +10,6 @@
 #else
 	#define PTL_ASSERT(x, ...)
 	#define PTL_CORE_ASSERT(x, ...)
-#endif
+#endif //PTL_ENABLE_ASSERTS
 
 #define PTL_BIND_EVENT_FN(fn) std::bind(&fn, this, std::placeholders::_1)

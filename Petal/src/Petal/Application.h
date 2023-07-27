@@ -11,7 +11,7 @@
 
 namespace ptl
 {
-	class PTL_API Application
+	class Application
 	{
 	public:
 		Application();

@@ -4,7 +4,7 @@
 
 namespace ptl
 {
-	class PTL_API WindowCloseEvent : public Event
+	class WindowCloseEvent : public Event
 	{
 	public:
 		WindowCloseEvent() = default;
@@ -15,7 +15,7 @@ namespace ptl
 		virtual const char* GetName() const override { return "WindowCloseEvent"; }
 	};
 
-	class PTL_API WindowResizeEvent : public Event
+	class WindowResizeEvent : public Event
 	{
 	public:
 		WindowResizeEvent(uint32_t width, uint32_t height)
@@ -42,7 +42,7 @@ namespace ptl
 		uint32_t m_Height;
 	};
 
-	class PTL_API WindowFocusEvent : public Event
+	class WindowFocusEvent : public Event
 	{
 	public:
 		WindowFocusEvent() = default;
@@ -53,7 +53,7 @@ namespace ptl
 		virtual const char* GetName() const override { return "WindowFocusEvent"; }
 	};
 
-	class PTL_API WindowUnfocusEvent : public Event
+	class WindowUnfocusEvent : public Event
 	{
 	public:
 		WindowUnfocusEvent() = default;
@@ -64,7 +64,7 @@ namespace ptl
 		virtual const char* GetName() const override { return "WindowUnfocusEvent"; }
 	};
 
-	class PTL_API WindowMoveEvent : public Event
+	class WindowMoveEvent : public Event
 	{
 	public:
 		WindowMoveEvent(uint32_t x, uint32_t y)

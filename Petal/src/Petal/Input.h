@@ -6,7 +6,7 @@
 
 namespace ptl
 {
-	class PTL_API Input
+	class Input
 	{
 	public:
 		inline static bool IsKeyPressed(KeyCode keyCode) { return s_Instance->IsKeyPressedImpl(keyCode); }

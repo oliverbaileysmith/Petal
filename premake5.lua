@@ -22,9 +22,10 @@ workspace "Petal"
 
 project "Petal"
 	location "%{prj.name}"
-	kind "SharedLib"
+	kind "StaticLib"
 	language "C++"
-	staticruntime "Off"
+	cppdialect "C++20"
+	staticruntime "on"
 
 	targetdir ("bin/" .. outputDir .. "/%{prj.name}")
 	objdir ("bin-int/" .. outputDir .. "/%{prj.name}")
@@ -56,30 +57,23 @@ project "Petal"
 	links
 	{
 		"opengl32.lib",
-		"glfw3.lib",
+		"glfw3_mt.lib",
 		"glad",
 		"ImGui"
 	}
 
 	filter "system:windows"
-		cppdialect "C++20"
 		systemversion "latest"
 
 		defines
 		{
 			"PTL_PLATFORM_WINDOWS",
-			"PTL_BUILD_DLL",
 			"GLFW_INCLUDE_NONE"
-		}
-
-		postbuildcommands
-		{
-			("{COPY} %{cfg.buildtarget.relpath} \"../bin/" .. outputDir .. "/Sandbox/\"")
 		}
 
 	filter "configurations:Debug"
 		runtime "Debug"
-		symbols "On"
+		symbols "on"
 		defines
 		{
 			"PTL_DEBUG",
@@ -88,14 +82,15 @@ project "Petal"
 
 	filter "configurations:Release"
 		runtime "Release"
-		optimize "On"
+		optimize "on"
 		defines "PTL_RELEASE"
 
 project "Sandbox"
 	location "%{prj.name}"
 	kind "ConsoleApp"
 	language "C++"
-	staticruntime "Off"
+	cppdialect "C++20"
+	staticruntime "on"
 
 	targetdir ("bin/" .. outputDir .. "/%{prj.name}")
 	objdir ("bin-int/" .. outputDir .. "/%{prj.name}")
@@ -120,7 +115,6 @@ project "Sandbox"
 	}
 
 	filter "system:windows"
-		cppdialect "C++20"
 		systemversion "latest"
 
 		defines
@@ -130,7 +124,7 @@ project "Sandbox"
 
 	filter "configurations:Debug"
 		runtime "Debug"
-		symbols "On"
+		symbols "on"
 		defines
 		{
 			"PTL_DEBUG",
@@ -139,5 +133,5 @@ project "Sandbox"
 
 	filter "configurations:Release"
 		runtime "Release"
-		optimize "On"
+		optimize "on"
 		defines "PTL_RELEASE"
