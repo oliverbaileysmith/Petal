@@ -4,6 +4,7 @@
 
 #include "Petal/Core.h"
 #include "Petal/Events/Event.h"
+#include "Petal/Renderer/RenderContext.h"
 
 namespace ptl
 {
@@ -12,13 +13,15 @@ namespace ptl
 		std::string Title;
 		uint32_t Width;
 		uint32_t Height;
+		RenderAPI API;
 
 		WindowProps(
 			const std::string& title = "Petal",
 			uint32_t width = 1280,
-			uint32_t height = 720
+			uint32_t height = 720,
+			RenderAPI api = RenderAPI::OpenGL
 		)
-			: Title(title), Width(width), Height(height)
+			: Title(title), Width(width), Height(height), API(api)
 		{
 		}
 	};

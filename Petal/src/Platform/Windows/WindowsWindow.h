@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Petal/Window.h"
+#include "Petal/Renderer/RenderContext.h"
 
 #include <GLFW/glfw3.h>
 
@@ -28,6 +29,7 @@ namespace ptl
 
 	private:
 		GLFWwindow* m_Window;
+		RenderContext* m_Context;
 
 		struct WindowData
 		{
@@ -36,6 +38,7 @@ namespace ptl
 			uint32_t Height;
 			bool VSync;
 			std::function<void(Event&)> EventCallback;
+			RenderAPI API;
 		};
 
 		WindowData m_Data;

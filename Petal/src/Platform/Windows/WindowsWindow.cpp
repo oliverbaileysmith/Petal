@@ -2,13 +2,12 @@
 #include "WindowsWindow.h"
 
 #include "Platform/Windows/WindowsInput.h"
+#include "Platform/OpenGL/OpenGLContext.h"
 
 #include "Petal/Events/ApplicationEvent.h"
 #include "Petal/Events/WindowEvent.h"
 #include "Petal/Events/KeyEvent.h"
 #include "Petal/Events/MouseEvent.h"
-
-#include <glad/glad.h>
 
 namespace ptl
 {
@@ -27,7 +26,7 @@ namespace ptl
 	void WindowsWindow::OnUpdate()
 	{
 		glfwPollEvents();
-		glfwSwapBuffers(m_Window);
+		m_Context->SwapBuffers();
 	}
 
 	void WindowsWindow::SetEventCallback(const std::function<void(Event&)> eventCallback)
@@ -70,6 +69,7 @@ namespace ptl
 		m_Data.Title = props.Title;
 		m_Data.Width = props.Width;
 		m_Data.Height = props.Height;
+		m_Data.API = props.API;
 
 		// Initialize GLFW
 
@@ -87,12 +87,16 @@ namespace ptl
 			});
 
 		m_Window = glfwCreateWindow(m_Data.Width, m_Data.Height, m_Data.Title.c_str(), nullptr, nullptr);
-		glfwMakeContextCurrent(m_Window);
 
-		// Load glad
+		switch (m_Data.API)
+		{
+			case RenderAPI::OpenGL:
+			default:
+				m_Context = new OpenGLContext(m_Window);
+		}
 
-		int32_t status = gladLoadGLLoader((GLADloadproc)glfwGetProcAddress);
-		PTL_CORE_ASSERT(status, "Could not initialize glad");
+		m_Context = new OpenGLContext(m_Window);
+		m_Context->Init();
 
 		glfwSetWindowUserPointer(m_Window, &m_Data);
 		SetVSync(true);
