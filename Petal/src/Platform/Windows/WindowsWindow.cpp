@@ -87,6 +87,7 @@ namespace ptl
 			});
 
 		m_Window = glfwCreateWindow(m_Data.Width, m_Data.Height, m_Data.Title.c_str(), nullptr, nullptr);
+		PTL_CORE_INFO("Initialized window \"{0}\" ({1}x{2})", props.Title, props.Width, props.Height);
 
 		switch (m_Data.API)
 		{
@@ -99,9 +100,7 @@ namespace ptl
 		m_Context->Init();
 
 		glfwSetWindowUserPointer(m_Window, &m_Data);
-		SetVSync(true);
-		
-		PTL_CORE_INFO("Initialized window \"{0}\" ({1}x{2})", props.Title, props.Width, props.Height);
+		SetVSync(true);	
 
 		// Set GLFW callbacks
 

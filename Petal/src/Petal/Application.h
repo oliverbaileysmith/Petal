@@ -38,6 +38,8 @@ namespace ptl
 		bool m_Running = true;
 		LayerStack m_LayerStack;
 		ImGuiLayer* m_ImGuiLayer;
+
+		uint32_t m_VertexArray, m_VertexBuffer, m_IndexBuffer;
 	};
 
 	// To be defined in client application
