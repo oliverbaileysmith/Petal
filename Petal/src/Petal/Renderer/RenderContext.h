@@ -2,11 +2,6 @@
 
 namespace ptl
 {
-	enum class RenderAPI
-	{
-		OpenGL = 0
-	};
-
 	class RenderContext
 	{
 	public:

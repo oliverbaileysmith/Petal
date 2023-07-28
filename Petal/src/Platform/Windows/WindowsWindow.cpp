@@ -3,6 +3,7 @@
 
 #include "Platform/Windows/WindowsInput.h"
 #include "Platform/OpenGL/OpenGLContext.h"
+#include "Petal/Renderer/Renderer.h"
 
 #include "Petal/Events/ApplicationEvent.h"
 #include "Petal/Events/WindowEvent.h"
@@ -69,7 +70,6 @@ namespace ptl
 		m_Data.Title = props.Title;
 		m_Data.Width = props.Width;
 		m_Data.Height = props.Height;
-		m_Data.API = props.API;
 
 		// Initialize GLFW
 
@@ -86,14 +86,22 @@ namespace ptl
 				PTL_CORE_ERROR("GLFW Error {0}: {1}", error, description);
 			});
 
+		glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
+		glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 6);
+		glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+
 		m_Window = glfwCreateWindow(m_Data.Width, m_Data.Height, m_Data.Title.c_str(), nullptr, nullptr);
 		PTL_CORE_INFO("Initialized window \"{0}\" ({1}x{2})", props.Title, props.Width, props.Height);
 
-		switch (m_Data.API)
+		switch (Renderer::GetAPI())
 		{
 			case RenderAPI::OpenGL:
-			default:
 				m_Context = new OpenGLContext(m_Window);
+				break;
+			
+			case RenderAPI::None:
+			default:
+				PTL_CORE_ASSERT(false, "RenderAPI::None not supported");
 		}
 
 		m_Context->Init();

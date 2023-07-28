@@ -38,7 +38,6 @@ namespace ptl
 			uint32_t Height;
 			bool VSync;
 			std::function<void(Event&)> EventCallback;
-			RenderAPI API;
 		};
 
 		WindowData m_Data;
