@@ -9,6 +9,8 @@
 #include "Petal/Events/Event.h"
 #include "Petal/Events/WindowEvent.h"
 
+#include "Petal/Renderer/Shader.h"
+
 namespace ptl
 {
 	class Application
@@ -40,6 +42,7 @@ namespace ptl
 		ImGuiLayer* m_ImGuiLayer;
 
 		uint32_t m_VertexArray, m_VertexBuffer, m_IndexBuffer;
+		std::unique_ptr<Shader> m_Shader;
 	};
 
 	// To be defined in client application
