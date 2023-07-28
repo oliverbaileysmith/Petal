@@ -69,7 +69,7 @@ namespace ptl
 			}
 		)";
 
-		m_Shader = std::make_unique<Shader>(vertexSource, fragmentSource);
+		m_Shader = std::unique_ptr<Shader>(Shader::Create(vertexSource, fragmentSource));
 	}
 
 	Application::~Application()
