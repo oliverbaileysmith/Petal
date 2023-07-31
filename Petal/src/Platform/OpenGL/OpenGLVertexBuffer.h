@@ -18,8 +18,6 @@ namespace ptl
 		virtual void SetLayout(const VertexBufferLayout& layout) override;
 		virtual const VertexBufferLayout& GetLayout() const override;
 
-		static GLenum ShaderDataTypeToOpenGLBaseType(ShaderDataType type);
-
 	private:
 		uint32_t m_ID;
 		VertexBufferLayout m_Layout;

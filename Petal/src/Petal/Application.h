@@ -10,6 +10,7 @@
 #include "Petal/Events/WindowEvent.h"
 
 #include "Petal/Renderer/Shader.h"
+#include "Petal/Renderer/VertexArray.h"
 #include "Petal/Renderer/VertexBuffer.h"
 #include "Petal/Renderer/IndexBuffer.h"
 
@@ -43,10 +44,8 @@ namespace ptl
 		LayerStack m_LayerStack;
 		ImGuiLayer* m_ImGuiLayer;
 
-		uint32_t m_VertexArray;
-		std::unique_ptr<Shader> m_Shader;
-		std::unique_ptr<VertexBuffer> m_VertexBuffer;
-		std::unique_ptr<IndexBuffer> m_IndexBuffer;
+		std::shared_ptr<Shader> m_Shader;
+		std::shared_ptr<VertexArray> m_VertexArray;
 	};
 
 	// To be defined in client application

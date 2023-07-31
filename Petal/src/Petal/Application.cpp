@@ -3,7 +3,6 @@
 #include "Petal/Core.h"
 
 #include <glad/glad.h> // TODO: remove OpenGL from this file
-#include "Platform/OpenGL/OpenGLVertexBuffer.h"
 
 namespace ptl
 {
@@ -21,51 +20,36 @@ namespace ptl
 		m_LayerStack.PushOverlay(m_ImGuiLayer);
 
 		// Temporary triangle code
-		
-		glGenVertexArrays(1, &m_VertexArray);
-		glBindVertexArray(m_VertexArray);
-
-		float vertices[3 * 7] = {
-			-0.5f, -0.5f, 0.0f, 1.0f, 0.0f, 1.0f, 1.0f,
-			 0.5f, -0.5f, 0.0f, 0.0f, 1.0f, 1.0f, 1.0f,
-			 0.0f,  0.5f, 0.0f, 1.0f, 1.0f, 0.0f, 1.0f
+		float vertices[4 * 7] = {
+			-0.5f, -0.5f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f,
+			 0.5f, -0.5f, 0.0f, 0.0f, 1.0f, 0.0f, 1.0f,
+			 0.5f,  0.5f, 0.0f, 0.0f, 0.0f, 1.0f, 1.0f,
+			-0.5f,  0.5f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f
 		};
 
-		m_VertexBuffer = std::unique_ptr<VertexBuffer>(VertexBuffer::Create(vertices, sizeof(vertices)));
-		m_VertexBuffer->Bind();
-
-		{
-			std::vector<VertexBufferElement> elements = {
-				{ShaderDataType::Float3, "a_Position"},
-				{ShaderDataType::Float4, "a_Color"}
-			};
-			VertexBufferLayout layout(elements);
-			m_VertexBuffer->SetLayout(layout);
-		}
-
-		uint32_t index = 0;
-		const VertexBufferLayout& layout = m_VertexBuffer->GetLayout();
-		for (const VertexBufferElement& element : layout)
-		{
-			glEnableVertexAttribArray(index);
-			glVertexAttribPointer(
-				index,
-				element.GetComponentCount(),
-				OpenGLVertexBuffer::ShaderDataTypeToOpenGLBaseType(element.Type),
-				element.Normalized ? GL_TRUE : GL_FALSE,
-				layout.GetStride(),
-				(const void*)element.Offset
-			);
-			index++;
-		}
-
-		const uint32_t nIndices = 3;
+		const uint32_t nIndices = 6;
 		uint32_t indices[nIndices] = {
-			0, 1, 2
+			0, 1, 2,
+			2, 3, 0
 		};
 
-		m_IndexBuffer = std::unique_ptr<IndexBuffer>(IndexBuffer::Create(indices, nIndices));
-		m_IndexBuffer->Bind();
+		m_VertexArray = std::shared_ptr<VertexArray>(VertexArray::Create());
+
+		std::shared_ptr<VertexBuffer> vertexBuffer = std::shared_ptr<VertexBuffer>(VertexBuffer::Create(vertices, sizeof(vertices)));
+		vertexBuffer->Bind();
+
+		std::vector<VertexBufferElement> elements = {
+			{ShaderDataType::Float3, "a_Position"},
+			{ShaderDataType::Float4, "a_Color"}
+		};
+		VertexBufferLayout layout(elements);
+
+		vertexBuffer->SetLayout(layout);
+		m_VertexArray->AddVertexBuffer(vertexBuffer);
+
+		std::shared_ptr<IndexBuffer> indexBuffer = std::shared_ptr<IndexBuffer>(IndexBuffer::Create(indices, nIndices));
+		indexBuffer->Bind();
+		m_VertexArray->AddIndexBuffer(indexBuffer);
 		
 		std::string vertexSource = R"(
 			#version 460 core
@@ -98,7 +82,7 @@ namespace ptl
 			}
 		)";
 
-		m_Shader = std::unique_ptr<Shader>(Shader::Create(vertexSource, fragmentSource));
+		m_Shader = std::shared_ptr<Shader>(Shader::Create(vertexSource, fragmentSource));
 	}
 
 	Application::~Application()
@@ -114,8 +98,8 @@ namespace ptl
 			glClear(GL_COLOR_BUFFER_BIT);
 
 			m_Shader->Bind();
-			glBindVertexArray(m_VertexArray);
-			glDrawElements(GL_TRIANGLES, m_IndexBuffer->GetCount(), GL_UNSIGNED_INT, nullptr);
+			m_VertexArray->Bind();
+			glDrawElements(GL_TRIANGLES, m_VertexArray->GetIndexBuffer()->GetCount(), GL_UNSIGNED_INT, nullptr);
 
 			for (Layer* layer : m_LayerStack)
 				layer->OnUpdate();
