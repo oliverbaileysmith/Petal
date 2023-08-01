@@ -141,8 +141,8 @@ public:
 
 	virtual void OnUpdate() override
 	{
-		ptl::RenderCommand::SetClearColor({ 0.1f, 0.1f, 0.1f, 1.0f });
-		ptl::RenderCommand::Clear();
+		ptl::Renderer::SetClearColor({ 0.1f, 0.1f, 0.1f, 1.0f });
+		ptl::Renderer::Clear();
 
 		ptl::Renderer::BeginScene();
 
