@@ -10,10 +10,10 @@ namespace ptl
 	{
 		switch (Renderer::GetAPI())
 		{
-			case RenderAPI::None:
+			case RendererAPI::API::None:
 				PTL_CORE_ASSERT(false, "RenderAPI::None not supported");
 				return nullptr;
-			case RenderAPI::OpenGL:
+			case RendererAPI::API::OpenGL:
 				return new OpenGLVertexArray();
 		}
 		PTL_CORE_ASSERT(false, "Unknown RenderAPI");

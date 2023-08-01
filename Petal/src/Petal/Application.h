@@ -9,11 +9,6 @@
 #include "Petal/Events/Event.h"
 #include "Petal/Events/WindowEvent.h"
 
-#include "Petal/Renderer/Shader.h"
-#include "Petal/Renderer/VertexArray.h"
-#include "Petal/Renderer/VertexBuffer.h"
-#include "Petal/Renderer/IndexBuffer.h"
-
 namespace ptl
 {
 	class Application
@@ -43,9 +38,6 @@ namespace ptl
 		bool m_Running = true;
 		LayerStack m_LayerStack;
 		ImGuiLayer* m_ImGuiLayer;
-
-		std::shared_ptr<Shader> m_Shader;
-		std::shared_ptr<VertexArray> m_VertexArray;
 	};
 
 	// To be defined in client application

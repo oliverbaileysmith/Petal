@@ -1,18 +1,18 @@
 #pragma once
 
+#include "Petal/Renderer/RenderCommand.h"
+#include "Petal/Renderer/RendererAPI.h"
+
 namespace ptl
 {
-	enum class RenderAPI
-	{
-		None, OpenGL
-	};
-
 	class Renderer
 	{
 	public:
-		inline static RenderAPI GetAPI() { return s_RenderAPI; }
+		static void BeginScene();
+		static void EndScene();
 
-	private:
-		static RenderAPI s_RenderAPI;
+		static void Submit(const std::shared_ptr<VertexArray>& vertexArray);
+
+		inline static RendererAPI::API GetAPI() { return RendererAPI::GetAPI(); }
 	};
 }

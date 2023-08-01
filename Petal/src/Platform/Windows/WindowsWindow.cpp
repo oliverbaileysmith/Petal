@@ -95,11 +95,11 @@ namespace ptl
 
 		switch (Renderer::GetAPI())
 		{
-			case RenderAPI::OpenGL:
+			case RendererAPI::API::OpenGL:
 				m_Context = new OpenGLContext(m_Window);
 				break;
 			
-			case RenderAPI::None:
+			case RendererAPI::API::None:
 			default:
 				PTL_CORE_ASSERT(false, "RenderAPI::None not supported");
 		}
