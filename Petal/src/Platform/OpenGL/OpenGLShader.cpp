@@ -2,6 +2,7 @@
 #include "OpenGLShader.h"
 
 #include <glad/glad.h>
+#include <glm/gtc/type_ptr.hpp>
 
 namespace ptl
 {
@@ -100,5 +101,12 @@ namespace ptl
 	void OpenGLShader::Unbind() const
 	{
 		glUseProgram(0);
+	}
+	void OpenGLShader::UploadUniformMat4(const std::string& name, const glm::mat4& m) const
+	{
+		int loc = glGetUniformLocation(m_ID, name.c_str());
+		PTL_CORE_ASSERT(loc != -1, "Invalid uniform location");
+
+		glUniformMatrix4fv(loc, 1, GL_FALSE, glm::value_ptr(m));
 	}
 }

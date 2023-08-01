@@ -4,9 +4,9 @@ class SandboxLayer : public ptl::Layer
 {
 public:
 	SandboxLayer()
-		: Layer("Sandbox")
+		: Layer("Sandbox"), m_Camera(45.0f, 1280.0f, 720.0f, 0.1f, 100.0f)
 	{
-
+		
 	}
 
 	virtual void Init() override
@@ -78,6 +78,8 @@ public:
 			layout (location = 0) in vec3 a_Position;
 			layout (location = 1) in vec4 a_Color;
 			
+			uniform mat4 u_ViewProj;
+
 			out vec3 v_Position;
 			out vec4 v_Color;
 
@@ -85,7 +87,7 @@ public:
 			{
 				v_Position = a_Position;
 				v_Color = a_Color;
-				gl_Position = vec4(a_Position, 1.0f);
+				gl_Position = u_ViewProj * vec4(a_Position, 1.0f);
 			}
 		)";
 
@@ -94,12 +96,14 @@ public:
 			
 			layout (location = 0) in vec3 a_Position;
 
+			uniform mat4 u_ViewProj;
+
 			out vec3 v_Position;
 
 			void main()
 			{
 				v_Position = a_Position;
-				gl_Position = vec4(a_Position, 1.0f);
+				gl_Position = u_ViewProj * vec4(a_Position, 1.0f);
 			}
 		)";
 
@@ -144,13 +148,13 @@ public:
 		ptl::Renderer::SetClearColor({ 0.1f, 0.1f, 0.1f, 1.0f });
 		ptl::Renderer::Clear();
 
-		ptl::Renderer::BeginScene();
+		ptl::Renderer::BeginScene(m_Camera);
 
-		m_GenericShader->Bind();
-		ptl::Renderer::Submit(m_SquareVA);
+		// Move camera back slowly
+		m_Camera.SetPosition(m_Camera.GetPosition() + glm::vec3(0.0f, 0.0f, 0.01f));
 
-		m_MagentaShader->Bind();
-		ptl::Renderer::Submit(m_TriangleVA);
+		ptl::Renderer::Submit(m_SquareVA, m_GenericShader);
+		ptl::Renderer::Submit(m_TriangleVA, m_MagentaShader);
 
 		ptl::Renderer::EndScene();
 	}
@@ -172,6 +176,8 @@ private:
 	std::shared_ptr<ptl::Shader> m_MagentaShader;
 	std::shared_ptr<ptl::VertexArray> m_SquareVA;
 	std::shared_ptr<ptl::VertexArray> m_TriangleVA;
+
+	ptl::Camera m_Camera;
 };
 
 class Sandbox : public ptl::Application
