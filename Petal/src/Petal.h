@@ -12,4 +12,11 @@
 #include "Petal/Log.h"
 #include "Petal/ImGui/ImGuiLayer.h"
 
+#include "Petal/Renderer/Renderer.h"
+#include "Petal/Renderer/Shader.h"
+#include "Petal/Renderer/VertexArray.h"
+#include "Petal/Renderer/VertexBuffer.h"
+#include "Petal/Renderer/IndexBuffer.h"
+#include "Petal/Renderer/Camera.h"
+
 #include "Petal/EntryPoint.h"
