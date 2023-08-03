@@ -7,7 +7,7 @@ class SandboxLayer : public ptl::Layer
 public:
 	SandboxLayer()
 		: Layer("Sandbox"), m_Camera(45.0f, 1280.0f, 720.0f, 0.1f, 100.0f),
-		m_SquarePosition(0.0f), m_SquareTransform(1.0f), m_TrianglePosition(0.0f), m_TriangleTransform(1.0f)
+		m_SquarePosition(0.0f), m_SquareTransform(1.0f), m_TrianglePosition(0.0f), m_TriangleColor(1.0f), m_TriangleTransform(1.0f)
 	{
 		
 	}
@@ -95,7 +95,7 @@ public:
 			}
 		)";
 
-		std::string magentaVertexSource = R"(
+		std::string flatColorVertexSource = R"(
 			#version 460 core
 			
 			layout (location = 0) in vec3 a_Position;
@@ -126,21 +126,23 @@ public:
 			}
 		)";
 
-		std::string magentaFragmentSource = R"(
+		std::string flatColorFragmentSource = R"(
 			#version 460 core
 			
 			layout (location = 0) out vec4 color;
 			
 			in vec3 v_Position;
+
+			uniform vec3 u_Color;
 			
 			void main()
 			{
-				color = vec4(1.0f, 0.0f, 1.0f, 1.0f);
+				color = vec4(u_Color, 1.0f);
 			}
 		)";
 
 		m_GenericShader = std::shared_ptr<ptl::Shader>(ptl::Shader::Create(genericVertexSource, genericFragmentSource));
-		m_MagentaShader = std::shared_ptr<ptl::Shader>(ptl::Shader::Create(magentaVertexSource, magentaFragmentSource));
+		m_FlatColorShader = std::shared_ptr<ptl::Shader>(ptl::Shader::Create(flatColorVertexSource, flatColorFragmentSource));
 	}
 
 	virtual void ShutDown() override
@@ -159,7 +161,9 @@ public:
 		ptl::Renderer::BeginScene(m_Camera);
 
 		ptl::Renderer::Submit(m_SquareVA, m_GenericShader, m_SquareTransform);
-		ptl::Renderer::Submit(m_TriangleVA, m_MagentaShader, m_TriangleTransform);
+		m_FlatColorShader->Bind();
+		m_FlatColorShader->UploadUniformFloat3("u_Color", m_TriangleColor);
+		ptl::Renderer::Submit(m_TriangleVA, m_FlatColorShader, m_TriangleTransform);
 
 		ptl::Renderer::EndScene();
 	}
@@ -174,12 +178,13 @@ public:
 		ImGui::Begin("Controls");
 		ImGui::SliderFloat3("Square Position", &m_SquarePosition.x, -1.0f, 1.0f);
 		ImGui::SliderFloat3("Triangle Position", &m_TrianglePosition.x, -1.0f, 1.0f);
+		ImGui::ColorEdit3("Triangle Color", &m_TriangleColor.x);
 		ImGui::End();
 	}
 
 private:
 	std::shared_ptr<ptl::Shader> m_GenericShader;
-	std::shared_ptr<ptl::Shader> m_MagentaShader;
+	std::shared_ptr<ptl::Shader> m_FlatColorShader;
 	std::shared_ptr<ptl::VertexArray> m_SquareVA;
 	std::shared_ptr<ptl::VertexArray> m_TriangleVA;
 
@@ -187,6 +192,7 @@ private:
 	glm::mat4 m_SquareTransform;
 
 	glm::vec3 m_TrianglePosition;
+	glm::vec3 m_TriangleColor;
 	glm::mat4 m_TriangleTransform;
 
 	ptl::Camera m_Camera;

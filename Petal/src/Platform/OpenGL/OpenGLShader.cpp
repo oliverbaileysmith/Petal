@@ -102,11 +102,124 @@ namespace ptl
 	{
 		glUseProgram(0);
 	}
-	void OpenGLShader::UploadUniformMat4(const std::string& name, const glm::mat4& m) const
+
+	void OpenGLShader::UploadUniformBool(const std::string& name, bool value) const
 	{
 		int loc = glGetUniformLocation(m_ID, name.c_str());
 		PTL_CORE_ASSERT(loc != -1, "Invalid uniform location");
 
-		glUniformMatrix4fv(loc, 1, GL_FALSE, glm::value_ptr(m));
+		glUniform1i(loc, value);
+	}
+
+	void OpenGLShader::UploadUniformFloat(const std::string& name, float value) const
+	{
+		int loc = glGetUniformLocation(m_ID, name.c_str());
+		PTL_CORE_ASSERT(loc != -1, "Invalid uniform location");
+
+		glUniform1f(loc, value);
+	}
+
+	void OpenGLShader::UploadUniformFloat2(const std::string& name, const glm::vec2& value) const
+	{
+		int loc = glGetUniformLocation(m_ID, name.c_str());
+		PTL_CORE_ASSERT(loc != -1, "Invalid uniform location");
+
+		glUniform2f(loc, value.x, value.y);
+	}
+
+	void OpenGLShader::UploadUniformFloat3(const std::string& name, const glm::vec3& value) const
+	{
+		int loc = glGetUniformLocation(m_ID, name.c_str());
+		PTL_CORE_ASSERT(loc != -1, "Invalid uniform location");
+
+		glUniform3f(loc, value.x, value.y, value.z);
+	}
+
+	void OpenGLShader::UploadUniformFloat4(const std::string& name, const glm::vec4& value) const
+	{
+		int loc = glGetUniformLocation(m_ID, name.c_str());
+		PTL_CORE_ASSERT(loc != -1, "Invalid uniform location");
+
+		glUniform4f(loc, value.x, value.y, value.z, value.w);
+	}
+
+	void OpenGLShader::UploadUniformInt(const std::string& name, int32_t value) const
+	{
+		int loc = glGetUniformLocation(m_ID, name.c_str());
+		PTL_CORE_ASSERT(loc != -1, "Invalid uniform location");
+
+		glUniform1i(loc, value);
+	}
+
+	void OpenGLShader::UploadUniformInt2(const std::string& name, const glm::ivec2& value) const
+	{
+		int loc = glGetUniformLocation(m_ID, name.c_str());
+		PTL_CORE_ASSERT(loc != -1, "Invalid uniform location");
+
+		glUniform2i(loc, value.x, value.y);
+	}
+
+	void OpenGLShader::UploadUniformInt3(const std::string& name, const glm::ivec3& value) const
+	{
+		int loc = glGetUniformLocation(m_ID, name.c_str());
+		PTL_CORE_ASSERT(loc != -1, "Invalid uniform location");
+
+		glUniform3i(loc, value.x, value.y, value.z);
+	}
+
+	void OpenGLShader::UploadUniformInt4(const std::string& name, const glm::ivec4& value) const
+	{
+		int loc = glGetUniformLocation(m_ID, name.c_str());
+		PTL_CORE_ASSERT(loc != -1, "Invalid uniform location");
+
+		glUniform4i(loc, value.x, value.y, value.z, value.w);
+	}
+
+	void OpenGLShader::UploadUniformUint(const std::string& name, uint32_t value) const
+	{
+		int loc = glGetUniformLocation(m_ID, name.c_str());
+		PTL_CORE_ASSERT(loc != -1, "Invalid uniform location");
+
+		glUniform1ui(loc, value);
+	}
+
+	void OpenGLShader::UploadUniformUint2(const std::string& name, const glm::uvec2& value) const
+	{
+		int loc = glGetUniformLocation(m_ID, name.c_str());
+		PTL_CORE_ASSERT(loc != -1, "Invalid uniform location");
+
+		glUniform2ui(loc, value.x, value.y);
+	}
+
+	void OpenGLShader::UploadUniformUint3(const std::string& name, const glm::uvec3& value) const
+	{
+		int loc = glGetUniformLocation(m_ID, name.c_str());
+		PTL_CORE_ASSERT(loc != -1, "Invalid uniform location");
+
+		glUniform3ui(loc, value.x, value.y, value.z);
+	}
+
+	void OpenGLShader::UploadUniformUint4(const std::string& name, const glm::uvec4& value) const
+	{
+		int loc = glGetUniformLocation(m_ID, name.c_str());
+		PTL_CORE_ASSERT(loc != -1, "Invalid uniform location");
+
+		glUniform4ui(loc, value.x, value.y, value.z, value.w);
+	}
+
+	void OpenGLShader::UploadUniformMat3(const std::string& name, const glm::mat3& matrix) const
+	{
+		int loc = glGetUniformLocation(m_ID, name.c_str());
+		PTL_CORE_ASSERT(loc != -1, "Invalid uniform location");
+
+		glUniformMatrix3fv(loc, 1, GL_FALSE, glm::value_ptr(matrix));
+	}
+
+	void OpenGLShader::UploadUniformMat4(const std::string& name, const glm::mat4& matrix) const
+	{
+		int loc = glGetUniformLocation(m_ID, name.c_str());
+		PTL_CORE_ASSERT(loc != -1, "Invalid uniform location");
+
+		glUniformMatrix4fv(loc, 1, GL_FALSE, glm::value_ptr(matrix));
 	}
 }
