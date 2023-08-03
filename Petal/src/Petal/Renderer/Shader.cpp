@@ -6,7 +6,7 @@
 
 namespace ptl
 {
-	Shader* Shader::Create(const std::string& vertexSource, const std::string& fragmentSource)
+	Ref<Shader> Shader::Create(const std::string& vertexSource, const std::string& fragmentSource)
 	{
 		switch (Renderer::GetAPI())
 		{
@@ -14,7 +14,7 @@ namespace ptl
 				PTL_CORE_ASSERT(false, "RenderAPI::None not supported");
 				return nullptr;
 			case RendererAPI::API::OpenGL:
-				return new OpenGLShader(vertexSource, fragmentSource);
+				return std::make_shared<OpenGLShader>(vertexSource, fragmentSource);
 		}
 		PTL_CORE_ASSERT(false, "Unknown RenderAPI");
 		return nullptr;

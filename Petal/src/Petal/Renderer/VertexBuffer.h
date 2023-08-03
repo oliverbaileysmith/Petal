@@ -53,6 +53,6 @@ namespace ptl
 		virtual void SetLayout(const VertexBufferLayout& layout) = 0;
 		virtual const VertexBufferLayout& GetLayout() const = 0;
 
-		static VertexBuffer* Create(float* vertices, uint32_t size);
+		static Ref<VertexBuffer> Create(float* vertices, uint32_t size);
 	};
 }
