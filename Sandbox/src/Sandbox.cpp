@@ -28,9 +28,9 @@ public:
 			2, 3, 0
 		};
 
-		m_SquareVA = std::shared_ptr<ptl::VertexArray>(ptl::VertexArray::Create());
+		m_SquareVA = ptl::Ref<ptl::VertexArray>(ptl::VertexArray::Create());
 
-		std::shared_ptr<ptl::VertexBuffer> squareVertexBuffer = std::shared_ptr<ptl::VertexBuffer>(ptl::VertexBuffer::Create(squareVertices, sizeof(squareVertices)));
+		ptl::Ref<ptl::VertexBuffer> squareVertexBuffer = ptl::Ref<ptl::VertexBuffer>(ptl::VertexBuffer::Create(squareVertices, sizeof(squareVertices)));
 		squareVertexBuffer->Bind();
 
 		std::vector<ptl::VertexBufferElement> squareElements = {
@@ -42,7 +42,7 @@ public:
 		squareVertexBuffer->SetLayout(squareLayout);
 		m_SquareVA->AddVertexBuffer(squareVertexBuffer);
 
-		std::shared_ptr<ptl::IndexBuffer> squareIndexBuffer = std::shared_ptr<ptl::IndexBuffer>(ptl::IndexBuffer::Create(squareIndices, nSquareIndices));
+		ptl::Ref<ptl::IndexBuffer> squareIndexBuffer = ptl::Ref<ptl::IndexBuffer>(ptl::IndexBuffer::Create(squareIndices, nSquareIndices));
 		squareIndexBuffer->Bind();
 		m_SquareVA->AddIndexBuffer(squareIndexBuffer);
 
@@ -58,9 +58,9 @@ public:
 			0, 1, 2
 		};
 
-		m_TriangleVA = std::shared_ptr<ptl::VertexArray>(ptl::VertexArray::Create());
+		m_TriangleVA = ptl::Ref<ptl::VertexArray>(ptl::VertexArray::Create());
 
-		std::shared_ptr<ptl::VertexBuffer> triangleVertexBuffer = std::shared_ptr<ptl::VertexBuffer>(ptl::VertexBuffer::Create(triangleVertices, sizeof(triangleVertices)));
+		ptl::Ref<ptl::VertexBuffer> triangleVertexBuffer = ptl::Ref<ptl::VertexBuffer>(ptl::VertexBuffer::Create(triangleVertices, sizeof(triangleVertices)));
 		triangleVertexBuffer->Bind();
 
 		std::vector<ptl::VertexBufferElement> triangleElements = {
@@ -71,7 +71,7 @@ public:
 		triangleVertexBuffer->SetLayout(triangleLayout);
 		m_TriangleVA->AddVertexBuffer(triangleVertexBuffer);
 
-		std::shared_ptr<ptl::IndexBuffer> triangleIndexBuffer = std::shared_ptr<ptl::IndexBuffer>(ptl::IndexBuffer::Create(triangleIndices, nTriangleIndices));
+		ptl::Ref<ptl::IndexBuffer> triangleIndexBuffer = ptl::Ref<ptl::IndexBuffer>(ptl::IndexBuffer::Create(triangleIndices, nTriangleIndices));
 		triangleIndexBuffer->Bind();
 		m_TriangleVA->AddIndexBuffer(triangleIndexBuffer);
 
@@ -141,8 +141,8 @@ public:
 			}
 		)";
 
-		m_GenericShader = std::shared_ptr<ptl::Shader>(ptl::Shader::Create(genericVertexSource, genericFragmentSource));
-		m_FlatColorShader = std::shared_ptr<ptl::Shader>(ptl::Shader::Create(flatColorVertexSource, flatColorFragmentSource));
+		m_GenericShader = ptl::Ref<ptl::Shader>(ptl::Shader::Create(genericVertexSource, genericFragmentSource));
+		m_FlatColorShader = ptl::Ref<ptl::Shader>(ptl::Shader::Create(flatColorVertexSource, flatColorFragmentSource));
 	}
 
 	virtual void ShutDown() override
@@ -183,10 +183,10 @@ public:
 	}
 
 private:
-	std::shared_ptr<ptl::Shader> m_GenericShader;
-	std::shared_ptr<ptl::Shader> m_FlatColorShader;
-	std::shared_ptr<ptl::VertexArray> m_SquareVA;
-	std::shared_ptr<ptl::VertexArray> m_TriangleVA;
+	ptl::Ref<ptl::Shader> m_GenericShader;
+	ptl::Ref<ptl::Shader> m_FlatColorShader;
+	ptl::Ref<ptl::VertexArray> m_SquareVA;
+	ptl::Ref<ptl::VertexArray> m_TriangleVA;
 
 	glm::vec3 m_SquarePosition;
 	glm::mat4 m_SquareTransform;

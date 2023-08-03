@@ -1,5 +1,7 @@
 #pragma once
 
+#include <memory>
+
 #ifndef PTL_PLATFORM_WINDOWS
 	#error Petal only supports Windows!
 #endif //PTL_PLATFORM_WINDOWS
@@ -13,3 +15,12 @@
 #endif //PTL_ENABLE_ASSERTS
 
 #define PTL_BIND_EVENT_FN(fn) std::bind(&fn, this, std::placeholders::_1)
+
+namespace ptl
+{
+	template<typename T>
+	using Scope = std::unique_ptr<T>;
+
+	template<typename T>
+	using Ref = std::shared_ptr<T>;
+}
