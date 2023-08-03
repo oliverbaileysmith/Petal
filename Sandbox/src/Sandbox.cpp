@@ -1,10 +1,13 @@
 #include <Petal.h>
 
+#include <glm/gtc/matrix_transform.hpp>
+
 class SandboxLayer : public ptl::Layer
 {
 public:
 	SandboxLayer()
-		: Layer("Sandbox"), m_Camera(45.0f, 1280.0f, 720.0f, 0.1f, 100.0f)
+		: Layer("Sandbox"), m_Camera(45.0f, 1280.0f, 720.0f, 0.1f, 100.0f),
+		m_SquarePosition(0.0f), m_SquareTransform(1.0f), m_TrianglePosition(0.0f), m_TriangleTransform(1.0f)
 	{
 		
 	}
@@ -79,6 +82,7 @@ public:
 			layout (location = 1) in vec4 a_Color;
 			
 			uniform mat4 u_ViewProj;
+			uniform mat4 u_Model;
 
 			out vec3 v_Position;
 			out vec4 v_Color;
@@ -87,7 +91,7 @@ public:
 			{
 				v_Position = a_Position;
 				v_Color = a_Color;
-				gl_Position = u_ViewProj * vec4(a_Position, 1.0f);
+				gl_Position = u_ViewProj * u_Model * vec4(a_Position, 1.0f);
 			}
 		)";
 
@@ -97,13 +101,14 @@ public:
 			layout (location = 0) in vec3 a_Position;
 
 			uniform mat4 u_ViewProj;
+			uniform mat4 u_Model;
 
 			out vec3 v_Position;
 
 			void main()
 			{
 				v_Position = a_Position;
-				gl_Position = u_ViewProj * vec4(a_Position, 1.0f);
+				gl_Position = u_ViewProj * u_Model * vec4(a_Position, 1.0f);
 			}
 		)";
 
@@ -145,16 +150,16 @@ public:
 
 	virtual void OnUpdate(ptl::Timestep timestep) override
 	{
+		m_SquareTransform = glm::translate(glm::mat4(1.0f), m_SquarePosition);
+		m_TriangleTransform = glm::translate(glm::mat4(1.0f), m_TrianglePosition);
+
 		ptl::Renderer::SetClearColor({ 0.1f, 0.1f, 0.1f, 1.0f });
 		ptl::Renderer::Clear();
 
 		ptl::Renderer::BeginScene(m_Camera);
 
-		// Move camera back slowly
-		m_Camera.SetPosition(m_Camera.GetPosition() + glm::vec3(0.0f, 0.0f, 0.1f) * timestep.GetSeconds());
-
-		ptl::Renderer::Submit(m_SquareVA, m_GenericShader);
-		ptl::Renderer::Submit(m_TriangleVA, m_MagentaShader);
+		ptl::Renderer::Submit(m_SquareVA, m_GenericShader, m_SquareTransform);
+		ptl::Renderer::Submit(m_TriangleVA, m_MagentaShader, m_TriangleTransform);
 
 		ptl::Renderer::EndScene();
 	}
@@ -166,8 +171,9 @@ public:
 
 	virtual void OnImGuiRender() override
 	{
-		ImGui::Begin("Test");
-		ImGui::Text("Hello");
+		ImGui::Begin("Controls");
+		ImGui::SliderFloat3("Square Position", &m_SquarePosition.x, -1.0f, 1.0f);
+		ImGui::SliderFloat3("Triangle Position", &m_TrianglePosition.x, -1.0f, 1.0f);
 		ImGui::End();
 	}
 
@@ -176,6 +182,12 @@ private:
 	std::shared_ptr<ptl::Shader> m_MagentaShader;
 	std::shared_ptr<ptl::VertexArray> m_SquareVA;
 	std::shared_ptr<ptl::VertexArray> m_TriangleVA;
+
+	glm::vec3 m_SquarePosition;
+	glm::mat4 m_SquareTransform;
+
+	glm::vec3 m_TrianglePosition;
+	glm::mat4 m_TriangleTransform;
 
 	ptl::Camera m_Camera;
 };

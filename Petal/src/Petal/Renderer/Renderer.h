@@ -11,7 +11,7 @@ namespace ptl
 		static void BeginScene(Camera& camera);
 		static void EndScene();
 
-		static void Submit(const std::shared_ptr<VertexArray>& vertexArray, const std::shared_ptr<Shader>& shader);
+		static void Submit(const std::shared_ptr<VertexArray>& vertexArray, const std::shared_ptr<Shader>& shader, const glm::mat4& transform);
 
 		// Renderer API commands
 		inline static void SetClearColor(const glm::vec4& color) { s_RendererAPI->SetClearColor(color); }

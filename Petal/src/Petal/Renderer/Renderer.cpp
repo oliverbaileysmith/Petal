@@ -17,10 +17,12 @@ namespace ptl
 	{
 	}
 
-	void Renderer::Submit(const std::shared_ptr<VertexArray>& vertexArray, const std::shared_ptr<Shader>& shader)
+	void Renderer::Submit(const std::shared_ptr<VertexArray>& vertexArray, const std::shared_ptr<Shader>& shader, const glm::mat4& transform)
 	{
 		shader->Bind();
 		shader->UploadUniformMat4("u_ViewProj", s_SceneData->ViewProj);
+		shader->UploadUniformMat4("u_Model", transform);
+
 		vertexArray->Bind();
 		DrawIndexed(vertexArray);
 	}
