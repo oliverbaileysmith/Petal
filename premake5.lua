@@ -16,6 +16,7 @@ workspace "Petal"
 	includeDir["glad"] = "Petal/external/glad/include"
 	includeDir["ImGui"] = "Petal/external/imgui"
 	includeDir["glm"] = "Petal/external/glm"
+	includeDir["stb_image"] = "Petal/external/stb_image"
 
 	include "Petal/external/glad"
 	include "Petal/external/imgui"
@@ -36,7 +37,9 @@ project "Petal"
 	files
 	{
 		"%{prj.name}/src/**.h",
-		"%{prj.name}/src/**.cpp"
+		"%{prj.name}/src/**.cpp",
+		"%{prj.name}/external/stb_image/**.h",
+		"%{prj.name}/external/stb_image/**.cpp"
 	}
 
 	includedirs
@@ -46,7 +49,8 @@ project "Petal"
 		"%{includeDir.GLFW}",
 		"%{includeDir.glad}",
 		"%{includeDir.ImGui}",
-		"%{includeDir.glm}"
+		"%{includeDir.glm}",
+		"%{includeDir.stb_image}"
 	}
 
 	libdirs

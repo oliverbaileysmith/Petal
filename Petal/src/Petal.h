@@ -14,6 +14,7 @@
 
 #include "Petal/Renderer/Renderer.h"
 #include "Petal/Renderer/Shader.h"
+#include "Petal/Renderer/Texture.h"
 #include "Petal/Renderer/VertexArray.h"
 #include "Petal/Renderer/VertexBuffer.h"
 #include "Petal/Renderer/IndexBuffer.h"

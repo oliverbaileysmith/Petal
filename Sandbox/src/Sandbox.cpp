@@ -15,11 +15,11 @@ public:
 	virtual void Init() override
 	{
 		// Square setup
-		float squareVertices[4 * 7] = {
-			-0.5f, -0.5f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f,
-			 0.5f, -0.5f, 0.0f, 0.0f, 1.0f, 0.0f, 1.0f,
-			 0.5f,  0.5f, 0.0f, 0.0f, 0.0f, 1.0f, 1.0f,
-			-0.5f,  0.5f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f
+		float squareVertices[4 * 9] = {
+			-0.5f, -0.5f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f,
+			 0.5f, -0.5f, 0.0f, 0.0f, 1.0f, 0.0f, 1.0f, 1.0f, 0.0f,
+			 0.5f,  0.5f, 0.0f, 0.0f, 0.0f, 1.0f, 1.0f, 1.0f, 1.0f,
+			-0.5f,  0.5f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 1.0f
 		};
 
 		const uint32_t nSquareIndices = 6;
@@ -35,7 +35,8 @@ public:
 
 		std::vector<ptl::VertexBufferElement> squareElements = {
 			{ptl::ShaderDataType::Float3, "a_Position"},
-			{ptl::ShaderDataType::Float4, "a_Color"}
+			{ptl::ShaderDataType::Float4, "a_Color"},
+			{ptl::ShaderDataType::Float2, "a_TexCoords"}
 		};
 		ptl::VertexBufferLayout squareLayout(squareElements);
 
@@ -112,6 +113,25 @@ public:
 			}
 		)";
 
+		std::string textureVertexSource = R"(
+			#version 460 core
+			
+			layout (location = 0) in vec3 a_Position;
+			layout (location = 1) in vec4 a_Color;
+			layout (location = 2) in vec2 a_TexCoords;
+
+			uniform mat4 u_ViewProj;
+			uniform mat4 u_Model;
+
+			out vec2 v_TexCoords;
+
+			void main()
+			{
+				v_TexCoords = a_TexCoords;
+				gl_Position = u_ViewProj * u_Model * vec4(a_Position, 1.0f);
+			}
+		)";
+
 		std::string genericFragmentSource = R"(
 			#version 460 core
 			
@@ -141,8 +161,26 @@ public:
 			}
 		)";
 
+		std::string textureFragmentSource = R"(
+			#version 460 core
+			
+			layout (location = 0) out vec4 color;
+			
+			in vec2 v_TexCoords;
+
+			uniform sampler2D u_Texture;
+			
+			void main()
+			{
+				color = texture(u_Texture, v_TexCoords);
+			}
+		)";
+
 		m_GenericShader = ptl::Ref<ptl::Shader>(ptl::Shader::Create(genericVertexSource, genericFragmentSource));
 		m_FlatColorShader = ptl::Ref<ptl::Shader>(ptl::Shader::Create(flatColorVertexSource, flatColorFragmentSource));
+		m_TextureShader = ptl::Ref<ptl::Shader>(ptl::Shader::Create(textureVertexSource, textureFragmentSource));
+
+		m_Texture = ptl::Texture2D::Create("res/textures/test_texture.png");
 	}
 
 	virtual void ShutDown() override
@@ -160,7 +198,11 @@ public:
 
 		ptl::Renderer::BeginScene(m_Camera);
 
-		ptl::Renderer::Submit(m_SquareVA, m_GenericShader, m_SquareTransform);
+		m_TextureShader->Bind();
+		m_TextureShader->UploadUniformInt("u_Texture", 0);
+		m_Texture->Bind(0);
+		ptl::Renderer::Submit(m_SquareVA, m_TextureShader, m_SquareTransform);
+
 		m_FlatColorShader->Bind();
 		m_FlatColorShader->UploadUniformFloat3("u_Color", m_TriangleColor);
 		ptl::Renderer::Submit(m_TriangleVA, m_FlatColorShader, m_TriangleTransform);
@@ -185,6 +227,10 @@ public:
 private:
 	ptl::Ref<ptl::Shader> m_GenericShader;
 	ptl::Ref<ptl::Shader> m_FlatColorShader;
+	ptl::Ref<ptl::Shader> m_TextureShader;
+
+	ptl::Ref<ptl::Texture2D> m_Texture;
+
 	ptl::Ref<ptl::VertexArray> m_SquareVA;
 	ptl::Ref<ptl::VertexArray> m_TriangleVA;
 
