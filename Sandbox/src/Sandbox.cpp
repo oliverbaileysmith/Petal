@@ -7,7 +7,7 @@ class SandboxLayer : public ptl::Layer
 public:
 	SandboxLayer()
 		: Layer("Sandbox"), m_Camera(45.0f, 1280.0f, 720.0f, 0.1f, 100.0f),
-		m_SquarePosition(0.0f), m_SquareTransform(1.0f), m_TrianglePosition(0.0f), m_TriangleColor(1.0f), m_TriangleTransform(1.0f)
+		m_SquarePosition(0.0f), m_Square1Transform(1.0f), m_Square2Transform(1.0f), m_TrianglePosition(0.0f), m_TriangleColor(1.0f), m_TriangleTransform(1.0f)
 	{
 		
 	}
@@ -28,9 +28,9 @@ public:
 			2, 3, 0
 		};
 
-		m_SquareVA = ptl::Ref<ptl::VertexArray>(ptl::VertexArray::Create());
+		m_SquareVA = ptl::VertexArray::Create();
 
-		ptl::Ref<ptl::VertexBuffer> squareVertexBuffer = ptl::Ref<ptl::VertexBuffer>(ptl::VertexBuffer::Create(squareVertices, sizeof(squareVertices)));
+		ptl::Ref<ptl::VertexBuffer> squareVertexBuffer = ptl::VertexBuffer::Create(squareVertices, sizeof(squareVertices));
 		squareVertexBuffer->Bind();
 
 		std::vector<ptl::VertexBufferElement> squareElements = {
@@ -43,7 +43,7 @@ public:
 		squareVertexBuffer->SetLayout(squareLayout);
 		m_SquareVA->AddVertexBuffer(squareVertexBuffer);
 
-		ptl::Ref<ptl::IndexBuffer> squareIndexBuffer = ptl::Ref<ptl::IndexBuffer>(ptl::IndexBuffer::Create(squareIndices, nSquareIndices));
+		ptl::Ref<ptl::IndexBuffer> squareIndexBuffer = ptl::IndexBuffer::Create(squareIndices, nSquareIndices);
 		squareIndexBuffer->Bind();
 		m_SquareVA->AddIndexBuffer(squareIndexBuffer);
 
@@ -59,9 +59,9 @@ public:
 			0, 1, 2
 		};
 
-		m_TriangleVA = ptl::Ref<ptl::VertexArray>(ptl::VertexArray::Create());
+		m_TriangleVA = ptl::VertexArray::Create();
 
-		ptl::Ref<ptl::VertexBuffer> triangleVertexBuffer = ptl::Ref<ptl::VertexBuffer>(ptl::VertexBuffer::Create(triangleVertices, sizeof(triangleVertices)));
+		ptl::Ref<ptl::VertexBuffer> triangleVertexBuffer = ptl::VertexBuffer::Create(triangleVertices, sizeof(triangleVertices));
 		triangleVertexBuffer->Bind();
 
 		std::vector<ptl::VertexBufferElement> triangleElements = {
@@ -72,7 +72,7 @@ public:
 		triangleVertexBuffer->SetLayout(triangleLayout);
 		m_TriangleVA->AddVertexBuffer(triangleVertexBuffer);
 
-		ptl::Ref<ptl::IndexBuffer> triangleIndexBuffer = ptl::Ref<ptl::IndexBuffer>(ptl::IndexBuffer::Create(triangleIndices, nTriangleIndices));
+		ptl::Ref<ptl::IndexBuffer> triangleIndexBuffer = ptl::IndexBuffer::Create(triangleIndices, nTriangleIndices);
 		triangleIndexBuffer->Bind();
 		m_TriangleVA->AddIndexBuffer(triangleIndexBuffer);
 
@@ -176,11 +176,16 @@ public:
 			}
 		)";
 
-		m_GenericShader = ptl::Ref<ptl::Shader>(ptl::Shader::Create(genericVertexSource, genericFragmentSource));
-		m_FlatColorShader = ptl::Ref<ptl::Shader>(ptl::Shader::Create(flatColorVertexSource, flatColorFragmentSource));
-		m_TextureShader = ptl::Ref<ptl::Shader>(ptl::Shader::Create(textureVertexSource, textureFragmentSource));
+		m_GenericShader = ptl::Shader::Create(genericVertexSource, genericFragmentSource);
+		m_FlatColorShader = ptl::Shader::Create(flatColorVertexSource, flatColorFragmentSource);
+		m_TextureShader = ptl::Shader::Create(textureVertexSource, textureFragmentSource);
 
-		m_Texture = ptl::Texture2D::Create("res/textures/test_texture.png");
+		m_TestTexture = ptl::Texture2D::Create("res/textures/test_texture.png");
+		m_SusTexture = ptl::Texture2D::Create("res/textures/sus.png");
+
+		m_TextureShader->Bind();
+		m_TestTexture->Bind(0);
+		m_SusTexture->Bind(1);
 	}
 
 	virtual void ShutDown() override
@@ -190,7 +195,7 @@ public:
 
 	virtual void OnUpdate(ptl::Timestep timestep) override
 	{
-		m_SquareTransform = glm::translate(glm::mat4(1.0f), m_SquarePosition);
+		m_Square1Transform = glm::translate(glm::mat4(1.0f), m_SquarePosition);
 		m_TriangleTransform = glm::translate(glm::mat4(1.0f), m_TrianglePosition);
 
 		ptl::Renderer::SetClearColor({ 0.1f, 0.1f, 0.1f, 1.0f });
@@ -200,8 +205,11 @@ public:
 
 		m_TextureShader->Bind();
 		m_TextureShader->UploadUniformInt("u_Texture", 0);
-		m_Texture->Bind(0);
-		ptl::Renderer::Submit(m_SquareVA, m_TextureShader, m_SquareTransform);
+		ptl::Renderer::Submit(m_SquareVA, m_TextureShader, m_Square1Transform);
+
+		m_TextureShader->Bind();
+		m_TextureShader->UploadUniformInt("u_Texture", 1);
+		ptl::Renderer::Submit(m_SquareVA, m_TextureShader, m_Square2Transform);
 
 		m_FlatColorShader->Bind();
 		m_FlatColorShader->UploadUniformFloat3("u_Color", m_TriangleColor);
@@ -229,13 +237,15 @@ private:
 	ptl::Ref<ptl::Shader> m_FlatColorShader;
 	ptl::Ref<ptl::Shader> m_TextureShader;
 
-	ptl::Ref<ptl::Texture2D> m_Texture;
+	ptl::Ref<ptl::Texture2D> m_TestTexture;
+	ptl::Ref<ptl::Texture2D> m_SusTexture;
 
 	ptl::Ref<ptl::VertexArray> m_SquareVA;
 	ptl::Ref<ptl::VertexArray> m_TriangleVA;
 
 	glm::vec3 m_SquarePosition;
-	glm::mat4 m_SquareTransform;
+	glm::mat4 m_Square1Transform;
+	glm::mat4 m_Square2Transform;
 
 	glm::vec3 m_TrianglePosition;
 	glm::vec3 m_TriangleColor;

@@ -14,6 +14,8 @@ namespace ptl
 		m_Window = std::unique_ptr<Window>(Window::Create());
 		m_Window->SetEventCallback(PTL_BIND_EVENT_FN(Application::OnEvent));
 
+		Renderer::Init();
+
 		m_ImGuiLayer = new ImGuiLayer();
 		m_LayerStack.PushOverlay(m_ImGuiLayer);
 	}

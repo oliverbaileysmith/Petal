@@ -16,6 +16,7 @@ namespace ptl
 		static void Submit(const Ref<VertexArray>& vertexArray, const Ref<Shader>& shader, const glm::mat4& transform);
 
 		// Renderer API commands
+		inline static void Init() { s_RendererAPI->Init(); }
 		inline static void SetClearColor(const glm::vec4& color) { s_RendererAPI->SetClearColor(color); }
 		inline static void Clear() { s_RendererAPI->Clear(); }
 
