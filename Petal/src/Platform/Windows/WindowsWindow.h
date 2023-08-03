@@ -22,6 +22,7 @@ namespace ptl
 		virtual uint32_t GetWidth() const override;
 		virtual uint32_t GetHeight() const override;
 		virtual bool GetVSync() const override;
+		virtual float GetTime() const override;
 
 	private:
 		virtual void Init(const WindowProps& props);

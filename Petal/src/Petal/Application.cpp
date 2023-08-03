@@ -27,8 +27,12 @@ namespace ptl
 	{
 		while (m_Running)
 		{
+			float time = (float)m_Window->GetTime();
+			Timestep timestep(time - m_LastFrameTime);
+			m_LastFrameTime = time;
+
 			for (Layer* layer : m_LayerStack)
-				layer->OnUpdate();
+				layer->OnUpdate(timestep);
 
 			m_ImGuiLayer->Begin();
 			for (Layer* layer : m_LayerStack)

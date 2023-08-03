@@ -45,7 +45,7 @@ namespace ptl
 		ImGui::DestroyContext();
 	}
 
-	void ImGuiLayer::OnUpdate()
+	void ImGuiLayer::OnUpdate(Timestep timestep)
 	{
 	}
 

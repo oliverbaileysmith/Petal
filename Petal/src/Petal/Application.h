@@ -9,6 +9,8 @@
 #include "Petal/Events/Event.h"
 #include "Petal/Events/WindowEvent.h"
 
+#include "Petal/Core/Timestep.h"
+
 namespace ptl
 {
 	class Application
@@ -38,6 +40,7 @@ namespace ptl
 		bool m_Running = true;
 		LayerStack m_LayerStack;
 		ImGuiLayer* m_ImGuiLayer;
+		float m_LastFrameTime = 0.0f;
 	};
 
 	// To be defined in client application

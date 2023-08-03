@@ -18,7 +18,7 @@ namespace ptl
 
 		virtual void Init() override;
 		virtual void ShutDown() override;
-		virtual void OnUpdate() override;
+		virtual void OnUpdate(Timestep timestep) override;
 		virtual void OnEvent(Event& event) override;
 		virtual void OnImGuiRender() override;
 

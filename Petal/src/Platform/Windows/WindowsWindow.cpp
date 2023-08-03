@@ -65,11 +65,17 @@ namespace ptl
 		return m_Data.VSync;
 	}
 
+	float WindowsWindow::GetTime() const
+	{
+		return glfwGetTime();
+	}
+
 	void WindowsWindow::Init(const WindowProps& props)
 	{
 		m_Data.Title = props.Title;
 		m_Data.Width = props.Width;
 		m_Data.Height = props.Height;
+		m_Data.VSync = false;
 
 		// Initialize GLFW
 
@@ -107,7 +113,6 @@ namespace ptl
 		m_Context->Init();
 
 		glfwSetWindowUserPointer(m_Window, &m_Data);
-		SetVSync(true);	
 
 		// Set GLFW callbacks
 

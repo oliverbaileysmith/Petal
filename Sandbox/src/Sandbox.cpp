@@ -143,7 +143,7 @@ public:
 
 	}
 
-	virtual void OnUpdate() override
+	virtual void OnUpdate(ptl::Timestep timestep) override
 	{
 		ptl::Renderer::SetClearColor({ 0.1f, 0.1f, 0.1f, 1.0f });
 		ptl::Renderer::Clear();
@@ -151,7 +151,7 @@ public:
 		ptl::Renderer::BeginScene(m_Camera);
 
 		// Move camera back slowly
-		m_Camera.SetPosition(m_Camera.GetPosition() + glm::vec3(0.0f, 0.0f, 0.01f));
+		m_Camera.SetPosition(m_Camera.GetPosition() + glm::vec3(0.0f, 0.0f, 0.1f) * timestep.GetSeconds());
 
 		ptl::Renderer::Submit(m_SquareVA, m_GenericShader);
 		ptl::Renderer::Submit(m_TriangleVA, m_MagentaShader);

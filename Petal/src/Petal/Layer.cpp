@@ -20,7 +20,7 @@ namespace ptl
 	{
 	}
 
-	void Layer::OnUpdate()
+	void Layer::OnUpdate(Timestep timestep)
 	{
 	}
 
