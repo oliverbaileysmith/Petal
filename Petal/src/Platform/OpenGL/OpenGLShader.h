@@ -1,5 +1,9 @@
 #pragma once
 
+#include <unordered_map>
+
+#include <glad/glad.h>
+
 #include "Petal/Renderer/Shader.h"
 
 namespace ptl
@@ -7,6 +11,7 @@ namespace ptl
 	class OpenGLShader : public Shader
 	{
 	public:
+		OpenGLShader(const std::string& filepath);
 		OpenGLShader(const std::string& vertexSource, const std::string& fragmentSource);
 		virtual ~OpenGLShader() override;
 
@@ -32,6 +37,12 @@ namespace ptl
 
 		virtual void UploadUniformMat3(const std::string& name, const glm::mat3& matrix) const override;
 		virtual void UploadUniformMat4(const std::string& name, const glm::mat4& matrix) const override;
+
+	private:
+		std::string ReadFile(const std::string& filepath);
+		std::unordered_map<GLenum, std::string> SplitShaders(const std::string& source);
+		void Compile(const std::unordered_map<GLenum, std::string>& shaderSources);
+		static GLenum ShaderTypeFromString(const std::string& type);
 
 	private:
 		uint32_t m_ID;

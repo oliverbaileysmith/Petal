@@ -1,91 +1,25 @@
 #include "ptlpch.h"
 #include "OpenGLShader.h"
 
-#include <glad/glad.h>
+#include <fstream>
+
 #include <glm/gtc/type_ptr.hpp>
 
 namespace ptl
 {
+	OpenGLShader::OpenGLShader(const std::string& filepath)
+	{
+		std::string source = ReadFile(filepath);
+		auto shaderSources = SplitShaders(source);
+		Compile(shaderSources);
+	}
+
 	OpenGLShader::OpenGLShader(const std::string& vertexSource, const std::string& fragmentSource)
 	{
-		// Create vertex shader object
-		GLuint vertexShader = glCreateShader(GL_VERTEX_SHADER);
-		const GLchar* source = vertexSource.c_str();
-		glShaderSource(vertexShader, 1, &source, 0);
-		glCompileShader(vertexShader);
-
-		// Test vertex shader compilation
-		GLint isCompiled = 0;
-		glGetShaderiv(vertexShader, GL_COMPILE_STATUS, &isCompiled);
-		if (isCompiled == GL_FALSE)
-		{
-			GLint maxLength = 0;
-			glGetShaderiv(vertexShader, GL_INFO_LOG_LENGTH, &maxLength);
-
-			std::vector<GLchar> infoLog(maxLength);
-			glGetShaderInfoLog(vertexShader, maxLength, &maxLength, &infoLog[0]);
-
-			glDeleteShader(vertexShader);
-
-			PTL_CORE_ERROR("{0}", infoLog.data());
-			PTL_CORE_ASSERT(false, "Failed to compile vertex shader");
-			return;
-		}
-
-		// Create vertex shader object
-		GLuint fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
-		source = (const GLchar*)fragmentSource.c_str();
-		glShaderSource(fragmentShader, 1, &source, 0);
-		glCompileShader(fragmentShader);
-
-		// Test fragment shader compilation
-		glGetShaderiv(fragmentShader, GL_COMPILE_STATUS, &isCompiled);
-		if (isCompiled == GL_FALSE)
-		{
-			GLint maxLength = 0;
-			glGetShaderiv(fragmentShader, GL_INFO_LOG_LENGTH, &maxLength);
-
-			std::vector<GLchar> infoLog(maxLength);
-			glGetShaderInfoLog(fragmentShader, maxLength, &maxLength, &infoLog[0]);
-
-			glDeleteShader(fragmentShader);
-			glDeleteShader(vertexShader);
-
-			PTL_CORE_ERROR("{0}", infoLog.data());
-			PTL_CORE_ASSERT(false, "Failed to compile fragment shader");
-			return;
-		}
-
-		// Create shader program and store in Shader class
-		m_ID = glCreateProgram();
-		glAttachShader(m_ID, vertexShader);
-		glAttachShader(m_ID, fragmentShader);
-		glLinkProgram(m_ID);
-
-		// Test program linking
-		GLint isLinked = 0;
-		glGetProgramiv(m_ID, GL_LINK_STATUS, (int*)&isLinked);
-		if (isLinked == GL_FALSE)
-		{
-			GLint maxLength = 0;
-			glGetProgramiv(m_ID, GL_INFO_LOG_LENGTH, &maxLength);
-
-			std::vector<GLchar> infoLog(maxLength);
-			glGetProgramInfoLog(m_ID, maxLength, &maxLength, &infoLog[0]);
-
-			glDeleteProgram(m_ID);
-			glDeleteShader(vertexShader);
-			glDeleteShader(fragmentShader);
-
-			PTL_CORE_ERROR("{0}", infoLog.data());
-			PTL_CORE_ASSERT(false, "Failed to link shader program");
-			return;
-		}
-
-		glDetachShader(m_ID, vertexShader);
-		glDetachShader(m_ID, fragmentShader);
-		glDeleteShader(vertexShader);
-		glDeleteShader(fragmentShader);
+		std::unordered_map<GLenum, std::string> shaderSources;
+		shaderSources[GL_VERTEX_SHADER] = vertexSource;
+		shaderSources[GL_FRAGMENT_SHADER] = fragmentSource;
+		Compile(shaderSources);
 	}
 
 	OpenGLShader::~OpenGLShader()
@@ -222,4 +156,146 @@ namespace ptl
 
 		glUniformMatrix4fv(loc, 1, GL_FALSE, glm::value_ptr(matrix));
 	}
+	std::string OpenGLShader::ReadFile(const std::string& filepath)
+	{
+		std::string result;
+
+		std::ifstream ifs(filepath, std::ios::in | std::ios::binary);
+		if (ifs)
+		{
+			// Move pointer to end of file and resize output string
+			ifs.seekg(0, std::ios::end);
+			result.resize(ifs.tellg());
+
+			// Move pointer to beginning and read file
+			ifs.seekg(0, std::ios::beg);
+			ifs.read(&result[0], result.size());
+			ifs.close();
+		}
+		else
+		{
+			PTL_CORE_ERROR("Could not open shader file \"{0}\"", filepath);
+		}
+		
+		return result;
+	}
+
+	std::unordered_map<GLenum, std::string> OpenGLShader::SplitShaders(const std::string& source)
+	{
+		std::unordered_map<GLenum, std::string> shaderSources;
+
+		// Find first instance of #type
+		const char* typeToken = "#type";
+		size_t typeTokenLength = strlen(typeToken);
+		size_t pos = source.find(typeToken, 0);
+
+		// Parse rest of file
+		while (pos != std::string::npos)
+		{
+			// Find first new line character
+			size_t eol = source.find_first_of("\r\n", pos);
+			PTL_CORE_ASSERT(eol != std::string::npos, "Shader syntax error");
+
+			// Set pointer to word after #type (this doesn't account for multiple whitespace)
+			size_t begin = pos + typeTokenLength + 1;
+
+			// Ensure valid shader type
+			std::string type = source.substr(begin, eol - begin);
+			PTL_CORE_ASSERT(ShaderTypeFromString(type), "Invalid shader type specified");
+
+			// Get source until next token or end of file
+			size_t nextLinePos = source.find_first_of("\r\n", eol);
+			pos = source.find(typeToken, nextLinePos);
+			shaderSources[ShaderTypeFromString(type)] = source.substr(nextLinePos,
+				pos - (nextLinePos == std::string::npos ? source.size() - 1 : nextLinePos));
+		}
+
+		return shaderSources;
+	}
+
+	void OpenGLShader::Compile(const std::unordered_map<GLenum, std::string>& shaderSources)
+	{
+		PTL_CORE_ASSERT(shaderSources.size() < 3, "More than 2 shaders in file");
+
+		// Create shader program and store in Shader class
+		GLuint program = glCreateProgram();
+		std::array<GLuint, 2> shaderIDs;
+
+		int shaderIndex = 0;
+		for (auto& kv : shaderSources)
+		{
+			GLenum type = kv.first;
+			const std::string& source = kv.second;
+
+			// Create shader object
+			GLuint shader = glCreateShader(type);
+			const GLchar* sourceCStr = source.c_str();
+			glShaderSource(shader, 1, &sourceCStr, 0);
+			glCompileShader(shader);
+
+			// Test vertex shader compilation
+			GLint isCompiled = 0;
+			glGetShaderiv(shader, GL_COMPILE_STATUS, &isCompiled);
+			if (isCompiled == GL_FALSE)
+			{
+				GLint maxLength = 0;
+				glGetShaderiv(shader, GL_INFO_LOG_LENGTH, &maxLength);
+
+				std::vector<GLchar> infoLog(maxLength);
+				glGetShaderInfoLog(shader, maxLength, &maxLength, &infoLog[0]);
+
+				glDeleteShader(shader);
+
+				PTL_CORE_ERROR("{0}", infoLog.data());
+				PTL_CORE_ASSERT(false, "Failed to compile shader");
+				break;
+			}
+
+			// If shader compilation succeeded, attach to program
+			glAttachShader(program, shader);
+			shaderIDs[shaderIndex++] = shader;
+		}
+
+		// Link program and test
+		glLinkProgram(program);
+		GLint isLinked = 0;
+		glGetProgramiv(program, GL_LINK_STATUS, (int*)&isLinked);
+		if (isLinked == GL_FALSE)
+		{
+			GLint maxLength = 0;
+			glGetProgramiv(program, GL_INFO_LOG_LENGTH, &maxLength);
+
+			std::vector<GLchar> infoLog(maxLength);
+			glGetProgramInfoLog(program, maxLength, &maxLength, &infoLog[0]);
+
+			glDeleteProgram(program);
+
+			for (GLuint ID : shaderIDs)
+			{
+				glDeleteShader(ID);
+			}
+
+			PTL_CORE_ERROR("{0}", infoLog.data());
+			PTL_CORE_ASSERT(false, "Failed to link shader program");
+			return;
+		}
+
+		for (GLuint ID : shaderIDs)
+		{
+			glDetachShader(program, ID);
+			glDeleteShader(ID);
+		}
+
+		m_ID = program;
+	}
+
+	GLenum OpenGLShader::ShaderTypeFromString(const std::string& type)
+	{
+		if (type == "vertex") return GL_VERTEX_SHADER;
+		if (type == "fragment") return GL_FRAGMENT_SHADER;
+
+		PTL_CORE_ASSERT(false, "Unknown shader type");
+		return 0;
+	}
+
 }

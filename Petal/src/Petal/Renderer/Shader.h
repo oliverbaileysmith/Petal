@@ -43,7 +43,9 @@ namespace ptl
 		virtual void UploadUniformMat3(const std::string& name, const glm::mat3& matrix) const = 0;
 		virtual void UploadUniformMat4(const std::string& name, const glm::mat4& matrix) const = 0;
 
+		static Ref<Shader> Create(const std::string& filepath);
 		static Ref<Shader> Create(const std::string& vertexSource, const std::string& fragmentSource);
+
 		static uint32_t GetSizeOfShaderDataType(ShaderDataType type);
 	};
 }

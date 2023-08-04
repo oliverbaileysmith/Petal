@@ -6,6 +6,20 @@
 
 namespace ptl
 {
+	Ref<Shader> Shader::Create(const std::string& filepath)
+	{
+		switch (Renderer::GetAPI())
+		{
+			case RendererAPI::API::None:
+				PTL_CORE_ASSERT(false, "RenderAPI::None not supported");
+				return nullptr;
+			case RendererAPI::API::OpenGL:
+				return std::make_shared<OpenGLShader>(filepath);
+		}
+		PTL_CORE_ASSERT(false, "Unknown RenderAPI");
+		return nullptr;
+	}
+
 	Ref<Shader> Shader::Create(const std::string& vertexSource, const std::string& fragmentSource)
 	{
 		switch (Renderer::GetAPI())
