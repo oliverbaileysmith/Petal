@@ -12,11 +12,13 @@ namespace ptl
 	{
 	public:
 		OpenGLShader(const std::string& filepath);
-		OpenGLShader(const std::string& vertexSource, const std::string& fragmentSource);
+		OpenGLShader(const std::string& name, const std::string& vertexSource, const std::string& fragmentSource);
 		virtual ~OpenGLShader() override;
 
 		virtual void Bind() const override;
 		virtual void Unbind() const override;
+
+		virtual const std::string& GetName() const override;
 
 		virtual void UploadUniformBool(const std::string& name, bool value) const override;
 
@@ -46,5 +48,6 @@ namespace ptl
 
 	private:
 		uint32_t m_ID;
+		std::string m_Name;
 	};
 }

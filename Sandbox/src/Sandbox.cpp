@@ -76,26 +76,6 @@ public:
 		triangleIndexBuffer->Bind();
 		m_TriangleVA->AddIndexBuffer(triangleIndexBuffer);
 
-		std::string genericVertexSource = R"(
-			#version 460 core
-			
-			layout (location = 0) in vec3 a_Position;
-			layout (location = 1) in vec4 a_Color;
-			
-			uniform mat4 u_ViewProj;
-			uniform mat4 u_Model;
-
-			out vec3 v_Position;
-			out vec4 v_Color;
-
-			void main()
-			{
-				v_Position = a_Position;
-				v_Color = a_Color;
-				gl_Position = u_ViewProj * u_Model * vec4(a_Position, 1.0f);
-			}
-		)";
-
 		std::string flatColorVertexSource = R"(
 			#version 460 core
 			
@@ -110,20 +90,6 @@ public:
 			{
 				v_Position = a_Position;
 				gl_Position = u_ViewProj * u_Model * vec4(a_Position, 1.0f);
-			}
-		)";
-
-		std::string genericFragmentSource = R"(
-			#version 460 core
-			
-			layout (location = 0) out vec4 color;
-			
-			in vec3 v_Position;
-			in vec4 v_Color;
-			
-			void main()
-			{
-				color = v_Color;
 			}
 		)";
 
@@ -142,14 +108,13 @@ public:
 			}
 		)";
 
-		m_GenericShader = ptl::Shader::Create(genericVertexSource, genericFragmentSource);
-		m_FlatColorShader = ptl::Shader::Create(flatColorVertexSource, flatColorFragmentSource);
-		m_TextureShader = ptl::Shader::Create("res/shaders/Texture.glsl");
+		m_ShaderLibrary.Add(ptl::Shader::Create("FlatColor", flatColorVertexSource, flatColorFragmentSource));
+		ptl::Ref<ptl::Shader> textureShader = m_ShaderLibrary.Load("res/shaders/Texture.glsl");
 
-		m_TestTexture = ptl::Texture2D::Create("res/textures/test_texture.png");
+		m_TestTexture = ptl::Texture2D::Create("res/textures/test.png");
 		m_SusTexture = ptl::Texture2D::Create("res/textures/sus.png");
 
-		m_TextureShader->Bind();
+		textureShader->Bind();
 		m_TestTexture->Bind(0);
 		m_SusTexture->Bind(1);
 	}
@@ -169,17 +134,20 @@ public:
 
 		ptl::Renderer::BeginScene(m_Camera);
 
-		m_TextureShader->Bind();
-		m_TextureShader->UploadUniformInt("u_Texture", 0);
-		ptl::Renderer::Submit(m_SquareVA, m_TextureShader, m_Square1Transform);
+		ptl::Ref<ptl::Shader> textureShader = m_ShaderLibrary.Get("Texture");
+		ptl::Ref<ptl::Shader> flatColorShader = m_ShaderLibrary.Get("FlatColor");
 
-		m_TextureShader->Bind();
-		m_TextureShader->UploadUniformInt("u_Texture", 1);
-		ptl::Renderer::Submit(m_SquareVA, m_TextureShader, m_Square2Transform);
+		textureShader->Bind();
+		textureShader->UploadUniformInt("u_Texture", 0);
+		ptl::Renderer::Submit(m_SquareVA, textureShader, m_Square1Transform);
 
-		m_FlatColorShader->Bind();
-		m_FlatColorShader->UploadUniformFloat3("u_Color", m_TriangleColor);
-		ptl::Renderer::Submit(m_TriangleVA, m_FlatColorShader, m_TriangleTransform);
+		textureShader->Bind();
+		textureShader->UploadUniformInt("u_Texture", 1);
+		ptl::Renderer::Submit(m_SquareVA, textureShader, m_Square2Transform);
+
+		flatColorShader->Bind();
+		flatColorShader->UploadUniformFloat3("u_Color", m_TriangleColor);
+		ptl::Renderer::Submit(m_TriangleVA, flatColorShader, m_TriangleTransform);
 
 		ptl::Renderer::EndScene();
 	}
@@ -199,9 +167,7 @@ public:
 	}
 
 private:
-	ptl::Ref<ptl::Shader> m_GenericShader;
-	ptl::Ref<ptl::Shader> m_FlatColorShader;
-	ptl::Ref<ptl::Shader> m_TextureShader;
+	ptl::ShaderLibrary m_ShaderLibrary;
 
 	ptl::Ref<ptl::Texture2D> m_TestTexture;
 	ptl::Ref<ptl::Texture2D> m_SusTexture;

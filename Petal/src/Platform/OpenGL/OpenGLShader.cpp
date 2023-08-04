@@ -12,9 +12,17 @@ namespace ptl
 		std::string source = ReadFile(filepath);
 		auto shaderSources = SplitShaders(source);
 		Compile(shaderSources);
+
+		// Get shader name from filepath
+		size_t lastSlash = filepath.find_last_of("/\\");
+		size_t start = lastSlash == std::string::npos ? 0 : lastSlash + 1;
+		size_t lastDot = filepath.rfind('.');
+		size_t count = lastDot == std::string::npos ? filepath.size() - start : lastDot - start;
+		m_Name = filepath.substr(start, count);
 	}
 
-	OpenGLShader::OpenGLShader(const std::string& vertexSource, const std::string& fragmentSource)
+	OpenGLShader::OpenGLShader(const std::string& name, const std::string& vertexSource, const std::string& fragmentSource)
+		: m_Name(name)
 	{
 		std::unordered_map<GLenum, std::string> shaderSources;
 		shaderSources[GL_VERTEX_SHADER] = vertexSource;
@@ -35,6 +43,11 @@ namespace ptl
 	void OpenGLShader::Unbind() const
 	{
 		glUseProgram(0);
+	}
+
+	const std::string& OpenGLShader::GetName() const
+	{
+		return m_Name;
 	}
 
 	void OpenGLShader::UploadUniformBool(const std::string& name, bool value) const
