@@ -50,8 +50,6 @@ namespace ptl
 		EventDispatcher dispatcher(event);
 		dispatcher.Dispatch<WindowCloseEvent>(PTL_BIND_EVENT_FN(Application::OnWindowClose));
 
-		PTL_CORE_TRACE("{0}", event);
-
 		for (std::vector<Layer*>::iterator it = m_LayerStack.end(); it != m_LayerStack.begin(); it)
 		{
 			(*--it)->OnEvent(event);
