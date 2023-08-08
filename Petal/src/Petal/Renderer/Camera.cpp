@@ -6,6 +6,7 @@
 namespace ptl
 {
 	Camera::Camera(float vFOV, float viewportWidth, float viewportHeight, float nearClip, float farClip)
+		: m_VerticalFOV(vFOV), m_ViewportWidth(viewportWidth), m_ViewportHeight(viewportHeight), m_NearClip(nearClip), m_FarClip(farClip)
 	{
 		m_Proj = glm::perspective(glm::radians(vFOV), viewportWidth / viewportHeight, nearClip, farClip);
 		CalculateViewMatrix();
@@ -13,31 +14,50 @@ namespace ptl
 
 	void Camera::SetPosition(const glm::vec3& position)
 	{
-		m_Position = position;
-
-		m_Dirty = true;
+		if (m_Position != position)
+		{
+			m_Position = position;
+			m_ViewDirty = true;
+		}
 	}
 
 	void Camera::SetEuler(const glm::vec3& euler)
 	{
-		m_Euler = euler;
-		m_Direction.x = cos(glm::radians(m_Euler.y)) * cos(glm::radians(m_Euler.x));
-		m_Direction.y = sin(glm::radians(m_Euler.x));
-		m_Direction.z = sin(glm::radians(m_Euler.y)) * cos(glm::radians(m_Euler.x));
+		if (m_Euler != euler)
+		{
+			m_Euler = euler;
+			m_Direction.x = cos(glm::radians(m_Euler.y)) * cos(glm::radians(m_Euler.x));
+			m_Direction.y = sin(glm::radians(m_Euler.x));
+			m_Direction.z = sin(glm::radians(m_Euler.y)) * cos(glm::radians(m_Euler.x));
 
-		m_Direction = glm::normalize(m_Direction);
-		m_Right = glm::cross(m_Direction, { 0.0f, 1.0f, 0.0f });
-		m_Up = glm::cross(m_Right, m_Direction);
+			m_Direction = glm::normalize(m_Direction);
+			m_Right = glm::cross(m_Direction, { 0.0f, 1.0f, 0.0f });
+			m_Up = glm::cross(m_Right, m_Direction);
 
-		m_Dirty = true;
+			m_ViewDirty = true;
+		}
+	}
+
+	void Camera::SetViewport(float width, float height)
+	{
+		m_ViewportWidth = width;
+		m_ViewportHeight = height;
+
+		m_ProjDirty = true;
 	}
 
 	void Camera::Update()
 	{
-		if (m_Dirty)
+		if (m_ViewDirty)
 		{
 			CalculateViewMatrix();
-			m_Dirty = false;
+			m_ViewDirty = false;
+		}
+
+		if (m_ProjDirty)
+		{
+			CalculateProjMatrix();
+			m_ProjDirty = false;
 		}
 	}
 
@@ -74,6 +94,12 @@ namespace ptl
 	void Camera::CalculateViewMatrix()
 	{
 		m_View = glm::lookAt(m_Position, m_Position + m_Direction, { 0.0f, 1.0f, 0.0f });
+		m_ViewProj = m_Proj * m_View;
+	}
+
+	void Camera::CalculateProjMatrix()
+	{
+		m_Proj = glm::perspective(glm::radians(m_VerticalFOV), m_ViewportWidth / m_ViewportHeight, m_NearClip, m_FarClip);
 		m_ViewProj = m_Proj * m_View;
 	}
 }

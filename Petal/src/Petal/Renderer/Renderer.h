@@ -13,10 +13,12 @@ namespace ptl
 		static void BeginScene(Camera& camera);
 		static void EndScene();
 
+		static void OnWindowResize(uint32_t width, uint32_t height);
 		static void Submit(const Ref<VertexArray>& vertexArray, const Ref<Shader>& shader, const glm::mat4& transform);
 
 		// Renderer API commands
 		inline static void Init() { s_RendererAPI->Init(); }
+		inline static void SetViewport(uint32_t width, uint32_t height) { s_RendererAPI->SetViewport(width, height); }
 		inline static void SetClearColor(const glm::vec4& color) { s_RendererAPI->SetClearColor(color); }
 		inline static void Clear() { s_RendererAPI->Clear(); }
 

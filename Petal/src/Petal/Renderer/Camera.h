@@ -11,6 +11,8 @@ namespace ptl
 
 		void SetPosition(const glm::vec3& position);
 		void SetEuler(const glm::vec3& euler);
+		void SetViewport(float width, float height);
+
 		void Update();
 
 		const glm::vec3& GetPosition() const;
@@ -23,8 +25,15 @@ namespace ptl
 
 	private:
 		void CalculateViewMatrix();
+		void CalculateProjMatrix();
 
 	private:
+		float m_VerticalFOV;
+		float m_ViewportWidth;
+		float m_ViewportHeight;
+		float m_NearClip;
+		float m_FarClip;
+
 		glm::vec3 m_Position = glm::vec3(0.0f, 0.0f, 1.0f);
 		glm::vec3 m_Euler = glm::vec3(0.0f); // Pitch, yaw, roll -> x, y, z
 		glm::vec3 m_Direction = glm::vec3(1.0f, 0.0f, 0.0f);
@@ -35,6 +44,7 @@ namespace ptl
 		glm::mat4 m_Proj = glm::mat4(1.0f);
 		glm::mat4 m_ViewProj = glm::mat4(1.0f);
 
-		bool m_Dirty = true; // Requires recalculation of view matrix
+		bool m_ViewDirty = true; // Requires recalculation of view matrix
+		bool m_ProjDirty = true; // Requires recalculation of projection matrix
 	};
 }

@@ -17,6 +17,11 @@ namespace ptl
 	{
 	}
 
+	void Renderer::OnWindowResize(uint32_t width, uint32_t height)
+	{
+		SetViewport(width, height);
+	}
+
 	void Renderer::Submit(const Ref<VertexArray>& vertexArray, const Ref<Shader>& shader, const glm::mat4& transform)
 	{
 		shader->Bind();

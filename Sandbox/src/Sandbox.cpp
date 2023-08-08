@@ -196,6 +196,7 @@ public:
 	{
 		ptl::EventDispatcher dispatcher(event);
 		dispatcher.Dispatch<ptl::MouseMoveEvent>(PTL_BIND_EVENT_FN(SandboxLayer::OnMouseMove));
+		dispatcher.Dispatch<ptl::WindowResizeEvent>(PTL_BIND_EVENT_FN(SandboxLayer::OnWindowResize));
 	}
 
 	virtual void OnImGuiRender() override
@@ -232,6 +233,12 @@ private:
 		m_LastMouseX = x;
 		m_LastMouseY = y;
 		return true;
+	}
+
+	bool OnWindowResize(ptl::WindowResizeEvent& event)
+	{
+		m_Camera.SetViewport(event.GetWidth(), event.GetHeight());
+		return false;
 	}
 
 private:
