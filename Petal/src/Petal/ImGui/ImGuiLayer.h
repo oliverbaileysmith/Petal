@@ -24,5 +24,18 @@ namespace ptl
 
 		void Begin();
 		void End();
+
+	private:
+		bool OnWindowResizeEvent(WindowResizeEvent& event);
+		bool OnKeyPressEvent(KeyPressEvent& event);
+		bool OnKeyReleaseEvent(KeyReleaseEvent& event);
+		bool OnKeyTypeEvent(KeyTypeEvent& event);
+		bool OnMouseButtonPressEvent(MouseButtonPressEvent& event);
+		bool OnMouseButtonReleaseEvent(MouseButtonReleaseEvent& event);
+		bool OnMouseMoveEvent(MouseMoveEvent& event);
+		bool OnMouseScrollEvent(MouseScrollEvent& event);
+
+        ImGuiKey PtlToImGuiKeyCode(KeyCode keyCode);
+		ImGuiMouseButton PtlToImGuiMouseButtonCode(MouseButtonCode button);
 	};
 }

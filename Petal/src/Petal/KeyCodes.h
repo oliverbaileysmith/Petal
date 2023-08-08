@@ -1,5 +1,7 @@
 #pragma once
 
+#include <iostream>
+
 // Equivalent to GLFW key codes
 
 namespace ptl
