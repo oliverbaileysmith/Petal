@@ -1,9 +1,9 @@
 #pragma once
 
-#include "Petal/Core.h"
-#include "Window.h"
+#include "Petal/Core/Core.h"
+#include "Petal/Core/Window.h"
 
-#include "Petal/LayerStack.h"
+#include "Petal/Core/LayerStack.h"
 #include "Petal/ImGui/ImGuiLayer.h"
 
 #include "Petal/Events/Event.h"

@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Petal/Input.h"
+#include "Petal/Core/Input.h"
 
 namespace ptl
 {

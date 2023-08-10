@@ -237,7 +237,7 @@ private:
 
 	bool OnWindowResize(ptl::WindowResizeEvent& event)
 	{
-		m_Camera.SetViewport(event.GetWidth(), event.GetHeight());
+		m_Camera.SetViewport((float)event.GetWidth(), (float)event.GetHeight());
 		return false;
 	}
 

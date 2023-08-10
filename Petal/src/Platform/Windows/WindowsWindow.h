@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Petal/Window.h"
+#include "Petal/Core/Window.h"
 #include "Petal/Renderer/RenderContext.h"
 
 #include <GLFW/glfw3.h>

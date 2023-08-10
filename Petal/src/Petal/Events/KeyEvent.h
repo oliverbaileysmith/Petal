@@ -2,7 +2,7 @@
 
 #include "Petal/Events/Event.h"
 
-#include "Petal/KeyCodes.h"
+#include "Petal/Core/KeyCodes.h"
 
 namespace ptl
 {

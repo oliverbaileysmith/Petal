@@ -3,7 +3,7 @@
 
 #include "Platform/OpenGL/imgui_impl_opengl3.h"
 
-#include "Petal/Application.h"
+#include "Petal/Core/Application.h"
 
 #include <imgui.h>
 #include <GLFW/glfw3.h>
@@ -49,7 +49,6 @@ namespace ptl
 
     void ImGuiLayer::OnEvent(Event& event)
     {
-        PTL_CORE_TRACE(event);
         EventDispatcher dispatcher(event);
 
         dispatcher.Dispatch<WindowResizeEvent>(PTL_BIND_EVENT_FN(ImGuiLayer::OnWindowResizeEvent));
@@ -93,7 +92,7 @@ namespace ptl
     bool ImGuiLayer::OnWindowResizeEvent(WindowResizeEvent& event)
     {
         ImGuiIO& io = ImGui::GetIO();
-        io.DisplaySize = ImVec2(event.GetWidth(), event.GetHeight());
+        io.DisplaySize = ImVec2((float)event.GetWidth(), (float)event.GetHeight());
         return false;
     }
 

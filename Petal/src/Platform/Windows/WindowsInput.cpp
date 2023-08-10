@@ -1,7 +1,7 @@
 #include "ptlpch.h"
 #include "WindowsInput.h"
 
-#include "Petal/Application.h"
+#include "Petal/Core/Application.h"
 
 #include <GLFW/glfw3.h>
 

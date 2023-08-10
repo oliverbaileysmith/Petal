@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Petal/Renderer/RenderContext.h":
+#include "Petal/Renderer/RenderContext.h"
 
 struct GLFWwindow;
 

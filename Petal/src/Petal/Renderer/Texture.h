@@ -1,7 +1,7 @@
 #pragma once
 
 #include <string>
-#include "Petal/Core.h"
+#include "Petal/Core/Core.h"
 
 namespace ptl
 {

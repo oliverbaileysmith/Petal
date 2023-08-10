@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Petal/Layer.h"
+#include "Petal/Core/Layer.h"
 
 #include "Petal/Events/KeyEvent.h"
 #include "Petal/Events/MouseEvent.h"

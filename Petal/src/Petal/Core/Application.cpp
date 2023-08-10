@@ -1,6 +1,6 @@
 #include "ptlpch.h"
-#include "Petal/Application.h"
-#include "Petal/Core.h"
+#include "Petal/Core/Application.h"
+#include "Petal/Core/Core.h"
 
 namespace ptl
 {

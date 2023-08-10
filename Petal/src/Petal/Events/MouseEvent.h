@@ -2,7 +2,7 @@
 
 #include "Petal/Events/Event.h"
 
-#include "Petal/MouseButtonCodes.h"
+#include "Petal/Core/MouseButtonCodes.h"
 
 namespace ptl
 {

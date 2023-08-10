@@ -2,14 +2,14 @@
 
 // To be included by client application
 
-#include "Petal/Application.h"
-#include "Petal/Layer.h"
-#include "Petal/Log.h"
+#include "Petal/Core/Application.h"
+#include "Petal/Core/Layer.h"
+#include "Petal/Core/Log.h"
 #include "Petal/Core/Timestep.h"
 
-#include "Petal/Input.h"
-#include "Petal/KeyCodes.h"
-#include "Petal/MouseButtonCodes.h"
+#include "Petal/Core/Input.h"
+#include "Petal/Core/KeyCodes.h"
+#include "Petal/Core/MouseButtonCodes.h"
 #include "Petal/ImGui/ImGuiLayer.h"
 
 #include "Petal/Renderer/Renderer.h"
@@ -20,4 +20,4 @@
 #include "Petal/Renderer/IndexBuffer.h"
 #include "Petal/Renderer/Camera.h"
 
-#include "Petal/EntryPoint.h"
+#include "Petal/Core/EntryPoint.h"

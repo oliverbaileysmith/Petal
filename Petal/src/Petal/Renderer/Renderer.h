@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Petal/Core.h"
+#include "Petal/Core/Core.h"
 
 #include "Petal/Renderer/RendererAPI.h"
 #include "Petal/Renderer/Camera.h"

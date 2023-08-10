@@ -2,7 +2,7 @@
 
 #include <glm/glm.hpp>
 
-#include "Petal/Core.h"
+#include "Petal/Core/Core.h"
 #include "Petal/Renderer/VertexArray.h"
 
 namespace ptl
