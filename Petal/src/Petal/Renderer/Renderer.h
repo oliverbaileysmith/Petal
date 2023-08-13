@@ -30,6 +30,7 @@ namespace ptl
 		struct SceneData
 		{
 			glm::mat4 ViewProj;
+			glm::vec3 CameraPosition;
 		};
 
 		static RendererAPI* s_RendererAPI;

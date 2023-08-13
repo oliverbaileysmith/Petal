@@ -7,7 +7,7 @@ class SandboxLayer : public ptl::Layer
 public:
 	SandboxLayer()
 		: Layer("Sandbox"), m_Camera(45.0f, 1280.0f, 720.0f, 0.1f, 100.0f),
-		m_CubePosition(0.0f), m_CubeTransform(1.0f), m_CubeColor(1.0f, 1.0f, 0.0f),
+		m_CubePosition(0.0f), m_CubeTransform(1.0f), m_CubeColor(0.5f, 0.2f, 0.8f),
 		m_LightPosition(2.0f), m_LightTransform(glm::translate(glm::mat4(1.0f), m_LightPosition)), m_LightColor(1.0f),
 		m_CameraPos(0.0f, 0.0f, 3.0f), m_CameraEuler(0.0f, -90.0f, 0.0f)
 	{
@@ -17,31 +17,53 @@ public:
 	virtual void Init() override
 	{
 		// Cube setup
-		float cubeVertices[3 * 8] = {
-			-0.5f, -0.5f,  0.5f,
-			 0.5f, -0.5f,  0.5f,
-			 0.5f,  0.5f,  0.5f,
-			-0.5f,  0.5f,  0.5f,
-			 0.5f, -0.5f, -0.5f,
-			-0.5f, -0.5f, -0.5f,
-			-0.5f,  0.5f, -0.5f,
-			 0.5f,  0.5f, -0.5f
+		float cubeVertices[6 * 24] = {
+			-0.5f, -0.5f,  0.5f,  0.0f,  0.0f,  1.0f, // Front
+			 0.5f, -0.5f,  0.5f,  0.0f,  0.0f,  1.0f, 
+			 0.5f,  0.5f,  0.5f,  0.0f,  0.0f,  1.0f, 
+			-0.5f,  0.5f,  0.5f,  0.0f,  0.0f,  1.0f, 
+
+			 0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f, // Back
+			-0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f,
+			-0.5f,  0.5f, -0.5f,  0.0f,  0.0f, -1.0f,
+			 0.5f,  0.5f, -0.5f,  0.0f,  0.0f, -1.0f,
+
+			 0.5f, -0.5f,  0.5f,  1.0f,  0.0f,  0.0f, // Right
+			 0.5f, -0.5f, -0.5f,  1.0f,  0.0f,  0.0f,
+			 0.5f,  0.5f, -0.5f,  1.0f,  0.0f,  0.0f,
+			 0.5f,  0.5f,  0.5f,  1.0f,  0.0f,  0.0f,
+
+			-0.5f, -0.5f, -0.5f, -1.0f,  0.0f,  0.0f, // Left
+			-0.5f, -0.5f,  0.5f, -1.0f,  0.0f,  0.0f,
+			-0.5f,  0.5f,  0.5f, -1.0f,  0.0f,  0.0f,
+			-0.5f,  0.5f, -0.5f, -1.0f,  0.0f,  0.0f,
+
+			-0.5f,  0.5f,  0.5f,  0.0f,  1.0f,  0.0f, // Top
+			 0.5f,  0.5f,  0.5f,  0.0f,  1.0f,  0.0f,
+			 0.5f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f,
+			-0.5f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f,
+
+			-0.5f, -0.5f, -0.5f,  0.0f, -1.0f,  0.0f, // Bottom
+			 0.5f, -0.5f, -0.5f,  0.0f, -1.0f,  0.0f,
+			 0.5f, -0.5f,  0.5f,  0.0f, -1.0f,  0.0f,
+			-0.5f, -0.5f,  0.5f,  0.0f, -1.0f,  0.0f
+
 		};
 
 		const uint32_t nCubeIndices = 36;
 		uint32_t cubeIndices[nCubeIndices] = {
-			0, 1, 2, // Front
-			2, 3, 0,
-			4, 5, 6, // Back
-			6, 7, 4,
-			1, 4, 7, // Right
-			7, 2, 1,
-			5, 0, 3, // Left
-			3, 6, 5,
-			3, 2, 7, // Top
-			7, 6, 3,
-			5, 4, 1, // Bottom
-			1, 0, 5
+			 0,  1,  2, // Front
+			 2,  3,  0,
+			 4,  5,  6, // Back
+			 6,  7,  4,
+			 8,  9, 10, // Right
+			10, 11,  8,
+			12, 13, 14, // Left
+			14, 15, 12,
+			16, 17, 18, // Top
+			18, 19, 16,
+			20, 21, 22, // Bottom
+			22, 23, 20
 		};
 
 		m_CubeVA = ptl::VertexArray::Create();
@@ -50,7 +72,8 @@ public:
 		cubeVB->Bind();
 
 		std::vector<ptl::VertexBufferElement> cubeElements = {
-			{ptl::ShaderDataType::Float3, "a_Position"}
+			{ptl::ShaderDataType::Float3, "a_Position"},
+			{ptl::ShaderDataType::Float3, "a_Normal"}
 		};
 		ptl::VertexBufferLayout cubeLayout(cubeElements);
 
@@ -68,12 +91,7 @@ public:
 		ptl::Ref<ptl::VertexBuffer> lightVB = ptl::VertexBuffer::Create(cubeVertices, sizeof(cubeVertices));
 		lightVB->Bind();
 
-		std::vector<ptl::VertexBufferElement> lightElements = {
-			{ptl::ShaderDataType::Float3, "a_Position"}
-		};
-		ptl::VertexBufferLayout lightLayout(lightElements);
-
-		lightVB->SetLayout(lightLayout);
+		lightVB->SetLayout(cubeLayout);
 		m_LightVA->AddVertexBuffer(lightVB);
 
 		ptl::Ref<ptl::IndexBuffer> lightIB = ptl::IndexBuffer::Create(cubeIndices, nCubeIndices);
@@ -149,9 +167,12 @@ public:
 		ptl::Ref<ptl::Shader> phongShader = m_ShaderLibrary.Get("Phong");
 		ptl::Ref<ptl::Shader> lampShader = m_ShaderLibrary.Get("Lamp");
 
+		glm::mat3 normalMatrix = glm::mat3(glm::transpose(glm::inverse(m_CubeTransform)));
 		phongShader->Bind();
+		phongShader->UploadUniformMat3("u_NormalMatrix", normalMatrix);
 		phongShader->UploadUniformFloat3("u_ObjectColor", m_CubeColor);
 		phongShader->UploadUniformFloat3("u_LightColor", m_LightColor);
+		phongShader->UploadUniformFloat3("u_LightPosition", m_LightPosition);
 		ptl::Renderer::Submit(m_CubeVA, phongShader, m_CubeTransform);
 
 		lampShader->Bind();
@@ -173,9 +194,9 @@ public:
 		ImGui::Begin("Controls");
 
 		ImGui::SliderFloat3("Cube Position", &m_CubePosition.x, -2.0f, 2.0f);
-		ImGui::SliderFloat3("Light Position", &m_LightPosition.x, -2.0f, 2.0f);
-
 		ImGui::ColorEdit3("Cube Color", &m_CubeColor.x);
+
+		ImGui::SliderFloat3("Light Position", &m_LightPosition.x, -2.0f, 2.0f);
 		ImGui::ColorEdit3("Light Color", &m_LightColor.x);
 
 		ImGui::SliderFloat3("Camera Position", &m_CameraPos.x, -5.0f, 5.0f);
