@@ -19,37 +19,36 @@ public:
 	virtual void Init() override
 	{
 		// Cube setup
-		float cubeVertices[6 * 24] = {
-			-0.5f, -0.5f,  0.5f,  0.0f,  0.0f,  1.0f, // Front
-			 0.5f, -0.5f,  0.5f,  0.0f,  0.0f,  1.0f, 
-			 0.5f,  0.5f,  0.5f,  0.0f,  0.0f,  1.0f, 
-			-0.5f,  0.5f,  0.5f,  0.0f,  0.0f,  1.0f, 
+		float cubeVertices[8 * 24] = {
+			-0.5f, -0.5f,  0.5f,  0.0f,  0.0f,  1.0f, 0.0f, 0.0f, // Front
+			 0.5f, -0.5f,  0.5f,  0.0f,  0.0f,  1.0f, 1.0f, 0.0f,
+			 0.5f,  0.5f,  0.5f,  0.0f,  0.0f,  1.0f, 1.0f, 1.0f,
+			-0.5f,  0.5f,  0.5f,  0.0f,  0.0f,  1.0f, 0.0f, 1.0f,
 
-			 0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f, // Back
-			-0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f,
-			-0.5f,  0.5f, -0.5f,  0.0f,  0.0f, -1.0f,
-			 0.5f,  0.5f, -0.5f,  0.0f,  0.0f, -1.0f,
+			 0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f, 0.0f, 0.0f, // Back
+			-0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f, 1.0f, 0.0f,
+			-0.5f,  0.5f, -0.5f,  0.0f,  0.0f, -1.0f, 1.0f, 1.0f,
+			 0.5f,  0.5f, -0.5f,  0.0f,  0.0f, -1.0f, 0.0f, 1.0f,
 
-			 0.5f, -0.5f,  0.5f,  1.0f,  0.0f,  0.0f, // Right
-			 0.5f, -0.5f, -0.5f,  1.0f,  0.0f,  0.0f,
-			 0.5f,  0.5f, -0.5f,  1.0f,  0.0f,  0.0f,
-			 0.5f,  0.5f,  0.5f,  1.0f,  0.0f,  0.0f,
+			 0.5f, -0.5f,  0.5f,  1.0f,  0.0f,  0.0f, 0.0f, 0.0f, // Right
+			 0.5f, -0.5f, -0.5f,  1.0f,  0.0f,  0.0f, 1.0f, 0.0f,
+			 0.5f,  0.5f, -0.5f,  1.0f,  0.0f,  0.0f, 1.0f, 1.0f,
+			 0.5f,  0.5f,  0.5f,  1.0f,  0.0f,  0.0f, 0.0f, 1.0f,
 
-			-0.5f, -0.5f, -0.5f, -1.0f,  0.0f,  0.0f, // Left
-			-0.5f, -0.5f,  0.5f, -1.0f,  0.0f,  0.0f,
-			-0.5f,  0.5f,  0.5f, -1.0f,  0.0f,  0.0f,
-			-0.5f,  0.5f, -0.5f, -1.0f,  0.0f,  0.0f,
+			-0.5f, -0.5f, -0.5f, -1.0f,  0.0f,  0.0f, 0.0f, 0.0f, // Left
+			-0.5f, -0.5f,  0.5f, -1.0f,  0.0f,  0.0f, 1.0f, 0.0f,
+			-0.5f,  0.5f,  0.5f, -1.0f,  0.0f,  0.0f, 1.0f, 1.0f,
+			-0.5f,  0.5f, -0.5f, -1.0f,  0.0f,  0.0f, 0.0f, 1.0f,
 
-			-0.5f,  0.5f,  0.5f,  0.0f,  1.0f,  0.0f, // Top
-			 0.5f,  0.5f,  0.5f,  0.0f,  1.0f,  0.0f,
-			 0.5f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f,
-			-0.5f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f,
+			-0.5f,  0.5f,  0.5f,  0.0f,  1.0f,  0.0f, 0.0f, 0.0f, // Top
+			 0.5f,  0.5f,  0.5f,  0.0f,  1.0f,  0.0f, 1.0f, 0.0f,
+			 0.5f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f, 1.0f, 1.0f,
+			-0.5f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f, 0.0f, 1.0f,
 
-			-0.5f, -0.5f, -0.5f,  0.0f, -1.0f,  0.0f, // Bottom
-			 0.5f, -0.5f, -0.5f,  0.0f, -1.0f,  0.0f,
-			 0.5f, -0.5f,  0.5f,  0.0f, -1.0f,  0.0f,
-			-0.5f, -0.5f,  0.5f,  0.0f, -1.0f,  0.0f
-
+			-0.5f, -0.5f, -0.5f,  0.0f, -1.0f,  0.0f, 0.0f, 0.0f, // Bottom
+			 0.5f, -0.5f, -0.5f,  0.0f, -1.0f,  0.0f, 1.0f, 0.0f,
+			 0.5f, -0.5f,  0.5f,  0.0f, -1.0f,  0.0f, 1.0f, 1.0f,
+			-0.5f, -0.5f,  0.5f,  0.0f, -1.0f,  0.0f, 0.0f, 1.0f
 		};
 
 		const uint32_t nCubeIndices = 36;
@@ -75,7 +74,8 @@ public:
 
 		std::vector<ptl::VertexBufferElement> cubeElements = {
 			{ptl::ShaderDataType::Float3, "a_Position"},
-			{ptl::ShaderDataType::Float3, "a_Normal"}
+			{ptl::ShaderDataType::Float3, "a_Normal"},
+			{ptl::ShaderDataType::Float2, "a_TexCoords"}
 		};
 		ptl::VertexBufferLayout cubeLayout(cubeElements);
 
@@ -102,15 +102,11 @@ public:
 
 		ptl::Ref<ptl::Shader> textureShader = ptl::Renderer::GetShaderLibrary()->Load("res/shaders/Texture.glsl");
 
-		m_CubeMaterial = std::make_shared<ptl::PhongMaterial>(m_CubeAmbient, m_CubeDiffuse, m_CubeSpecular, m_CubeShininess);
+		m_CubeMaterial = std::make_shared<ptl::MappedPhongMaterial>(0, m_CubeSpecular, m_CubeShininess);
 		m_LampMaterial = std::make_shared<ptl::LampMaterial>(m_CubeDiffuse);
 
-		m_TestTexture = ptl::Texture2D::Create("res/textures/test.png");
-		m_SusTexture = ptl::Texture2D::Create("res/textures/sus.png");
-
-		textureShader->Bind();
-		m_TestTexture->Bind(0);
-		m_SusTexture->Bind(1);
+		m_CubeDiffuseTexture = ptl::Texture2D::Create("res/textures/crate_diffuse.png");
+		m_CubeDiffuseTexture->Bind(0);
 	}
 
 	virtual void ShutDown() override
@@ -166,26 +162,22 @@ public:
 
 		ptl::Renderer::BeginScene(m_Camera);
 
-		ptl::Ref<ptl::Shader> textureShader = ptl::Renderer::GetShaderLibrary()->Get("Texture");
-		ptl::Ref<ptl::Shader> phongShader = ptl::Renderer::GetShaderLibrary()->Get("PetalPhong");
-		ptl::Ref<ptl::Shader> lampShader = ptl::Renderer::GetShaderLibrary()->Get("PetalLamp");
-
-		glm::mat3 normalMatrix = glm::mat3(glm::transpose(glm::inverse(m_CubeTransform)));
+		glm::mat3 cubeNormalMatrix = glm::mat3(glm::transpose(glm::inverse(m_CubeTransform)));
 
 		m_CubeMaterial->Bind();
-		phongShader->Bind();
-		phongShader->UploadUniformMat3("u_NormalMatrix", normalMatrix);
+		ptl::Ref<ptl::Shader> cubeShader = m_CubeMaterial->GetShader();
+		cubeShader->Bind();
+		cubeShader->UploadUniformMat3("u_NormalMatrix", cubeNormalMatrix);
 
 		// TODO: move into Renderer::BeginScene
-		phongShader->UploadUniformFloat3("u_Light.Position", m_LightPosition);
-		phongShader->UploadUniformFloat3("u_Light.Ambient", m_LightAmbient);
-		phongShader->UploadUniformFloat3("u_Light.Diffuse", m_LightDiffuse);
-		phongShader->UploadUniformFloat3("u_Light.Specular", m_LightSpecular);
+		cubeShader->UploadUniformFloat3("u_Light.Position", m_LightPosition);
+		cubeShader->UploadUniformFloat3("u_Light.Ambient", m_LightAmbient);
+		cubeShader->UploadUniformFloat3("u_Light.Diffuse", m_LightDiffuse);
+		cubeShader->UploadUniformFloat3("u_Light.Specular", m_LightSpecular);
 
-		m_CubeMaterial->SetAmbient(m_CubeAmbient);
-		m_CubeMaterial->SetDiffuse(m_CubeDiffuse);
 		m_CubeMaterial->SetSpecular(m_CubeSpecular);
 		m_CubeMaterial->SetShininess(m_CubeShininess);
+
 		ptl::Renderer::Submit(m_CubeVA, m_CubeMaterial, m_CubeTransform);
 
 		m_LampMaterial->SetColor(m_LightDiffuse);
@@ -253,8 +245,7 @@ private:
 	}
 
 private:
-	ptl::Ref<ptl::Texture2D> m_TestTexture;
-	ptl::Ref<ptl::Texture2D> m_SusTexture;
+	ptl::Ref<ptl::Texture2D> m_CubeDiffuseTexture;
 
 	ptl::Ref<ptl::VertexArray> m_CubeVA;
 	ptl::Ref<ptl::VertexArray> m_LightVA;
@@ -274,7 +265,7 @@ private:
 	glm::vec3 m_LightDiffuse;
 	glm::vec3 m_LightSpecular;
 
-	ptl::Ref<ptl::PhongMaterial> m_CubeMaterial;
+	ptl::Ref<ptl::MappedPhongMaterial> m_CubeMaterial;
 	ptl::Ref<ptl::LampMaterial> m_LampMaterial;
 
 	float m_MouseSensitivity = 0.1f;

@@ -32,6 +32,24 @@ namespace ptl
 		float m_Shininess;
 	};
 
+	class MappedPhongMaterial : public Material
+	{
+	public:
+		MappedPhongMaterial(uint32_t ambientDiffuseSlot, const glm::vec3& specular, float shininess);
+		virtual void Bind() const override;
+		virtual const Ref<Shader>& GetShader() const override;
+
+		void SetAmbientDiffuseSlot(uint32_t slot);
+		void SetSpecular(const glm::vec3& specular);
+		void SetShininess(float shininess);
+
+	private:
+		Ref<Shader> m_Shader;
+		int m_AmbientDiffuseSlot;
+		glm::vec3 m_Specular;
+		float m_Shininess;
+	};
+
 	class LampMaterial : public Material
 	{
 	public:

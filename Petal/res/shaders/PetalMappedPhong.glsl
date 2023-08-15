@@ -3,18 +3,20 @@
 
 layout (location = 0) in vec3 a_Position;
 layout (location = 1) in vec3 a_Normal;
-layout (location = 2) in vec3 a_TexCoords;
+layout (location = 2) in vec2 a_TexCoords;
 
 uniform mat4 u_ViewProj;
 uniform mat4 u_Model;
 uniform mat3 u_NormalMatrix;
 
 out vec3 v_Normal;
+out vec2 v_TexCoords;
 out vec3 v_FragmentPosition;
 
 void main()
 {
 	v_Normal = u_NormalMatrix * a_Normal;
+	v_TexCoords = a_TexCoords;
 	v_FragmentPosition = vec3(u_Model * vec4(a_Position, 1.0f));
 	gl_Position = u_ViewProj * u_Model * vec4(a_Position, 1.0f);
 }
@@ -24,8 +26,7 @@ void main()
 
 struct Material
 {
-	vec3 Ambient;
-	vec3 Diffuse;
+	sampler2D AmbientDiffuse;
 	vec3 Specular;
 	float Shininess;
 };
@@ -39,6 +40,7 @@ struct Light
 };
 
 in vec3 v_Normal;
+in vec2 v_TexCoords;
 in vec3 v_FragmentPosition;
 
 uniform Material u_Material;
@@ -49,12 +51,12 @@ layout (location = 0) out vec4 fragColor;
 
 void main()
 {
-	vec3 ambient = u_Material.Ambient * u_Light.Ambient;
+	vec3 ambient = vec3(texture(u_Material.AmbientDiffuse, v_TexCoords)) * u_Light.Ambient;
 
 	vec3 n = normalize(v_Normal);
 	vec3 l = normalize(u_Light.Position - v_FragmentPosition);
 	float diffuseStrength = max(dot(n, l), 0.0f);
-	vec3 diffuse = diffuseStrength * u_Material.Diffuse * u_Light.Diffuse;
+	vec3 diffuse = diffuseStrength * vec3(texture(u_Material.AmbientDiffuse, v_TexCoords)) * u_Light.Diffuse;
 
 	vec3 v = normalize(u_CameraPosition - v_FragmentPosition);
 	vec3 r = reflect(-l, n);

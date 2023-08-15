@@ -35,6 +35,9 @@ namespace ptl
 		if (material->GetShader()->GetName() == "PetalPhong")
 			material->GetShader()->UploadUniformFloat3("u_CameraPosition", s_SceneData->CameraPosition);
 
+		if (material->GetShader()->GetName() == "PetalMappedPhong")
+			material->GetShader()->UploadUniformFloat3("u_CameraPosition", s_SceneData->CameraPosition);
+
 		vertexArray->Bind();
 		DrawIndexed(vertexArray);
 	}
