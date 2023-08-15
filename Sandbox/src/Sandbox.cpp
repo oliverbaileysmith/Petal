@@ -7,8 +7,10 @@ class SandboxLayer : public ptl::Layer
 public:
 	SandboxLayer()
 		: Layer("Sandbox"), m_Camera(45.0f, 1280.0f, 720.0f, 0.1f, 100.0f),
-		m_CubePosition(0.0f), m_CubeTransform(1.0f), m_CubeColor(0.5f, 0.2f, 0.8f),
-		m_LightPosition(2.0f), m_LightTransform(glm::translate(glm::mat4(1.0f), m_LightPosition)), m_LightColor(1.0f),
+		m_CubePosition(0.0f), m_CubeTransform(1.0f),
+		m_LightPosition(2.0f), m_LightTransform(glm::translate(glm::mat4(1.0f), m_LightPosition)),
+		m_CubeAmbient(1.0f, 0.5f, 0.3f), m_CubeDiffuse(1.0f, 0.5f, 0.3f), m_CubeSpecular(0.5f), m_CubeShininess(32.0f),
+		m_LightAmbient(0.2f), m_LightDiffuse(0.5f), m_LightSpecular(1.0f),
 		m_CameraPos(0.0f, 0.0f, 3.0f), m_CameraEuler(0.0f, -90.0f, 0.0f)
 	{
 
@@ -98,9 +100,10 @@ public:
 		lightIB->Bind();
 		m_LightVA->AddIndexBuffer(cubeIB);
 
-		ptl::Ref<ptl::Shader> textureShader = m_ShaderLibrary.Load("res/shaders/Texture.glsl");
-		ptl::Ref<ptl::Shader> phongShader = m_ShaderLibrary.Load("res/shaders/Phong.glsl");
-		ptl::Ref<ptl::Shader> lampShader = m_ShaderLibrary.Load("res/shaders/Lamp.glsl");
+		ptl::Ref<ptl::Shader> textureShader = ptl::Renderer::GetShaderLibrary()->Load("res/shaders/Texture.glsl");
+
+		m_CubeMaterial = std::make_shared<ptl::PhongMaterial>(m_CubeAmbient, m_CubeDiffuse, m_CubeSpecular, m_CubeShininess);
+		m_LampMaterial = std::make_shared<ptl::LampMaterial>(m_CubeDiffuse);
 
 		m_TestTexture = ptl::Texture2D::Create("res/textures/test.png");
 		m_SusTexture = ptl::Texture2D::Create("res/textures/sus.png");
@@ -163,21 +166,30 @@ public:
 
 		ptl::Renderer::BeginScene(m_Camera);
 
-		ptl::Ref<ptl::Shader> textureShader = m_ShaderLibrary.Get("Texture");
-		ptl::Ref<ptl::Shader> phongShader = m_ShaderLibrary.Get("Phong");
-		ptl::Ref<ptl::Shader> lampShader = m_ShaderLibrary.Get("Lamp");
+		ptl::Ref<ptl::Shader> textureShader = ptl::Renderer::GetShaderLibrary()->Get("Texture");
+		ptl::Ref<ptl::Shader> phongShader = ptl::Renderer::GetShaderLibrary()->Get("PetalPhong");
+		ptl::Ref<ptl::Shader> lampShader = ptl::Renderer::GetShaderLibrary()->Get("PetalLamp");
 
 		glm::mat3 normalMatrix = glm::mat3(glm::transpose(glm::inverse(m_CubeTransform)));
+
+		m_CubeMaterial->Bind();
 		phongShader->Bind();
 		phongShader->UploadUniformMat3("u_NormalMatrix", normalMatrix);
-		phongShader->UploadUniformFloat3("u_ObjectColor", m_CubeColor);
-		phongShader->UploadUniformFloat3("u_LightColor", m_LightColor);
-		phongShader->UploadUniformFloat3("u_LightPosition", m_LightPosition);
-		ptl::Renderer::Submit(m_CubeVA, phongShader, m_CubeTransform);
 
-		lampShader->Bind();
-		lampShader->UploadUniformFloat3("u_LightColor", m_LightColor);
-		ptl::Renderer::Submit(m_LightVA, lampShader, m_LightTransform);
+		// TODO: move into Renderer::BeginScene
+		phongShader->UploadUniformFloat3("u_Light.Position", m_LightPosition);
+		phongShader->UploadUniformFloat3("u_Light.Ambient", m_LightAmbient);
+		phongShader->UploadUniformFloat3("u_Light.Diffuse", m_LightDiffuse);
+		phongShader->UploadUniformFloat3("u_Light.Specular", m_LightSpecular);
+
+		m_CubeMaterial->SetAmbient(m_CubeAmbient);
+		m_CubeMaterial->SetDiffuse(m_CubeDiffuse);
+		m_CubeMaterial->SetSpecular(m_CubeSpecular);
+		m_CubeMaterial->SetShininess(m_CubeShininess);
+		ptl::Renderer::Submit(m_CubeVA, m_CubeMaterial, m_CubeTransform);
+
+		m_LampMaterial->SetColor(m_LightDiffuse);
+		ptl::Renderer::Submit(m_LightVA, m_LampMaterial, m_LightTransform);
 
 		ptl::Renderer::EndScene();
 	}
@@ -191,17 +203,24 @@ public:
 
 	virtual void OnImGuiRender() override
 	{
-		ImGui::Begin("Controls");
+		ImGui::Begin("Camera");
+		ImGui::SliderFloat3("Camera position", &m_CameraPos.x, -5.0f, 5.0f);
+		ImGui::SliderFloat3("Camera rotation", &m_CameraEuler.x, -360.0f, 360.0f);
+		ImGui::End();
 
-		ImGui::SliderFloat3("Cube Position", &m_CubePosition.x, -2.0f, 2.0f);
-		ImGui::ColorEdit3("Cube Color", &m_CubeColor.x);
+		ImGui::Begin("Object Positions");
+		ImGui::SliderFloat3("Cube position", &m_CubePosition.x, -2.0f, 2.0f);
+		ImGui::SliderFloat3("Light position", &m_LightPosition.x, -2.0f, 2.0f);
+		ImGui::End();
 
-		ImGui::SliderFloat3("Light Position", &m_LightPosition.x, -2.0f, 2.0f);
-		ImGui::ColorEdit3("Light Color", &m_LightColor.x);
-
-		ImGui::SliderFloat3("Camera Position", &m_CameraPos.x, -5.0f, 5.0f);
-		ImGui::SliderFloat3("Camera Rotation", &m_CameraEuler.x, -360.0f, 360.0f);
-
+		ImGui::Begin("Object Colors");
+		ImGui::SliderFloat3("Cube ambient", &m_CubeAmbient.x, 0.0f, 1.0f);
+		ImGui::SliderFloat3("Cube diffuse", &m_CubeDiffuse.x, 0.0f, 1.0f);
+		ImGui::SliderFloat3("Cube specular", &m_CubeSpecular.x, 0.0f, 1.0f);
+		ImGui::SliderFloat ("Cube shininess", &m_CubeShininess, 1.0f, 128.0f);
+		ImGui::SliderFloat3("Light ambient", &m_LightAmbient.x, 0.0f, 1.0f);
+		ImGui::SliderFloat3("Light diffuse", &m_LightDiffuse.x, 0.0f, 1.0f);
+		ImGui::SliderFloat3("Light specular", &m_LightSpecular.x, 0.0f, 1.0f);
 		ImGui::End();
 	}
 
@@ -234,8 +253,6 @@ private:
 	}
 
 private:
-	ptl::ShaderLibrary m_ShaderLibrary;
-
 	ptl::Ref<ptl::Texture2D> m_TestTexture;
 	ptl::Ref<ptl::Texture2D> m_SusTexture;
 
@@ -244,11 +261,21 @@ private:
 
 	glm::vec3 m_CubePosition;
 	glm::mat4 m_CubeTransform;
-	glm::vec3 m_CubeColor;
 
 	glm::vec3 m_LightPosition;
 	glm::mat4 m_LightTransform;
-	glm::vec3 m_LightColor;
+
+	glm::vec3 m_CubeAmbient;
+	glm::vec3 m_CubeDiffuse;
+	glm::vec3 m_CubeSpecular;
+	float m_CubeShininess;
+
+	glm::vec3 m_LightAmbient;
+	glm::vec3 m_LightDiffuse;
+	glm::vec3 m_LightSpecular;
+
+	ptl::Ref<ptl::PhongMaterial> m_CubeMaterial;
+	ptl::Ref<ptl::LampMaterial> m_LampMaterial;
 
 	float m_MouseSensitivity = 0.1f;
 	float m_LastMouseX = 640;

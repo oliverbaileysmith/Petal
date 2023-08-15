@@ -20,11 +20,11 @@ void main()
 
 in vec3 v_Normal;
 
-uniform vec3 u_LightColor;
+uniform vec3 u_LampColor;
 
 layout (location = 0) out vec4 color;
 
 void main()
 {
-	color = vec4(u_LightColor, 1.0f);
+	color = vec4(u_LampColor, 1.0f);
 }

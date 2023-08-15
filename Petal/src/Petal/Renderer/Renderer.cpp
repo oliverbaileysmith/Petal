@@ -7,6 +7,7 @@ namespace ptl
 {
 	RendererAPI* Renderer::s_RendererAPI = new OpenGLRendererAPI;
 	Renderer::SceneData* Renderer::s_SceneData = new Renderer::SceneData;
+	ShaderLibrary* Renderer::s_ShaderLibrary = new ShaderLibrary;
 
 	void Renderer::BeginScene(Camera& camera)
 	{
@@ -23,15 +24,16 @@ namespace ptl
 		SetViewport(width, height);
 	}
 
-	void Renderer::Submit(const Ref<VertexArray>& vertexArray, const Ref<Shader>& shader, const glm::mat4& transform)
+	void Renderer::Submit(const Ref<VertexArray>& vertexArray, const Ref<Material>& material, const glm::mat4& transform)
 	{
-		shader->Bind();
+		material->Bind();
 
-		shader->UploadUniformMat4("u_ViewProj", s_SceneData->ViewProj);
-		shader->UploadUniformMat4("u_Model", transform);
+		material->GetShader()->UploadUniformMat4("u_ViewProj", s_SceneData->ViewProj);
+		material->GetShader()->UploadUniformMat4("u_Model", transform);
 
-		if (shader->GetName() == "Phong")
-			shader->UploadUniformFloat3("u_CameraPosition", s_SceneData->CameraPosition);
+		// TODO: fix
+		if (material->GetShader()->GetName() == "PetalPhong")
+			material->GetShader()->UploadUniformFloat3("u_CameraPosition", s_SceneData->CameraPosition);
 
 		vertexArray->Bind();
 		DrawIndexed(vertexArray);

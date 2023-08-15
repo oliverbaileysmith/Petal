@@ -4,6 +4,7 @@
 
 #include "Petal/Renderer/RendererAPI.h"
 #include "Petal/Renderer/Camera.h"
+#include "Petal/Renderer/Material.h"
 
 namespace ptl
 {
@@ -14,7 +15,9 @@ namespace ptl
 		static void EndScene();
 
 		static void OnWindowResize(uint32_t width, uint32_t height);
-		static void Submit(const Ref<VertexArray>& vertexArray, const Ref<Shader>& shader, const glm::mat4& transform);
+		static void Submit(const Ref<VertexArray>& vertexArray, const Ref<Material>& material, const glm::mat4& transform);
+
+		inline static ShaderLibrary* GetShaderLibrary() { return s_ShaderLibrary; }
 
 		// Renderer API commands
 		inline static void Init() { s_RendererAPI->Init(); }
@@ -31,9 +34,11 @@ namespace ptl
 		{
 			glm::mat4 ViewProj;
 			glm::vec3 CameraPosition;
+			// TODO: add lights to scene data
 		};
 
 		static RendererAPI* s_RendererAPI;
+		static ShaderLibrary* s_ShaderLibrary;
 		static SceneData* s_SceneData;
 	};
 }

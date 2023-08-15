@@ -1,5 +1,6 @@
 #include "ptlpch.h"
 #include "OpenGLRendererAPI.h"
+#include "Petal/Renderer/Renderer.h"
 
 #include <glad/glad.h>
 
@@ -10,6 +11,9 @@ namespace ptl
 		glEnable(GL_BLEND);
 		glEnable(GL_DEPTH_TEST);
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+		Renderer::GetShaderLibrary()->Load("../Petal/res/shaders/PetalPhong.glsl");
+		Renderer::GetShaderLibrary()->Load("../Petal/res/shaders/PetalLamp.glsl");
 	}
 
 	void OpenGLRendererAPI::SetViewport(uint32_t width, uint32_t height)
