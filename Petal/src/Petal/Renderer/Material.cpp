@@ -69,8 +69,8 @@ namespace ptl
 		m_Color = color;
 	}
 
-	MappedPhongMaterial::MappedPhongMaterial(uint32_t ambientDiffuseSlot, const glm::vec3& specular, float shininess)
-		: m_AmbientDiffuseSlot(ambientDiffuseSlot), m_Specular(specular), m_Shininess(shininess)
+	MappedPhongMaterial::MappedPhongMaterial(uint32_t ambientDiffuseSlot, uint32_t specularSlot, float shininess)
+		: m_AmbientDiffuseSlot(ambientDiffuseSlot), m_SpecularSlot(specularSlot), m_Shininess(shininess)
 	{
 		m_Shader = Renderer::GetShaderLibrary()->Get("PetalMappedPhong");
 	}
@@ -79,8 +79,8 @@ namespace ptl
 	{
 		m_Shader->Bind();
 
-		m_Shader->UploadUniformInt("u_Material.AmbientDiffuse", m_AmbientDiffuseSlot);
-		m_Shader->UploadUniformFloat3("u_Material.Specular", m_Specular);
+		m_Shader->UploadUniformUint("u_Material.AmbientDiffuse", m_AmbientDiffuseSlot);
+		m_Shader->UploadUniformUint("u_Material.Specular", m_SpecularSlot);
 		m_Shader->UploadUniformFloat("u_Material.Shininess", m_Shininess);
 	}
 
@@ -94,9 +94,9 @@ namespace ptl
 		m_AmbientDiffuseSlot = slot;
 	}
 
-	void MappedPhongMaterial::SetSpecular(const glm::vec3& specular)
+	void MappedPhongMaterial::SetSpecularSlot(uint32_t slot)
 	{
-		m_Specular = specular;
+		m_SpecularSlot = slot;
 	}
 
 	void MappedPhongMaterial::SetShininess(float shininess)

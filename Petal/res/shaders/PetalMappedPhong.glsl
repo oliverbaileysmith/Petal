@@ -27,7 +27,7 @@ void main()
 struct Material
 {
 	sampler2D AmbientDiffuse;
-	vec3 Specular;
+	sampler2D Specular;
 	float Shininess;
 };
 
@@ -61,7 +61,7 @@ void main()
 	vec3 v = normalize(u_CameraPosition - v_FragmentPosition);
 	vec3 r = reflect(-l, n);
 	float specularStrength = pow(max(dot(v, r), 0.0f), u_Material.Shininess);
-	vec3 specular = specularStrength * u_Material.Specular * u_Light.Specular;
+	vec3 specular = specularStrength * vec3(texture(u_Material.Specular, v_TexCoords)) * u_Light.Specular;
 
 	vec3 color = ambient + diffuse + specular;
 

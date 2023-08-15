@@ -9,7 +9,6 @@ public:
 		: Layer("Sandbox"), m_Camera(45.0f, 1280.0f, 720.0f, 0.1f, 100.0f),
 		m_CubePosition(0.0f), m_CubeTransform(1.0f),
 		m_LightPosition(2.0f), m_LightTransform(glm::translate(glm::mat4(1.0f), m_LightPosition)),
-		m_CubeAmbient(1.0f, 0.5f, 0.3f), m_CubeDiffuse(1.0f, 0.5f, 0.3f), m_CubeSpecular(0.5f), m_CubeShininess(32.0f),
 		m_LightAmbient(0.2f), m_LightDiffuse(0.5f), m_LightSpecular(1.0f),
 		m_CameraPos(0.0f, 0.0f, 3.0f), m_CameraEuler(0.0f, -90.0f, 0.0f)
 	{
@@ -102,11 +101,17 @@ public:
 
 		ptl::Ref<ptl::Shader> textureShader = ptl::Renderer::GetShaderLibrary()->Load("res/shaders/Texture.glsl");
 
-		m_CubeMaterial = std::make_shared<ptl::MappedPhongMaterial>(0, m_CubeSpecular, m_CubeShininess);
-		m_LampMaterial = std::make_shared<ptl::LampMaterial>(m_CubeDiffuse);
+		m_CubeDiffuseSlot = 0;
+		m_CubeSpecularSlot = 1;
+
+		m_CubeMaterial = std::make_shared<ptl::MappedPhongMaterial>(m_CubeDiffuseSlot, m_CubeSpecularSlot, 32.0f);
+		m_LampMaterial = std::make_shared<ptl::LampMaterial>(m_LightDiffuse);
 
 		m_CubeDiffuseTexture = ptl::Texture2D::Create("res/textures/crate_diffuse.png");
-		m_CubeDiffuseTexture->Bind(0);
+		m_CubeSpecularTexture = ptl::Texture2D::Create("res/textures/crate_specular.png");
+		m_SampleTexture = ptl::Texture2D::Create("res/textures/test.png");
+
+		m_CubeMaterial->Bind();
 	}
 
 	virtual void ShutDown() override
@@ -175,8 +180,11 @@ public:
 		cubeShader->UploadUniformFloat3("u_Light.Diffuse", m_LightDiffuse);
 		cubeShader->UploadUniformFloat3("u_Light.Specular", m_LightSpecular);
 
-		m_CubeMaterial->SetSpecular(m_CubeSpecular);
-		m_CubeMaterial->SetShininess(m_CubeShininess);
+		m_CubeMaterial->SetAmbientDiffuseSlot(m_CubeDiffuseSlot);
+		m_CubeMaterial->SetSpecularSlot(m_CubeSpecularSlot);
+
+		m_CubeDiffuseTexture->Bind(m_CubeDiffuseSlot);
+		m_CubeSpecularTexture->Bind(m_CubeSpecularSlot);
 
 		ptl::Renderer::Submit(m_CubeVA, m_CubeMaterial, m_CubeTransform);
 
@@ -206,10 +214,6 @@ public:
 		ImGui::End();
 
 		ImGui::Begin("Object Colors");
-		ImGui::SliderFloat3("Cube ambient", &m_CubeAmbient.x, 0.0f, 1.0f);
-		ImGui::SliderFloat3("Cube diffuse", &m_CubeDiffuse.x, 0.0f, 1.0f);
-		ImGui::SliderFloat3("Cube specular", &m_CubeSpecular.x, 0.0f, 1.0f);
-		ImGui::SliderFloat ("Cube shininess", &m_CubeShininess, 1.0f, 128.0f);
 		ImGui::SliderFloat3("Light ambient", &m_LightAmbient.x, 0.0f, 1.0f);
 		ImGui::SliderFloat3("Light diffuse", &m_LightDiffuse.x, 0.0f, 1.0f);
 		ImGui::SliderFloat3("Light specular", &m_LightSpecular.x, 0.0f, 1.0f);
@@ -246,6 +250,8 @@ private:
 
 private:
 	ptl::Ref<ptl::Texture2D> m_CubeDiffuseTexture;
+	ptl::Ref<ptl::Texture2D> m_CubeSpecularTexture;
+	ptl::Ref<ptl::Texture2D> m_SampleTexture;
 
 	ptl::Ref<ptl::VertexArray> m_CubeVA;
 	ptl::Ref<ptl::VertexArray> m_LightVA;
@@ -253,13 +259,11 @@ private:
 	glm::vec3 m_CubePosition;
 	glm::mat4 m_CubeTransform;
 
+	uint32_t m_CubeDiffuseSlot;
+	uint32_t m_CubeSpecularSlot;
+
 	glm::vec3 m_LightPosition;
 	glm::mat4 m_LightTransform;
-
-	glm::vec3 m_CubeAmbient;
-	glm::vec3 m_CubeDiffuse;
-	glm::vec3 m_CubeSpecular;
-	float m_CubeShininess;
 
 	glm::vec3 m_LightAmbient;
 	glm::vec3 m_LightDiffuse;
