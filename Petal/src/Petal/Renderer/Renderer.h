@@ -5,13 +5,14 @@
 #include "Petal/Renderer/RendererAPI.h"
 #include "Petal/Renderer/Camera.h"
 #include "Petal/Renderer/Material.h"
+#include "Petal/Renderer/Light.h"
 
 namespace ptl
 {
 	class Renderer
 	{
 	public:
-		static void BeginScene(Camera& camera);
+		static void BeginScene(Camera& camera, const Ref<DirectionalLight>& dirLight, const std::vector<Ref<PointLight>>& pointLights);
 		static void EndScene();
 
 		static void OnWindowResize(uint32_t width, uint32_t height);
@@ -34,7 +35,13 @@ namespace ptl
 		{
 			glm::mat4 ViewProj;
 			glm::vec3 CameraPosition;
-			// TODO: add lights to scene data
+
+			Ref<DirectionalLight> DirLight;
+			std::vector<Ref<PointLight>> PointLights;
+
+			SceneData()
+			{
+			}
 		};
 
 		static RendererAPI* s_RendererAPI;

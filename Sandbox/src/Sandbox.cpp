@@ -9,9 +9,10 @@ public:
 		: Layer("Sandbox"), m_Camera(45.0f, 1280.0f, 720.0f, 0.1f, 100.0f),
 		m_CubePosition(0.0f), m_CubeTransform(1.0f),
 		m_Cube2Position(-1.0f), m_Cube2Transform(1.0f),
-		m_LightPosition(1.0f), m_LightTransform(glm::translate(glm::mat4(1.0f), m_LightPosition)),
-		m_LightAmbient(0.2f), m_LightDiffuse(0.5f), m_LightSpecular(1.0f),
-		m_CameraPos(0.0f, 0.0f, 3.0f), m_CameraEuler(0.0f, -90.0f, 0.0f)
+		m_PointLightPosition(1.0f), m_PointLightTransform(glm::translate(glm::mat4(1.0f), m_PointLightPosition)),
+		m_PointLightAmbient(0.1f), m_PointLightDiffuse(0.5f), m_PointLightSpecular(1.0f),
+		m_DirLight(std::make_shared<ptl::DirectionalLight>(glm::vec3(1.0f, -1.0f, 1.0f), glm::vec3(0.0f,0.0f,0.1f), glm::vec3(0.2f,0.2f,0.4f), glm::vec3(1.0f, 1.0f, 1.0f))),
+		m_PointLights(), m_CameraPos(0.0f, 0.0f, 3.0f), m_CameraEuler(0.0f, -90.0f, 0.0f)
 	{
 
 	}
@@ -106,13 +107,15 @@ public:
 		m_CubeSpecularSlot = 1;
 
 		m_CubeMaterial = std::make_shared<ptl::MappedPhongMaterial>(m_CubeDiffuseSlot, m_CubeSpecularSlot, 32.0f);
-		m_LampMaterial = std::make_shared<ptl::LampMaterial>(m_LightDiffuse);
+		m_LampMaterial = std::make_shared<ptl::LampMaterial>(m_PointLightDiffuse);
 
 		m_CubeDiffuseTexture = ptl::Texture2D::Create("res/textures/crate_diffuse.png");
 		m_CubeSpecularTexture = ptl::Texture2D::Create("res/textures/crate_specular.png");
 		m_SampleTexture = ptl::Texture2D::Create("res/textures/test.png");
 
 		m_CubeMaterial->Bind();
+		
+		m_PointLights.push_back(std::make_shared<ptl::PointLight>(m_PointLightPosition, m_PointLightAmbient, m_PointLightDiffuse, m_PointLightSpecular, 1.0f, 0.09f, 0.032f));
 	}
 
 	virtual void ShutDown() override
@@ -161,33 +164,18 @@ public:
 		// Update geometry
 		m_CubeTransform = glm::translate(glm::mat4(1.0f), m_CubePosition);
 		m_Cube2Transform = glm::translate(glm::mat4(1.0f), m_Cube2Position);
-		m_LightTransform = glm::mat4(1.0f);
-		m_LightTransform = glm::translate(m_LightTransform, m_LightPosition);
-		m_LightTransform = glm::scale(m_LightTransform, glm::vec3(0.2f));
+		m_PointLightTransform = glm::mat4(1.0f);
+		m_PointLightTransform = glm::translate(m_PointLightTransform, m_PointLightPosition);
+		m_PointLightTransform = glm::scale(m_PointLightTransform, glm::vec3(0.2f));
+		m_PointLights[0] = std::make_shared<ptl::PointLight>(m_PointLightPosition, m_PointLightAmbient, m_PointLightDiffuse, m_PointLightSpecular, 1.0f, 0.09f, 0.032f);
 
 		// Render
 		ptl::Renderer::SetClearColor({ 0.1f, 0.1f, 0.1f, 1.0f });
 		ptl::Renderer::Clear();
 
-		ptl::Renderer::BeginScene(m_Camera);
-
-		glm::mat3 cubeNormalMatrix = glm::mat3(glm::transpose(glm::inverse(m_CubeTransform)));
+		ptl::Renderer::BeginScene(m_Camera, m_DirLight, m_PointLights);
 
 		m_CubeMaterial->Bind();
-		ptl::Ref<ptl::Shader> cubeShader = m_CubeMaterial->GetShader();
-		cubeShader->Bind();
-		cubeShader->UploadUniformMat3("u_NormalMatrix", cubeNormalMatrix);
-
-		// TODO: move into Renderer::BeginScene
-		cubeShader->UploadUniformFloat3("u_Light.Position", m_LightPosition);
-		cubeShader->UploadUniformFloat3("u_Light.Ambient", m_LightAmbient);
-		cubeShader->UploadUniformFloat3("u_Light.Diffuse", m_LightDiffuse);
-		cubeShader->UploadUniformFloat3("u_Light.Specular", m_LightSpecular);
-
-		cubeShader->UploadUniformFloat("u_Light.Constant", 1.0f);
-		cubeShader->UploadUniformFloat("u_Light.Linear", 0.09f);
-		cubeShader->UploadUniformFloat("u_Light.Quadratic", 0.032f);
-
 		m_CubeMaterial->SetAmbientDiffuseSlot(m_CubeDiffuseSlot);
 		m_CubeMaterial->SetSpecularSlot(m_CubeSpecularSlot);
 
@@ -197,8 +185,8 @@ public:
 		ptl::Renderer::Submit(m_CubeVA, m_CubeMaterial, m_CubeTransform);
 		ptl::Renderer::Submit(m_CubeVA, m_CubeMaterial, m_Cube2Transform);
 
-		m_LampMaterial->SetColor(m_LightDiffuse);
-		ptl::Renderer::Submit(m_LightVA, m_LampMaterial, m_LightTransform);
+		m_LampMaterial->SetColor(m_PointLightDiffuse);
+		ptl::Renderer::Submit(m_LightVA, m_LampMaterial, m_PointLightTransform);
 
 		ptl::Renderer::EndScene();
 	}
@@ -219,13 +207,13 @@ public:
 
 		ImGui::Begin("Object Positions");
 		ImGui::SliderFloat3("Cube position", &m_CubePosition.x, -2.0f, 2.0f);
-		ImGui::SliderFloat3("Light position", &m_LightPosition.x, -2.0f, 2.0f);
+		ImGui::SliderFloat3("Point light 1 position", &m_PointLightPosition.x, -2.0f, 2.0f);
 		ImGui::End();
 
 		ImGui::Begin("Object Colors");
-		ImGui::SliderFloat3("Light ambient", &m_LightAmbient.x, 0.0f, 1.0f);
-		ImGui::SliderFloat3("Light diffuse", &m_LightDiffuse.x, 0.0f, 1.0f);
-		ImGui::SliderFloat3("Light specular", &m_LightSpecular.x, 0.0f, 1.0f);
+		ImGui::SliderFloat3("Point light 1 ambient", &m_PointLightAmbient.x, 0.0f, 1.0f);
+		ImGui::SliderFloat3("Point light 1 diffuse", &m_PointLightDiffuse.x, 0.0f, 1.0f);
+		ImGui::SliderFloat3("Point light 1 specular", &m_PointLightSpecular.x, 0.0f, 1.0f);
 		ImGui::End();
 	}
 
@@ -274,13 +262,15 @@ private:
 	uint32_t m_CubeDiffuseSlot;
 	uint32_t m_CubeSpecularSlot;
 
-	glm::vec3 m_LightPosition;
-	glm::mat4 m_LightTransform;
+	glm::vec3 m_PointLightPosition;
+	glm::mat4 m_PointLightTransform;
 
-	glm::vec3 m_LightAmbient;
-	glm::vec3 m_LightDiffuse;
-	glm::vec3 m_LightSpecular;
+	glm::vec3 m_PointLightAmbient;
+	glm::vec3 m_PointLightDiffuse;
+	glm::vec3 m_PointLightSpecular;
 
+	ptl::Ref<ptl::DirectionalLight> m_DirLight;
+	std::vector<ptl::Ref<ptl::PointLight>> m_PointLights;
 	ptl::Ref<ptl::MappedPhongMaterial> m_CubeMaterial;
 	ptl::Ref<ptl::LampMaterial> m_LampMaterial;
 

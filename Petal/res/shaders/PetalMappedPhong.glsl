@@ -60,7 +60,8 @@ in vec2 v_TexCoords;
 in vec3 v_FragmentPosition;
 
 uniform Material u_Material;
-uniform PointLight u_Light;
+uniform DirectionalLight u_DirLight;
+uniform PointLight u_PointLight;
 uniform vec3 u_CameraPosition;
 
 layout (location = 0) out vec4 fragColor;
@@ -74,8 +75,8 @@ void main()
 	vec3 v = normalize(u_CameraPosition - v_FragmentPosition);
 
 	vec3 color = vec3(0.0f);
-	color += CalcDirLight(u_Light, n, v);
-	color += CalcPointLight(u_Light, n, v, v_FragmentPosition);
+	color += CalcDirLight(u_DirLight, n, v);
+	color += CalcPointLight(u_PointLight, n, v, v_FragmentPosition);
 	fragColor = vec4(color, 1.0f);
 }
 

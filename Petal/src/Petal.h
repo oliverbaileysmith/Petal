@@ -20,5 +20,6 @@
 #include "Petal/Renderer/VertexBuffer.h"
 #include "Petal/Renderer/IndexBuffer.h"
 #include "Petal/Renderer/Camera.h"
+#include "Petal/Renderer/Light.h"
 
 #include "Petal/Core/EntryPoint.h"
