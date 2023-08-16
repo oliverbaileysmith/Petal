@@ -31,12 +31,25 @@ struct Material
 	float Shininess;
 };
 
-struct Light
+struct DirectionalLight
+{
+	vec3 Direction;
+	vec3 Ambient;
+	vec3 Diffuse;
+	vec3 Specular;
+};
+
+struct PointLight
 {
 	vec3 Position;
 	vec3 Ambient;
 	vec3 Diffuse;
 	vec3 Specular;
+
+	// Attenuation values
+	float Constant;
+	float Linear;
+	float Quadratic;
 };
 
 in vec3 v_Normal;
@@ -44,13 +57,15 @@ in vec2 v_TexCoords;
 in vec3 v_FragmentPosition;
 
 uniform Material u_Material;
-uniform Light u_Light;
+uniform PointLight u_Light;
 uniform vec3 u_CameraPosition;
 
 layout (location = 0) out vec4 fragColor;
 
 void main()
 {
+	float distance = length(u_Light.Position - v_FragmentPosition);
+	float attenuation = 1.0f / (u_Light.Constant + u_Light.Linear * distance + u_Light.Quadratic * distance * distance);
 	vec3 ambient = vec3(texture(u_Material.AmbientDiffuse, v_TexCoords)) * u_Light.Ambient;
 
 	vec3 n = normalize(v_Normal);
@@ -62,6 +77,10 @@ void main()
 	vec3 r = reflect(-l, n);
 	float specularStrength = pow(max(dot(v, r), 0.0f), u_Material.Shininess);
 	vec3 specular = specularStrength * vec3(texture(u_Material.Specular, v_TexCoords)) * u_Light.Specular;
+
+	ambient *= attenuation;
+	diffuse *= attenuation;
+	specular *= attenuation;
 
 	vec3 color = ambient + diffuse + specular;
 

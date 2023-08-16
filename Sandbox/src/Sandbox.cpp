@@ -8,7 +8,8 @@ public:
 	SandboxLayer()
 		: Layer("Sandbox"), m_Camera(45.0f, 1280.0f, 720.0f, 0.1f, 100.0f),
 		m_CubePosition(0.0f), m_CubeTransform(1.0f),
-		m_LightPosition(2.0f), m_LightTransform(glm::translate(glm::mat4(1.0f), m_LightPosition)),
+		m_Cube2Position(-1.0f), m_Cube2Transform(1.0f),
+		m_LightPosition(1.0f), m_LightTransform(glm::translate(glm::mat4(1.0f), m_LightPosition)),
 		m_LightAmbient(0.2f), m_LightDiffuse(0.5f), m_LightSpecular(1.0f),
 		m_CameraPos(0.0f, 0.0f, 3.0f), m_CameraEuler(0.0f, -90.0f, 0.0f)
 	{
@@ -159,7 +160,10 @@ public:
 
 		// Update geometry
 		m_CubeTransform = glm::translate(glm::mat4(1.0f), m_CubePosition);
-		m_LightTransform = glm::translate(glm::mat4(1.0f), m_LightPosition);
+		m_Cube2Transform = glm::translate(glm::mat4(1.0f), m_Cube2Position);
+		m_LightTransform = glm::mat4(1.0f);
+		m_LightTransform = glm::translate(m_LightTransform, m_LightPosition);
+		m_LightTransform = glm::scale(m_LightTransform, glm::vec3(0.2f));
 
 		// Render
 		ptl::Renderer::SetClearColor({ 0.1f, 0.1f, 0.1f, 1.0f });
@@ -180,6 +184,10 @@ public:
 		cubeShader->UploadUniformFloat3("u_Light.Diffuse", m_LightDiffuse);
 		cubeShader->UploadUniformFloat3("u_Light.Specular", m_LightSpecular);
 
+		cubeShader->UploadUniformFloat("u_Light.Constant", 1.0f);
+		cubeShader->UploadUniformFloat("u_Light.Linear", 0.09f);
+		cubeShader->UploadUniformFloat("u_Light.Quadratic", 0.032f);
+
 		m_CubeMaterial->SetAmbientDiffuseSlot(m_CubeDiffuseSlot);
 		m_CubeMaterial->SetSpecularSlot(m_CubeSpecularSlot);
 
@@ -187,6 +195,7 @@ public:
 		m_CubeSpecularTexture->Bind(m_CubeSpecularSlot);
 
 		ptl::Renderer::Submit(m_CubeVA, m_CubeMaterial, m_CubeTransform);
+		ptl::Renderer::Submit(m_CubeVA, m_CubeMaterial, m_Cube2Transform);
 
 		m_LampMaterial->SetColor(m_LightDiffuse);
 		ptl::Renderer::Submit(m_LightVA, m_LampMaterial, m_LightTransform);
@@ -258,6 +267,9 @@ private:
 
 	glm::vec3 m_CubePosition;
 	glm::mat4 m_CubeTransform;
+
+	glm::vec3 m_Cube2Position;
+	glm::mat4 m_Cube2Transform;
 
 	uint32_t m_CubeDiffuseSlot;
 	uint32_t m_CubeSpecularSlot;
