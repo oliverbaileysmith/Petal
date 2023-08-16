@@ -37,15 +37,26 @@ namespace ptl
 		phongShader->UploadUniformFloat3("u_DirLight.Specular", s_SceneData->DirLight->Specular);
 
 		// Point lights
-		// TODO: put in loop
-		phongShader->UploadUniformFloat3("u_PointLight.Position", s_SceneData->PointLights[0]->Position);
-		phongShader->UploadUniformFloat3("u_PointLight.Ambient", s_SceneData->PointLights[0]->Ambient);
-		phongShader->UploadUniformFloat3("u_PointLight.Diffuse", s_SceneData->PointLights[0]->Diffuse);
-		phongShader->UploadUniformFloat3("u_PointLight.Specular", s_SceneData->PointLights[0]->Specular);
+		uint8_t numLights = s_SceneData->PointLights.size();
+		PTL_CORE_ASSERT(numLights < 9, "Petal supports at most 8 point lights in a scene");
+		phongShader->UploadUniformUint("u_NumPointLights", numLights);
 
-		phongShader->UploadUniformFloat("u_PointLight.Constant", s_SceneData->PointLights[0]->Constant);
-		phongShader->UploadUniformFloat("u_PointLight.Linear", s_SceneData->PointLights[0]->Linear);
-		phongShader->UploadUniformFloat("u_PointLight.Quadratic", s_SceneData->PointLights[0]->Quadratic);
+		for (int i = 0; i < numLights; i++)
+		{
+			std::string uniformPrefix;
+			uniformPrefix.append("u_PointLights[");
+			uniformPrefix.append(std::to_string(i));
+			uniformPrefix.append("].");
+
+			phongShader->UploadUniformFloat3(uniformPrefix + "Position", s_SceneData->PointLights[i]->Position);
+			phongShader->UploadUniformFloat3(uniformPrefix + "Ambient", s_SceneData->PointLights[i]->Ambient);
+			phongShader->UploadUniformFloat3(uniformPrefix + "Diffuse", s_SceneData->PointLights[i]->Diffuse);
+			phongShader->UploadUniformFloat3(uniformPrefix + "Specular", s_SceneData->PointLights[i]->Specular);
+
+			phongShader->UploadUniformFloat(uniformPrefix + "Constant", s_SceneData->PointLights[i]->Constant);
+			phongShader->UploadUniformFloat(uniformPrefix + "Linear", s_SceneData->PointLights[i]->Linear);
+			phongShader->UploadUniformFloat(uniformPrefix + "Quadratic", s_SceneData->PointLights[i]->Quadratic);
+		}
 	}
 
 	void Renderer::EndScene()

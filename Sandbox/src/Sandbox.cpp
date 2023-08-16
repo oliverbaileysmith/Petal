@@ -10,8 +10,8 @@ public:
 		m_CubePosition(0.0f), m_CubeTransform(1.0f),
 		m_Cube2Position(-1.0f), m_Cube2Transform(1.0f),
 		m_PointLightPosition(1.0f), m_PointLightTransform(glm::translate(glm::mat4(1.0f), m_PointLightPosition)),
-		m_PointLightAmbient(0.1f), m_PointLightDiffuse(0.5f), m_PointLightSpecular(1.0f),
-		m_DirLight(std::make_shared<ptl::DirectionalLight>(glm::vec3(1.0f, -1.0f, 1.0f), glm::vec3(0.0f,0.0f,0.1f), glm::vec3(0.2f,0.2f,0.4f), glm::vec3(1.0f, 1.0f, 1.0f))),
+		m_PointLightAmbient(glm::vec3(0.1f, 0.2f, 0.1f)), m_PointLightDiffuse(glm::vec3(0.1f, 0.4f, 0.1f)), m_PointLightSpecular(1.0f),
+		m_DirLight(std::make_shared<ptl::DirectionalLight>(glm::vec3(1.0f, -1.0f, -1.0f), glm::vec3(0.1f), glm::vec3(0.3f), glm::vec3(1.0f, 1.0f, 1.0f))),
 		m_PointLights(), m_CameraPos(0.0f, 0.0f, 3.0f), m_CameraEuler(0.0f, -90.0f, 0.0f)
 	{
 
@@ -116,6 +116,7 @@ public:
 		m_CubeMaterial->Bind();
 		
 		m_PointLights.push_back(std::make_shared<ptl::PointLight>(m_PointLightPosition, m_PointLightAmbient, m_PointLightDiffuse, m_PointLightSpecular, 1.0f, 0.09f, 0.032f));
+		m_PointLights.push_back(std::make_shared<ptl::PointLight>(glm::vec3(-2.0f), glm::vec3(0.1f, 0.0f, 0.0f), glm::vec3(0.4f, 0.1f, 0.1f), glm::vec3(1.0f), 1.0f, 0.09f, 0.032f));
 	}
 
 	virtual void ShutDown() override
@@ -169,6 +170,9 @@ public:
 		m_PointLightTransform = glm::scale(m_PointLightTransform, glm::vec3(0.2f));
 		m_PointLights[0] = std::make_shared<ptl::PointLight>(m_PointLightPosition, m_PointLightAmbient, m_PointLightDiffuse, m_PointLightSpecular, 1.0f, 0.09f, 0.032f);
 
+		glm::mat4 pointLight2Transform = glm::translate(glm::mat4(1.0f), glm::vec3(-2.0f));
+		pointLight2Transform = glm::scale(pointLight2Transform, glm::vec3(0.2f));
+
 		// Render
 		ptl::Renderer::SetClearColor({ 0.1f, 0.1f, 0.1f, 1.0f });
 		ptl::Renderer::Clear();
@@ -187,6 +191,8 @@ public:
 
 		m_LampMaterial->SetColor(m_PointLightDiffuse);
 		ptl::Renderer::Submit(m_LightVA, m_LampMaterial, m_PointLightTransform);
+		m_LampMaterial->SetColor(glm::vec3(0.5f, 0.2f, 0.2f));
+		ptl::Renderer::Submit(m_LightVA, m_LampMaterial, pointLight2Transform);
 
 		ptl::Renderer::EndScene();
 	}

@@ -53,7 +53,6 @@ struct PointLight
 	float Linear;
 	float Quadratic;
 };
-#define NUM_POINT_LIGHTS 1
 
 in vec3 v_Normal;
 in vec2 v_TexCoords;
@@ -61,7 +60,8 @@ in vec3 v_FragmentPosition;
 
 uniform Material u_Material;
 uniform DirectionalLight u_DirLight;
-uniform PointLight u_PointLight;
+uniform uint u_NumPointLights;
+uniform PointLight u_PointLights[8];
 uniform vec3 u_CameraPosition;
 
 layout (location = 0) out vec4 fragColor;
@@ -76,7 +76,10 @@ void main()
 
 	vec3 color = vec3(0.0f);
 	color += CalcDirLight(u_DirLight, n, v);
-	color += CalcPointLight(u_PointLight, n, v, v_FragmentPosition);
+
+	for (int i = 0; i < u_NumPointLights; i++)
+		color += CalcPointLight(u_PointLights[i], n, v, v_FragmentPosition);
+	
 	fragColor = vec4(color, 1.0f);
 }
 
