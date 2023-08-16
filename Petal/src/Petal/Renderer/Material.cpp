@@ -79,8 +79,8 @@ namespace ptl
 	{
 		m_Shader->Bind();
 
-		m_Shader->UploadUniformUint("u_Material.AmbientDiffuse", m_AmbientDiffuseSlot);
-		m_Shader->UploadUniformUint("u_Material.Specular", m_SpecularSlot);
+		m_Shader->UploadUniformInt("u_Material.AmbientDiffuse", m_AmbientDiffuseSlot);
+		m_Shader->UploadUniformInt("u_Material.Specular", m_SpecularSlot);
 		m_Shader->UploadUniformFloat("u_Material.Shininess", m_Shininess);
 	}
 

@@ -36,17 +36,20 @@ namespace ptl
 		PTL_CORE_ASSERT(internalFormat && dataFormat, "Texture format not supported");
 
 		// Allocate memory on GPU for texture
-		glCreateTextures(GL_TEXTURE_2D, 1, &m_ID);
-		glTextureStorage2D(m_ID, 1, internalFormat, m_Width, m_Height);
+		glGenTextures(1, &m_ID);
+		glBindTexture(GL_TEXTURE_2D, m_ID);
 
 		// Set min/mag filters
 		glTextureParameteri(m_ID, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 		glTextureParameteri(m_ID, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+		glTextureParameteri(m_ID, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+		glTextureParameteri(m_ID, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
 
 		// Upload texture data to GPU
-		glTextureSubImage2D(m_ID, 0, 0, 0, m_Width, m_Height, dataFormat, GL_UNSIGNED_BYTE, data);
+		glTexImage2D(GL_TEXTURE_2D, 0, internalFormat, m_Width, m_Height, 0, dataFormat, GL_UNSIGNED_BYTE, data);
 
-		// Free data from CPU
+		// Unbind texture and free data from CPU
+		glBindTexture(GL_TEXTURE_2D, 0);
 		stbi_image_free(data);
 	}
 
@@ -67,6 +70,9 @@ namespace ptl
 
 	void OpenGLTexture2D::Bind(uint32_t slot) const
 	{
-		glBindTextureUnit(slot, m_ID);
+		PTL_CORE_ASSERT(slot < 32, "Only texture slots 0-31 are supported");
+
+		glActiveTexture(GL_TEXTURE0 + slot);
+		glBindTexture(GL_TEXTURE_2D, m_ID);
 	}
 }
