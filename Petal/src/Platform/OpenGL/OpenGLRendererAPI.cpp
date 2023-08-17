@@ -13,7 +13,6 @@ namespace ptl
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
 		Renderer::GetShaderLibrary()->Load("../Petal/res/shaders/PetalPhong.glsl");
-		Renderer::GetShaderLibrary()->Load("../Petal/res/shaders/PetalMappedPhong.glsl");
 		Renderer::GetShaderLibrary()->Load("../Petal/res/shaders/PetalLamp.glsl");
 	}
 

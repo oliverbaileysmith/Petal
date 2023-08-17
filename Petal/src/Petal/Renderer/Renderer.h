@@ -12,7 +12,7 @@ namespace ptl
 	class Renderer
 	{
 	public:
-		static void BeginScene(Camera& camera, const Ref<DirectionalLight>& dirLight, const std::vector<Ref<PointLight>>& pointLights);
+		static void BeginScene(Camera& camera, const std::vector<Ref<PointLight>>& pointLights, const Ref<DirectionalLight>& dirLight = nullptr);
 		static void EndScene();
 
 		static void OnWindowResize(uint32_t width, uint32_t height);
@@ -36,6 +36,7 @@ namespace ptl
 			glm::mat4 ViewProj;
 			glm::vec3 CameraPosition;
 
+			bool DirLightEnabled;
 			Ref<DirectionalLight> DirLight;
 			std::vector<Ref<PointLight>> PointLights;
 

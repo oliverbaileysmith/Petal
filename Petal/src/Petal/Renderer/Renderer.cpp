@@ -9,15 +9,21 @@ namespace ptl
 	Renderer::SceneData* Renderer::s_SceneData = new Renderer::SceneData;
 	ShaderLibrary* Renderer::s_ShaderLibrary = new ShaderLibrary;
 
-	void Renderer::BeginScene(Camera& camera, const Ref<DirectionalLight>& dirLight, const std::vector<Ref<PointLight>>& pointLights)
+	void Renderer::BeginScene(Camera& camera, const std::vector<Ref<PointLight>>& pointLights, const Ref<DirectionalLight>& dirLight)
 	{
 		s_SceneData->ViewProj = camera.GetViewProj();
 		s_SceneData->CameraPosition = camera.GetPosition();
 
-		s_SceneData->DirLight = dirLight;
 		s_SceneData->PointLights = pointLights;
+		if (dirLight)
+		{
+			s_SceneData->DirLightEnabled = true;
+			s_SceneData->DirLight = dirLight;
+		}
+		else
+			s_SceneData->DirLightEnabled = false;
 		
-		Ref<Shader> phongShader = s_ShaderLibrary->Get("PetalMappedPhong");
+		Ref<Shader> phongShader = s_ShaderLibrary->Get("PetalPhong");
 		Ref<Shader> lampShader = s_ShaderLibrary->Get("PetalLamp");
 
 		// Scene-wide uniforms (this can be extended to upload to all shaders in use)
@@ -31,10 +37,15 @@ namespace ptl
 		phongShader->UploadUniformFloat3("u_CameraPosition", s_SceneData->CameraPosition);
 
 		// Directional light
-		phongShader->UploadUniformFloat3("u_DirLight.Direction", s_SceneData->DirLight->Direction);
-		phongShader->UploadUniformFloat3("u_DirLight.Ambient", s_SceneData->DirLight->Ambient);
-		phongShader->UploadUniformFloat3("u_DirLight.Diffuse", s_SceneData->DirLight->Diffuse);
-		phongShader->UploadUniformFloat3("u_DirLight.Specular", s_SceneData->DirLight->Specular);
+		phongShader->UploadUniformBool("u_DirLightEnabled", s_SceneData->DirLightEnabled);
+
+		if (dirLight)
+		{
+			phongShader->UploadUniformFloat3("u_DirLight.Direction", s_SceneData->DirLight->Direction);
+			phongShader->UploadUniformFloat3("u_DirLight.Ambient", s_SceneData->DirLight->Ambient);
+			phongShader->UploadUniformFloat3("u_DirLight.Diffuse", s_SceneData->DirLight->Diffuse);
+			phongShader->UploadUniformFloat3("u_DirLight.Specular", s_SceneData->DirLight->Specular);
+		}
 
 		// Point lights
 		uint8_t numLights = s_SceneData->PointLights.size();
@@ -72,13 +83,12 @@ namespace ptl
 	{
 		material->Bind();
 		Ref<Shader> shader = material->GetShader();
-		shader->Bind();
 
 		// Per-object uniforms
 		shader->UploadUniformMat4("u_Model", transform);
 		glm::mat3 normalMatrix = glm::mat3(glm::transpose(glm::inverse(transform)));
 
-		if (shader->GetName() == "PetalMappedPhong")
+		if (shader->GetName() == "PetalPhong")
 			shader->UploadUniformMat3("u_NormalMatrix", normalMatrix);
 
 		vertexArray->Bind();

@@ -2,6 +2,7 @@
 
 #include "Petal/Core/Core.h"
 #include "Petal/Renderer/Shader.h"
+#include "Petal/Renderer/Texture.h"
 
 namespace ptl
 {
@@ -15,7 +16,8 @@ namespace ptl
 	class PhongMaterial : public Material
 	{
 	public:
-		PhongMaterial(const glm::vec3& ambient, const glm::vec3& diffuse, const glm::vec3& specular, float shininess);
+		PhongMaterial(const glm::vec3& ambient, const glm::vec3& diffuse,
+			const glm::vec3& specular, float shininess);
 		virtual void Bind() const override;
 		virtual const Ref<Shader>& GetShader() const override;
 
@@ -24,30 +26,29 @@ namespace ptl
 		void SetSpecular(const glm::vec3& specular);
 		void SetShininess(float shininess);
 
+		void AddAmbientDiffuseMap(Ref<Texture2D> ambientDiffuseMap, uint32_t slot);
+		void AddSpecularMap(Ref<Texture2D> specularMap, uint32_t slot);
+
+		void EnableAmbientDiffuseMap();
+		void DisableAmbientDiffuseMap();
+		void EnableSpecularMap();
+		void DisableSpecularMap();
+
 	private:
 		Ref<Shader> m_Shader;
+
 		glm::vec3 m_Ambient;
 		glm::vec3 m_Diffuse;
 		glm::vec3 m_Specular;
 		float m_Shininess;
-	};
 
-	class MappedPhongMaterial : public Material
-	{
-	public:
-		MappedPhongMaterial(uint32_t ambientDiffuseSlot, uint32_t specularSlot, float shininess);
-		virtual void Bind() const override;
-		virtual const Ref<Shader>& GetShader() const override;
+		bool m_UsingAmbientDiffuseMap = false;
+		bool m_UsingSpecularMap = false;
 
-		void SetAmbientDiffuseSlot(uint32_t slot);
-		void SetSpecularSlot(uint32_t slot);
-		void SetShininess(float shininess);
-
-	private:
-		Ref<Shader> m_Shader;
+		Ref<Texture2D> m_AmbientDiffuseMap;
+		Ref<Texture2D> m_SpecularMap;
 		uint32_t m_AmbientDiffuseSlot;
 		uint32_t m_SpecularSlot;
-		float m_Shininess;
 	};
 
 	class LampMaterial : public Material
