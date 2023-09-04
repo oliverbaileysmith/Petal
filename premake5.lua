@@ -17,6 +17,7 @@ workspace "Petal"
 	includeDir["ImGui"] = "Petal/external/imgui"
 	includeDir["glm"] = "Petal/external/glm"
 	includeDir["stb_image"] = "Petal/external/stb_image"
+	includeDir["assimp"] = "Petal/external/assimp/include"
 
 	include "Petal/external/glad"
 	include "Petal/external/imgui"
@@ -50,12 +51,14 @@ project "Petal"
 		"%{includeDir.glad}",
 		"%{includeDir.ImGui}",
 		"%{includeDir.glm}",
-		"%{includeDir.stb_image}"
+		"%{includeDir.stb_image}",
+		"%{includeDir.assimp}"
 	}
 
 	libdirs
 	{
-		"%{prj.name}/external/GLFW/lib-vc2022"
+		"%{prj.name}/external/GLFW/lib-vc2022",
+		"%{prj.name}/external/assimp/lib/x64"
 	}
 
 	links
@@ -63,7 +66,8 @@ project "Petal"
 		"opengl32.lib",
 		"glfw3_mt.lib",
 		"glad",
-		"ImGui"
+		"ImGui",
+		"assimp-vc143-mt.lib"
 	}
 
 	filter "system:windows"
