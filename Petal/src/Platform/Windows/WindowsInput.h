@@ -18,4 +18,4 @@ namespace ptl
 		static KeyCode GLFWToPtlKeyCode(int32_t keyCode);
 		static MouseButtonCode GLFWToPtlMouseButtonCode(int32_t button);
 	};
-}
+} // namespace ptl

@@ -21,30 +21,30 @@ namespace ptl
 
 		void Run();
 
-		void OnEvent(Event& event);
+		void OnEvent(Event &event);
 
-		void PushLayer(Layer* layer);
-		void PopLayer(Layer* layer);
-		void PushOverlay(Layer* overlay);
-		void PopOverlay(Layer* overlay);
+		void PushLayer(Layer *layer);
+		void PopLayer(Layer *layer);
+		void PushOverlay(Layer *overlay);
+		void PopOverlay(Layer *overlay);
 
-		static Application& Get();
-		Window& GetWindow();
-
-	private:
-		bool OnWindowClose(WindowCloseEvent& event);
-		bool OnWindowResize(WindowResizeEvent& event);
+		static Application &Get();
+		Window &GetWindow();
 
 	private:
-		static Application* s_Instance;
+		bool OnWindowClose(WindowCloseEvent &event);
+		bool OnWindowResize(WindowResizeEvent &event);
+
+	private:
+		static Application *s_Instance;
 		std::unique_ptr<Window> m_Window;
 		bool m_Running = true;
 		bool m_Minimized = false;
 		LayerStack m_LayerStack;
-		ImGuiLayer* m_ImGuiLayer;
+		ImGuiLayer *m_ImGuiLayer;
 		float m_LastFrameTime = 0.0f;
 	};
 
 	// To be defined in client application
-	Application* CreateApplication();
-}
+	Application *CreateApplication();
+} // namespace ptl

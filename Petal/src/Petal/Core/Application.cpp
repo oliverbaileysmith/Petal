@@ -4,12 +4,12 @@
 
 namespace ptl
 {
-	Application* Application::s_Instance = nullptr;
+	Application *Application::s_Instance = nullptr;
 
 	Application::Application()
 	{
 		PTL_CORE_ASSERT(!s_Instance, "Application already exists")
-			s_Instance = this;
+		s_Instance = this;
 
 		m_Window = std::unique_ptr<Window>(Window::Create());
 		m_Window->SetEventCallback(PTL_BIND_EVENT_FN(Application::OnEvent));
@@ -20,10 +20,7 @@ namespace ptl
 		m_LayerStack.PushOverlay(m_ImGuiLayer);
 	}
 
-	Application::~Application()
-	{
-
-	}
+	Application::~Application() {}
 
 	void Application::Run()
 	{
@@ -35,26 +32,29 @@ namespace ptl
 
 			if (!m_Minimized)
 			{
-				for (Layer* layer : m_LayerStack)
+				for (Layer *layer : m_LayerStack)
 					layer->OnUpdate(timestep);
 
 				m_ImGuiLayer->Begin();
-				for (Layer* layer : m_LayerStack)
+				for (Layer *layer : m_LayerStack)
 					layer->OnImGuiRender();
 				m_ImGuiLayer->End();
 			}
-			
+
 			m_Window->OnUpdate();
 		}
 	}
 
-	void Application::OnEvent(Event& event)
+	void Application::OnEvent(Event &event)
 	{
 		EventDispatcher dispatcher(event);
-		dispatcher.Dispatch<WindowCloseEvent>(PTL_BIND_EVENT_FN(Application::OnWindowClose));
-		dispatcher.Dispatch<WindowResizeEvent>(PTL_BIND_EVENT_FN(Application::OnWindowResize));
+		dispatcher.Dispatch<WindowCloseEvent>(
+			PTL_BIND_EVENT_FN(Application::OnWindowClose));
+		dispatcher.Dispatch<WindowResizeEvent>(
+			PTL_BIND_EVENT_FN(Application::OnWindowResize));
 
-		for (std::vector<Layer*>::iterator it = m_LayerStack.end(); it != m_LayerStack.begin(); it)
+		for (std::vector<Layer *>::iterator it = m_LayerStack.end();
+			 it != m_LayerStack.begin(); it)
 		{
 			(*--it)->OnEvent(event);
 			if (event.Handled)
@@ -62,42 +62,42 @@ namespace ptl
 		}
 	}
 
-	void Application::PushLayer(Layer* layer)
+	void Application::PushLayer(Layer *layer)
 	{
 		m_LayerStack.PushLayer(layer);
 	}
 
-	void Application::PopLayer(Layer* layer)
+	void Application::PopLayer(Layer *layer)
 	{
 		m_LayerStack.PopLayer(layer);
 	}
 
-	void Application::PushOverlay(Layer* overlay)
+	void Application::PushOverlay(Layer *overlay)
 	{
 		m_LayerStack.PushOverlay(overlay);
 	}
 
-	void Application::PopOverlay(Layer* overlay)
+	void Application::PopOverlay(Layer *overlay)
 	{
 		m_LayerStack.PopOverlay(overlay);
 	}
 
-	Application& Application::Get()
+	Application &Application::Get()
 	{
 		return *s_Instance;
 	}
 
-	Window& Application::GetWindow()
+	Window &Application::GetWindow()
 	{
 		return *m_Window;
 	}
 
-	bool Application::OnWindowClose(WindowCloseEvent& event)
+	bool Application::OnWindowClose(WindowCloseEvent &event)
 	{
 		m_Running = false;
 		return true;
 	}
-	bool Application::OnWindowResize(WindowResizeEvent& event)
+	bool Application::OnWindowResize(WindowResizeEvent &event)
 	{
 		if (event.GetWidth() == 0 || event.GetHeight() == 0)
 		{
@@ -110,4 +110,4 @@ namespace ptl
 
 		return false;
 	}
-}
+} // namespace ptl

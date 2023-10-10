@@ -9,10 +9,22 @@ namespace ptl
 	class Input
 	{
 	public:
-		inline static bool IsKeyPressed(KeyCode keyCode) { return s_Instance->IsKeyPressedImpl(keyCode); }
-		inline static bool IsMouseButtonPressed(MouseButtonCode button) { return s_Instance->IsMouseButtonPressedImpl(button); }
-		inline static float GetMouseX() { return s_Instance->GetMouseXImpl(); }
-		inline static float GetMouseY() { return s_Instance->GetMouseYImpl(); }
+		inline static bool IsKeyPressed(KeyCode keyCode)
+		{
+			return s_Instance->IsKeyPressedImpl(keyCode);
+		}
+		inline static bool IsMouseButtonPressed(MouseButtonCode button)
+		{
+			return s_Instance->IsMouseButtonPressedImpl(button);
+		}
+		inline static float GetMouseX()
+		{
+			return s_Instance->GetMouseXImpl();
+		}
+		inline static float GetMouseY()
+		{
+			return s_Instance->GetMouseYImpl();
+		}
 
 	protected:
 		virtual bool IsKeyPressedImpl(KeyCode keyCode) = 0;
@@ -21,6 +33,6 @@ namespace ptl
 		virtual float GetMouseYImpl() = 0;
 
 	private:
-		static Input* s_Instance;
+		static Input *s_Instance;
 	};
-}
+} // namespace ptl

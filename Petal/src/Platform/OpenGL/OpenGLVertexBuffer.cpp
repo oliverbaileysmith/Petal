@@ -3,7 +3,7 @@
 
 namespace ptl
 {
-	OpenGLVertexBuffer::OpenGLVertexBuffer(float* vertices, uint32_t size)
+	OpenGLVertexBuffer::OpenGLVertexBuffer(float *vertices, uint32_t size)
 	{
 		glCreateBuffers(1, &m_ID);
 		glBindBuffer(GL_ARRAY_BUFFER, m_ID);
@@ -25,13 +25,13 @@ namespace ptl
 		glBindBuffer(GL_ARRAY_BUFFER, 0);
 	}
 
-	void OpenGLVertexBuffer::SetLayout(const VertexBufferLayout& layout)
+	void OpenGLVertexBuffer::SetLayout(const VertexBufferLayout &layout)
 	{
 		m_Layout = layout;
 	}
 
-	const VertexBufferLayout& OpenGLVertexBuffer::GetLayout() const
+	const VertexBufferLayout &OpenGLVertexBuffer::GetLayout() const
 	{
 		return m_Layout;
 	}
-}
+} // namespace ptl

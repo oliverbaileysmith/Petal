@@ -7,25 +7,29 @@
 
 namespace ptl
 {
-	Input* Input::s_Instance = new WindowsInput();
+	Input *Input::s_Instance = new WindowsInput();
 
 	bool WindowsInput::IsKeyPressedImpl(KeyCode keyCode)
 	{
-		GLFWwindow* window = static_cast<GLFWwindow*>(Application::Get().GetWindow().GetNativeWindow());
+		GLFWwindow *window = static_cast<GLFWwindow *>(
+			Application::Get().GetWindow().GetNativeWindow());
 		int32_t state = glfwGetKey(window, PtlToGLFWKeyCode(keyCode));
 		return (state == GLFW_PRESS || state == GLFW_REPEAT);
 	}
 
 	bool WindowsInput::IsMouseButtonPressedImpl(MouseButtonCode button)
 	{
-		GLFWwindow* window = static_cast<GLFWwindow*>(Application::Get().GetWindow().GetNativeWindow());
-		int32_t state = glfwGetMouseButton(window, PtlToGLFWMouseButtonCode(button));
+		GLFWwindow *window = static_cast<GLFWwindow *>(
+			Application::Get().GetWindow().GetNativeWindow());
+		int32_t state =
+			glfwGetMouseButton(window, PtlToGLFWMouseButtonCode(button));
 		return state == GLFW_PRESS;
 	}
 
 	float WindowsInput::GetMouseXImpl()
 	{
-		GLFWwindow* window = static_cast<GLFWwindow*>(Application::Get().GetWindow().GetNativeWindow());
+		GLFWwindow *window = static_cast<GLFWwindow *>(
+			Application::Get().GetWindow().GetNativeWindow());
 		double mouseX, mouseY;
 		glfwGetCursorPos(window, &mouseX, &mouseY);
 
@@ -34,7 +38,8 @@ namespace ptl
 
 	float WindowsInput::GetMouseYImpl()
 	{
-		GLFWwindow* window = static_cast<GLFWwindow*>(Application::Get().GetWindow().GetNativeWindow());
+		GLFWwindow *window = static_cast<GLFWwindow *>(
+			Application::Get().GetWindow().GetNativeWindow());
 		double mouseX, mouseY;
 		glfwGetCursorPos(window, &mouseX, &mouseY);
 
@@ -60,4 +65,4 @@ namespace ptl
 	{
 		return (MouseButtonCode)button;
 	}
-}
+} // namespace ptl

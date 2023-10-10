@@ -7,7 +7,7 @@ namespace ptl
 	class OpenGLTexture2D : public Texture2D
 	{
 	public:
-		OpenGLTexture2D(const std::string& path);
+		OpenGLTexture2D(const std::string &path);
 		virtual ~OpenGLTexture2D();
 
 		virtual uint32_t GetWidth() const override;
@@ -21,4 +21,4 @@ namespace ptl
 		uint32_t m_Height;
 		uint32_t m_ID;
 	};
-}
+} // namespace ptl

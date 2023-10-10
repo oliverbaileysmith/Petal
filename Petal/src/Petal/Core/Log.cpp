@@ -18,4 +18,4 @@ namespace ptl
 		s_ClientLogger = spdlog::stdout_color_mt("CLIENT");
 		s_ClientLogger->set_level(spdlog::level::trace);
 	}
-}
+} // namespace ptl

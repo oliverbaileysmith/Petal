@@ -10,13 +10,13 @@ namespace ptl
 	{
 		switch (Renderer::GetAPI())
 		{
-			case RendererAPI::API::None:
-				PTL_CORE_ASSERT(false, "RenderAPI::None not supported");
-				return nullptr;
-			case RendererAPI::API::OpenGL:
-				return std::make_shared<OpenGLVertexArray>();
+		case RendererAPI::API::None:
+			PTL_CORE_ASSERT(false, "RenderAPI::None not supported");
+			return nullptr;
+		case RendererAPI::API::OpenGL:
+			return std::make_shared<OpenGLVertexArray>();
 		}
 		PTL_CORE_ASSERT(false, "Unknown RenderAPI");
 		return nullptr;
 	}
-}
+} // namespace ptl

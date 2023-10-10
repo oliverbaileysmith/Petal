@@ -9,17 +9,17 @@ namespace ptl
 	class OpenGLVertexBuffer : public VertexBuffer
 	{
 	public:
-		OpenGLVertexBuffer(float* vertices, uint32_t size);
+		OpenGLVertexBuffer(float *vertices, uint32_t size);
 		virtual ~OpenGLVertexBuffer() override;
-		
+
 		virtual void Bind() const override;
 		virtual void Unbind() const override;
 
-		virtual void SetLayout(const VertexBufferLayout& layout) override;
-		virtual const VertexBufferLayout& GetLayout() const override;
+		virtual void SetLayout(const VertexBufferLayout &layout) override;
+		virtual const VertexBufferLayout &GetLayout() const override;
 
 	private:
 		uint32_t m_ID;
 		VertexBufferLayout m_Layout;
 	};
-}
+} // namespace ptl

@@ -6,98 +6,100 @@ class SandboxLayer : public ptl::Layer
 {
 public:
 	SandboxLayer()
-		: Layer("Sandbox"),
-		m_Cube1Position(0.5f), m_Cube1Transform(1.0f),
-		m_Cube2Position(-0.5f), m_Cube2Transform(1.0f),
-		m_DirLightDirection(1.0f, -1.0f, -1.0f),
-		m_PointLight1Position(1.5f), m_PointLight1Transform(glm::translate(glm::mat4(1.0f), m_PointLight1Position)),
-		m_PointLight2Position(-1.5f), m_PointLight2Transform(glm::translate(glm::mat4(1.0f), m_PointLight2Position)),
-		m_DirLightAmbient(0.1), m_DirLightDiffuse(0.3f), m_DirLightSpecular(1.0f),
-		m_PointLight1Ambient(0.0f, 0.2f, 0.0f), m_PointLight1Diffuse(0.1f, 0.5f, 0.1f), m_PointLight1Specular(1.0f),
-		m_PointLight2Ambient(0.2f, 0.0f, 0.0f), m_PointLight2Diffuse(0.5f, 0.1f, 0.1f), m_PointLight2Specular(1.0f),
-		m_DirLight(std::make_shared<ptl::DirectionalLight>(m_DirLightDirection, m_DirLightAmbient, m_DirLightDiffuse, m_DirLightSpecular)),
-		m_PointLights(), m_CameraPos(0.0f, 0.0f, 5.0f), m_CameraEuler(0.0f, -90.0f, 0.0f),
-		m_Camera(45.0f, 1280.0f, 720.0f, 0.1f, 100.0f)
+		: Layer("Sandbox"), m_Cube1Position(0.5f), m_Cube1Transform(1.0f),
+		  m_Cube2Position(-0.5f), m_Cube2Transform(1.0f),
+		  m_DirLightDirection(1.0f, -1.0f, -1.0f), m_PointLight1Position(1.5f),
+		  m_PointLight1Transform(
+			  glm::translate(glm::mat4(1.0f), m_PointLight1Position)),
+		  m_PointLight2Position(-1.5f),
+		  m_PointLight2Transform(
+			  glm::translate(glm::mat4(1.0f), m_PointLight2Position)),
+		  m_DirLightAmbient(0.1), m_DirLightDiffuse(0.3f),
+		  m_DirLightSpecular(1.0f), m_PointLight1Ambient(0.0f, 0.2f, 0.0f),
+		  m_PointLight1Diffuse(0.1f, 0.5f, 0.1f), m_PointLight1Specular(1.0f),
+		  m_PointLight2Ambient(0.2f, 0.0f, 0.0f),
+		  m_PointLight2Diffuse(0.5f, 0.1f, 0.1f), m_PointLight2Specular(1.0f),
+		  m_DirLight(
+			  std::make_shared<ptl::DirectionalLight>(m_DirLightDirection,
+				  m_DirLightAmbient, m_DirLightDiffuse, m_DirLightSpecular)),
+		  m_PointLights(), m_CameraPos(0.0f, 0.0f, 5.0f),
+		  m_CameraEuler(0.0f, -90.0f, 0.0f),
+		  m_Camera(45.0f, 1280.0f, 720.0f, 0.1f, 100.0f)
 	{
-
 	}
 
 	virtual void Init() override
 	{
 		// Cube setup
-		float cubeVertices[8 * 24] = {
-			-0.5f, -0.5f,  0.5f,  0.0f,  0.0f,  1.0f, 0.0f, 0.0f, // Front
-			 0.5f, -0.5f,  0.5f,  0.0f,  0.0f,  1.0f, 1.0f, 0.0f,
-			 0.5f,  0.5f,  0.5f,  0.0f,  0.0f,  1.0f, 1.0f, 1.0f,
-			-0.5f,  0.5f,  0.5f,  0.0f,  0.0f,  1.0f, 0.0f, 1.0f,
+		float cubeVertices[8 * 24] = {-0.5f, -0.5f, 0.5f, 0.0f, 0.0f, 1.0f,
+			0.0f, 0.0f, // Front
+			0.5f, -0.5f, 0.5f, 0.0f, 0.0f, 1.0f, 1.0f, 0.0f, 0.5f, 0.5f, 0.5f,
+			0.0f, 0.0f, 1.0f, 1.0f, 1.0f, -0.5f, 0.5f, 0.5f, 0.0f, 0.0f, 1.0f,
+			0.0f, 1.0f,
 
-			 0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f, 0.0f, 0.0f, // Back
-			-0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f, 1.0f, 0.0f,
-			-0.5f,  0.5f, -0.5f,  0.0f,  0.0f, -1.0f, 1.0f, 1.0f,
-			 0.5f,  0.5f, -0.5f,  0.0f,  0.0f, -1.0f, 0.0f, 1.0f,
+			0.5f, -0.5f, -0.5f, 0.0f, 0.0f, -1.0f, 0.0f, 0.0f, // Back
+			-0.5f, -0.5f, -0.5f, 0.0f, 0.0f, -1.0f, 1.0f, 0.0f, -0.5f, 0.5f,
+			-0.5f, 0.0f, 0.0f, -1.0f, 1.0f, 1.0f, 0.5f, 0.5f, -0.5f, 0.0f, 0.0f,
+			-1.0f, 0.0f, 1.0f,
 
-			 0.5f, -0.5f,  0.5f,  1.0f,  0.0f,  0.0f, 0.0f, 0.0f, // Right
-			 0.5f, -0.5f, -0.5f,  1.0f,  0.0f,  0.0f, 1.0f, 0.0f,
-			 0.5f,  0.5f, -0.5f,  1.0f,  0.0f,  0.0f, 1.0f, 1.0f,
-			 0.5f,  0.5f,  0.5f,  1.0f,  0.0f,  0.0f, 0.0f, 1.0f,
+			0.5f, -0.5f, 0.5f, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f, // Right
+			0.5f, -0.5f, -0.5f, 1.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.5f, 0.5f, -0.5f,
+			1.0f, 0.0f, 0.0f, 1.0f, 1.0f, 0.5f, 0.5f, 0.5f, 1.0f, 0.0f, 0.0f,
+			0.0f, 1.0f,
 
-			-0.5f, -0.5f, -0.5f, -1.0f,  0.0f,  0.0f, 0.0f, 0.0f, // Left
-			-0.5f, -0.5f,  0.5f, -1.0f,  0.0f,  0.0f, 1.0f, 0.0f,
-			-0.5f,  0.5f,  0.5f, -1.0f,  0.0f,  0.0f, 1.0f, 1.0f,
-			-0.5f,  0.5f, -0.5f, -1.0f,  0.0f,  0.0f, 0.0f, 1.0f,
+			-0.5f, -0.5f, -0.5f, -1.0f, 0.0f, 0.0f, 0.0f, 0.0f, // Left
+			-0.5f, -0.5f, 0.5f, -1.0f, 0.0f, 0.0f, 1.0f, 0.0f, -0.5f, 0.5f,
+			0.5f, -1.0f, 0.0f, 0.0f, 1.0f, 1.0f, -0.5f, 0.5f, -0.5f, -1.0f,
+			0.0f, 0.0f, 0.0f, 1.0f,
 
-			-0.5f,  0.5f,  0.5f,  0.0f,  1.0f,  0.0f, 0.0f, 0.0f, // Top
-			 0.5f,  0.5f,  0.5f,  0.0f,  1.0f,  0.0f, 1.0f, 0.0f,
-			 0.5f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f, 1.0f, 1.0f,
-			-0.5f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f, 0.0f, 1.0f,
+			-0.5f, 0.5f, 0.5f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, // Top
+			0.5f, 0.5f, 0.5f, 0.0f, 1.0f, 0.0f, 1.0f, 0.0f, 0.5f, 0.5f, -0.5f,
+			0.0f, 1.0f, 0.0f, 1.0f, 1.0f, -0.5f, 0.5f, -0.5f, 0.0f, 1.0f, 0.0f,
+			0.0f, 1.0f,
 
-			-0.5f, -0.5f, -0.5f,  0.0f, -1.0f,  0.0f, 0.0f, 0.0f, // Bottom
-			 0.5f, -0.5f, -0.5f,  0.0f, -1.0f,  0.0f, 1.0f, 0.0f,
-			 0.5f, -0.5f,  0.5f,  0.0f, -1.0f,  0.0f, 1.0f, 1.0f,
-			-0.5f, -0.5f,  0.5f,  0.0f, -1.0f,  0.0f, 0.0f, 1.0f
-		};
+			-0.5f, -0.5f, -0.5f, 0.0f, -1.0f, 0.0f, 0.0f, 0.0f, // Bottom
+			0.5f, -0.5f, -0.5f, 0.0f, -1.0f, 0.0f, 1.0f, 0.0f, 0.5f, -0.5f,
+			0.5f, 0.0f, -1.0f, 0.0f, 1.0f, 1.0f, -0.5f, -0.5f, 0.5f, 0.0f,
+			-1.0f, 0.0f, 0.0f, 1.0f};
 
 		const uint32_t nCubeIndices = 36;
-		uint32_t cubeIndices[nCubeIndices] = {
-			 0,  1,  2, // Front
-			 2,  3,  0,
-			 4,  5,  6, // Back
-			 6,  7,  4,
-			 8,  9, 10, // Right
-			10, 11,  8,
-			12, 13, 14, // Left
-			14, 15, 12,
-			16, 17, 18, // Top
-			18, 19, 16,
-			20, 21, 22, // Bottom
-			22, 23, 20
-		};
+		uint32_t cubeIndices[nCubeIndices] = {0, 1, 2, // Front
+			2, 3, 0, 4, 5, 6,						   // Back
+			6, 7, 4, 8, 9, 10,						   // Right
+			10, 11, 8, 12, 13, 14,					   // Left
+			14, 15, 12, 16, 17, 18,					   // Top
+			18, 19, 16, 20, 21, 22,					   // Bottom
+			22, 23, 20};
 
 		m_CubeVA = ptl::VertexArray::Create();
 
-		ptl::Ref<ptl::VertexBuffer> cubeVB = ptl::VertexBuffer::Create(cubeVertices, sizeof(cubeVertices));
+		ptl::Ref<ptl::VertexBuffer> cubeVB =
+			ptl::VertexBuffer::Create(cubeVertices, sizeof(cubeVertices));
 		cubeVB->Bind();
 
 		std::vector<ptl::VertexBufferElement> cubeElements = {
 			{ptl::ShaderDataType::Float3, "a_Position"},
 			{ptl::ShaderDataType::Float3, "a_Normal"},
-			{ptl::ShaderDataType::Float2, "a_TexCoords"}
-		};
+			{ptl::ShaderDataType::Float2, "a_TexCoords"}};
 		ptl::VertexBufferLayout cubeLayout(cubeElements);
 
 		cubeVB->SetLayout(cubeLayout);
 		m_CubeVA->AddVertexBuffer(cubeVB);
 
-		ptl::Ref<ptl::IndexBuffer> cubeIB = ptl::IndexBuffer::Create(cubeIndices, nCubeIndices);
+		ptl::Ref<ptl::IndexBuffer> cubeIB =
+			ptl::IndexBuffer::Create(cubeIndices, nCubeIndices);
 		cubeIB->Bind();
 		m_CubeVA->AddIndexBuffer(cubeIB);
 
 		// Material setup
 
-		m_CubeDiffuseTexture = ptl::Texture2D::Create("res/textures/crate_diffuse.png");
-		m_CubeSpecularTexture = ptl::Texture2D::Create("res/textures/crate_specular.png");
+		m_CubeDiffuseTexture =
+			ptl::Texture2D::Create("res/textures/crate_diffuse.png");
+		m_CubeSpecularTexture =
+			ptl::Texture2D::Create("res/textures/crate_specular.png");
 
-		m_CubeMaterial = std::make_shared<ptl::PhongMaterial>(glm::vec3(0.5f), glm::vec3(0.5f), glm::vec3(0.5f), 32.0f);
+		m_CubeMaterial = std::make_shared<ptl::PhongMaterial>(glm::vec3(0.5f),
+			glm::vec3(0.5f), glm::vec3(0.5f), 32.0f);
 		m_LampMaterial = std::make_shared<ptl::LampMaterial>(glm::vec3(1.0f));
 
 		m_CubeMaterial->AddAmbientDiffuseMap(m_CubeDiffuseTexture, 0);
@@ -106,14 +108,15 @@ public:
 		m_CubeMaterial->EnableSpecularMap();
 
 		// Light setup
-		m_PointLights.push_back(std::make_shared<ptl::PointLight>(m_PointLight1Position, m_PointLight1Ambient, m_PointLight1Diffuse, m_PointLight1Specular, 1.0f, 0.09f, 0.032f));
-		m_PointLights.push_back(std::make_shared<ptl::PointLight>(m_PointLight2Position, m_PointLight2Ambient, m_PointLight2Diffuse, m_PointLight2Specular, 1.0f, 0.09f, 0.032f));
+		m_PointLights.push_back(std::make_shared<ptl::PointLight>(
+			m_PointLight1Position, m_PointLight1Ambient, m_PointLight1Diffuse,
+			m_PointLight1Specular, 1.0f, 0.09f, 0.032f));
+		m_PointLights.push_back(std::make_shared<ptl::PointLight>(
+			m_PointLight2Position, m_PointLight2Ambient, m_PointLight2Diffuse,
+			m_PointLight2Specular, 1.0f, 0.09f, 0.032f));
 	}
 
-	virtual void ShutDown() override
-	{
-
-	}
+	virtual void ShutDown() override {}
 
 	virtual void OnUpdate(ptl::Timestep timestep) override
 	{
@@ -158,12 +161,16 @@ public:
 		m_Cube2Transform = glm::translate(glm::mat4(1.0f), m_Cube2Position);
 
 		m_PointLight1Transform = glm::mat4(1.0f);
-		m_PointLight1Transform = glm::translate(m_PointLight1Transform, m_PointLight1Position);
-		m_PointLight1Transform = glm::scale(m_PointLight1Transform, glm::vec3(0.2f));
+		m_PointLight1Transform =
+			glm::translate(m_PointLight1Transform, m_PointLight1Position);
+		m_PointLight1Transform =
+			glm::scale(m_PointLight1Transform, glm::vec3(0.2f));
 
 		m_PointLight2Transform = glm::mat4(1.0f);
-		m_PointLight2Transform = glm::translate(m_PointLight2Transform, m_PointLight2Position);
-		m_PointLight2Transform = glm::scale(m_PointLight2Transform, glm::vec3(0.2f));
+		m_PointLight2Transform =
+			glm::translate(m_PointLight2Transform, m_PointLight2Position);
+		m_PointLight2Transform =
+			glm::scale(m_PointLight2Transform, glm::vec3(0.2f));
 
 		// Update lights
 		m_DirLight->Direction = m_DirLightDirection;
@@ -172,7 +179,7 @@ public:
 		m_DirLight->Specular = m_DirLightSpecular;
 
 		if (m_PointLights.size() > 0)
-		{ 
+		{
 			m_PointLights[0]->Position = m_PointLight1Position;
 			m_PointLights[0]->Ambient = m_PointLight1Ambient;
 			m_PointLights[0]->Diffuse = m_PointLight1Diffuse;
@@ -180,7 +187,7 @@ public:
 		}
 
 		if (m_PointLights.size() > 1)
-		{ 
+		{
 			m_PointLights[1]->Position = m_PointLight2Position;
 			m_PointLights[1]->Ambient = m_PointLight2Ambient;
 			m_PointLights[1]->Diffuse = m_PointLight2Diffuse;
@@ -188,7 +195,7 @@ public:
 		}
 
 		// Render
-		ptl::Renderer::SetClearColor({ 0.1f, 0.1f, 0.1f, 1.0f });
+		ptl::Renderer::SetClearColor({0.1f, 0.1f, 0.1f, 1.0f});
 		ptl::Renderer::Clear();
 
 		ptl::Renderer::BeginScene(m_Camera, m_PointLights, m_DirLight);
@@ -204,11 +211,13 @@ public:
 		ptl::Renderer::EndScene();
 	}
 
-	virtual void OnEvent(ptl::Event& event) override
+	virtual void OnEvent(ptl::Event &event) override
 	{
 		ptl::EventDispatcher dispatcher(event);
-		dispatcher.Dispatch<ptl::MouseMoveEvent>(PTL_BIND_EVENT_FN(SandboxLayer::OnMouseMove));
-		dispatcher.Dispatch<ptl::WindowResizeEvent>(PTL_BIND_EVENT_FN(SandboxLayer::OnWindowResize));
+		dispatcher.Dispatch<ptl::MouseMoveEvent>(
+			PTL_BIND_EVENT_FN(SandboxLayer::OnMouseMove));
+		dispatcher.Dispatch<ptl::WindowResizeEvent>(
+			PTL_BIND_EVENT_FN(SandboxLayer::OnWindowResize));
 	}
 
 	virtual void OnImGuiRender() override
@@ -216,9 +225,12 @@ public:
 		ImGui::Begin("Objects");
 		ImGui::SliderFloat3("Cube 1 position", &m_Cube1Position.x, -2.0f, 2.0f);
 		ImGui::SliderFloat3("Cube 2 position", &m_Cube2Position.x, -2.0f, 2.0f);
-		ImGui::SliderFloat3("Dir light direction", &m_DirLightDirection.x, -2.0f, 2.0f);
-		ImGui::SliderFloat3("Point light 1 position", &m_PointLight1Position.x, -2.0f, 2.0f);
-		ImGui::SliderFloat3("Point light 2 position", &m_PointLight2Position.x, -2.0f, 2.0f);
+		ImGui::SliderFloat3("Dir light direction", &m_DirLightDirection.x,
+			-2.0f, 2.0f);
+		ImGui::SliderFloat3("Point light 1 position", &m_PointLight1Position.x,
+			-2.0f, 2.0f);
+		ImGui::SliderFloat3("Point light 2 position", &m_PointLight2Position.x,
+			-2.0f, 2.0f);
 
 		if (ImGui::Button("Enable diffuse map"))
 			m_CubeMaterial->EnableAmbientDiffuseMap();
@@ -244,12 +256,13 @@ public:
 
 		ImGui::Begin("Camera");
 		ImGui::SliderFloat3("Camera position", &m_CameraPos.x, -5.0f, 5.0f);
-		ImGui::SliderFloat3("Camera rotation", &m_CameraEuler.x, -360.0f, 360.0f);
+		ImGui::SliderFloat3("Camera rotation", &m_CameraEuler.x, -360.0f,
+			360.0f);
 		ImGui::End();
 	}
 
 private:
-	bool OnMouseMove(ptl::MouseMoveEvent& event)
+	bool OnMouseMove(ptl::MouseMoveEvent &event)
 	{
 		float x = event.GetXPos();
 		float y = event.GetYPos();
@@ -262,15 +275,17 @@ private:
 			m_CameraEuler.y += deltaX * m_MouseSensitivity;
 			m_CameraEuler.x += deltaY * m_MouseSensitivity;
 
-			if (m_CameraEuler.x > 89.0f) m_CameraEuler.x = 89.0f;
-			if (m_CameraEuler.x < -89.0f) m_CameraEuler.x = -89.0f;
+			if (m_CameraEuler.x > 89.0f)
+				m_CameraEuler.x = 89.0f;
+			if (m_CameraEuler.x < -89.0f)
+				m_CameraEuler.x = -89.0f;
 		}
 		m_LastMouseX = x;
 		m_LastMouseY = y;
 		return true;
 	}
 
-	bool OnWindowResize(ptl::WindowResizeEvent& event)
+	bool OnWindowResize(ptl::WindowResizeEvent &event)
 	{
 		m_Camera.SetViewport((float)event.GetWidth(), (float)event.GetHeight());
 		return false;
@@ -334,13 +349,10 @@ public:
 		PushLayer(new SandboxLayer());
 	}
 
-	~Sandbox()
-	{
-
-	}
+	~Sandbox() {}
 };
 
-ptl::Application* ptl::CreateApplication()
+ptl::Application *ptl::CreateApplication()
 {
 	return new Sandbox();
 }

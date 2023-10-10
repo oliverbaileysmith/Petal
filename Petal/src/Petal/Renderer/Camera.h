@@ -7,21 +7,22 @@ namespace ptl
 	class Camera
 	{
 	public:
-		Camera(float vFOV, float viewportWidth, float viewportHeight, float nearClip, float farClip);
+		Camera(float vFOV, float viewportWidth, float viewportHeight,
+			float nearClip, float farClip);
 
-		void SetPosition(const glm::vec3& position);
-		void SetEuler(const glm::vec3& euler);
+		void SetPosition(const glm::vec3 &position);
+		void SetEuler(const glm::vec3 &euler);
 		void SetViewport(float width, float height);
 
 		void Update();
 
-		const glm::vec3& GetPosition() const;
-		const glm::vec3& GetEuler() const;
-		const glm::vec3& Front() const;
-		const glm::vec3& Right() const;
-		const glm::vec3& Up() const;
+		const glm::vec3 &GetPosition() const;
+		const glm::vec3 &GetEuler() const;
+		const glm::vec3 &Front() const;
+		const glm::vec3 &Right() const;
+		const glm::vec3 &Up() const;
 
-		const glm::mat4& GetViewProj() const;
+		const glm::mat4 &GetViewProj() const;
 
 	private:
 		void CalculateViewMatrix();
@@ -47,4 +48,4 @@ namespace ptl
 		bool m_ViewDirty = true; // Requires recalculation of view matrix
 		bool m_ProjDirty = true; // Requires recalculation of projection matrix
 	};
-}
+} // namespace ptl

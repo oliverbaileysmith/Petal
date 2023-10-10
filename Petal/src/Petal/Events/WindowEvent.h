@@ -10,9 +10,18 @@ namespace ptl
 		WindowCloseEvent() = default;
 		~WindowCloseEvent() = default;
 
-		static EventType GetStaticType() { return EventType::WindowClose; }
-		virtual EventType GetEventType() const override { return GetStaticType(); }
-		virtual const char* GetName() const override { return "WindowCloseEvent"; }
+		static EventType GetStaticType()
+		{
+			return EventType::WindowClose;
+		}
+		virtual EventType GetEventType() const override
+		{
+			return GetStaticType();
+		}
+		virtual const char *GetName() const override
+		{
+			return "WindowCloseEvent";
+		}
 	};
 
 	class WindowResizeEvent : public Event
@@ -24,12 +33,27 @@ namespace ptl
 		}
 		~WindowResizeEvent() = default;
 
-		uint32_t GetWidth() const { return m_Width; }
-		uint32_t GetHeight() const { return m_Height; }
+		uint32_t GetWidth() const
+		{
+			return m_Width;
+		}
+		uint32_t GetHeight() const
+		{
+			return m_Height;
+		}
 
-		static EventType GetStaticType() { return EventType::WindowResize; }
-		virtual EventType GetEventType() const override { return GetStaticType(); }
-		virtual const char* GetName() const override { return "WindowResizeEvent"; }
+		static EventType GetStaticType()
+		{
+			return EventType::WindowResize;
+		}
+		virtual EventType GetEventType() const override
+		{
+			return GetStaticType();
+		}
+		virtual const char *GetName() const override
+		{
+			return "WindowResizeEvent";
+		}
 		virtual std::string ToString() const override
 		{
 			std::stringstream ss;
@@ -48,9 +72,18 @@ namespace ptl
 		WindowFocusEvent() = default;
 		~WindowFocusEvent() = default;
 
-		static EventType GetStaticType() { return EventType::WindowFocus; }
-		virtual EventType GetEventType() const override { return GetStaticType(); }
-		virtual const char* GetName() const override { return "WindowFocusEvent"; }
+		static EventType GetStaticType()
+		{
+			return EventType::WindowFocus;
+		}
+		virtual EventType GetEventType() const override
+		{
+			return GetStaticType();
+		}
+		virtual const char *GetName() const override
+		{
+			return "WindowFocusEvent";
+		}
 	};
 
 	class WindowUnfocusEvent : public Event
@@ -59,26 +92,47 @@ namespace ptl
 		WindowUnfocusEvent() = default;
 		~WindowUnfocusEvent() = default;
 
-		static EventType GetStaticType() { return EventType::WindowUnfocus; }
-		virtual EventType GetEventType() const override { return GetStaticType(); }
-		virtual const char* GetName() const override { return "WindowUnfocusEvent"; }
+		static EventType GetStaticType()
+		{
+			return EventType::WindowUnfocus;
+		}
+		virtual EventType GetEventType() const override
+		{
+			return GetStaticType();
+		}
+		virtual const char *GetName() const override
+		{
+			return "WindowUnfocusEvent";
+		}
 	};
 
 	class WindowMoveEvent : public Event
 	{
 	public:
-		WindowMoveEvent(uint32_t x, uint32_t y)
-			: m_X(x), m_Y(y)
-		{
-		}
+		WindowMoveEvent(uint32_t x, uint32_t y) : m_X(x), m_Y(y) {}
 		~WindowMoveEvent() = default;
 
-		uint32_t GetXPos() const { return m_X; }
-		uint32_t GetYPos() const { return m_Y; }
+		uint32_t GetXPos() const
+		{
+			return m_X;
+		}
+		uint32_t GetYPos() const
+		{
+			return m_Y;
+		}
 
-		static EventType GetStaticType() { return EventType::WindowMove; }
-		virtual EventType GetEventType() const override { return GetStaticType(); }
-		virtual const char* GetName() const override { return "WindowMoveEvent"; }
+		static EventType GetStaticType()
+		{
+			return EventType::WindowMove;
+		}
+		virtual EventType GetEventType() const override
+		{
+			return GetStaticType();
+		}
+		virtual const char *GetName() const override
+		{
+			return "WindowMoveEvent";
+		}
 		virtual std::string ToString() const override
 		{
 			std::stringstream ss;
@@ -90,4 +144,4 @@ namespace ptl
 		uint32_t m_X;
 		uint32_t m_Y;
 	};
-}
+} // namespace ptl

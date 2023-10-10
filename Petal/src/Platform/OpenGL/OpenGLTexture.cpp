@@ -6,13 +6,12 @@
 
 namespace ptl
 {
-	OpenGLTexture2D::OpenGLTexture2D(const std::string& path)
-		: m_Path(path)
+	OpenGLTexture2D::OpenGLTexture2D(const std::string &path) : m_Path(path)
 	{
 		// Load texture using stb_image
 		int32_t width, height, channels;
 		stbi_set_flip_vertically_on_load(true);
-		stbi_uc* data = stbi_load(path.c_str(), &width, &height, &channels, 0);
+		stbi_uc *data = stbi_load(path.c_str(), &width, &height, &channels, 0);
 		PTL_CORE_ASSERT(data, "Failed to load image into texture");
 
 		m_Width = width;
@@ -33,7 +32,8 @@ namespace ptl
 			dataFormat = GL_RGB;
 		}
 
-		PTL_CORE_ASSERT(internalFormat && dataFormat, "Texture format not supported");
+		PTL_CORE_ASSERT(internalFormat && dataFormat,
+			"Texture format not supported");
 
 		// Allocate memory on GPU for texture
 		glGenTextures(1, &m_ID);
@@ -46,7 +46,8 @@ namespace ptl
 		glTextureParameteri(m_ID, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
 
 		// Upload texture data to GPU
-		glTexImage2D(GL_TEXTURE_2D, 0, internalFormat, m_Width, m_Height, 0, dataFormat, GL_UNSIGNED_BYTE, data);
+		glTexImage2D(GL_TEXTURE_2D, 0, internalFormat, m_Width, m_Height, 0,
+			dataFormat, GL_UNSIGNED_BYTE, data);
 
 		// Unbind texture and free data from CPU
 		glBindTexture(GL_TEXTURE_2D, 0);
@@ -75,4 +76,4 @@ namespace ptl
 		glActiveTexture(GL_TEXTURE0 + slot);
 		glBindTexture(GL_TEXTURE_2D, m_ID);
 	}
-}
+} // namespace ptl

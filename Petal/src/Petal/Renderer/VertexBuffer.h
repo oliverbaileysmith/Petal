@@ -15,7 +15,8 @@ namespace ptl
 		bool Normalized;
 
 		VertexBufferElement();
-		VertexBufferElement(ShaderDataType type, const std::string& name, bool normalized = false);
+		VertexBufferElement(ShaderDataType type, const std::string &name,
+			bool normalized = false);
 
 		uint32_t GetComponentCount() const;
 	};
@@ -24,10 +25,10 @@ namespace ptl
 	{
 	public:
 		VertexBufferLayout();
-		VertexBufferLayout(const std::vector<VertexBufferElement>& elements);
+		VertexBufferLayout(const std::vector<VertexBufferElement> &elements);
 
 		uint32_t GetStride() const;
-		const std::vector<VertexBufferElement>& GetElements() const;
+		const std::vector<VertexBufferElement> &GetElements() const;
 
 		std::vector<VertexBufferElement>::iterator begin();
 		std::vector<VertexBufferElement>::iterator end();
@@ -49,10 +50,10 @@ namespace ptl
 
 		virtual void Bind() const = 0;
 		virtual void Unbind() const = 0;
-		
-		virtual void SetLayout(const VertexBufferLayout& layout) = 0;
-		virtual const VertexBufferLayout& GetLayout() const = 0;
 
-		static Ref<VertexBuffer> Create(float* vertices, uint32_t size);
+		virtual void SetLayout(const VertexBufferLayout &layout) = 0;
+		virtual const VertexBufferLayout &GetLayout() const = 0;
+
+		static Ref<VertexBuffer> Create(float *vertices, uint32_t size);
 	};
-}
+} // namespace ptl

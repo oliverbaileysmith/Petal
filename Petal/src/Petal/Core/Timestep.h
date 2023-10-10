@@ -5,11 +5,7 @@ namespace ptl
 	class Timestep
 	{
 	public:
-		Timestep(float time = 0.0f)
-			: m_Time(time)
-		{
-
-		}
+		Timestep(float time = 0.0f) : m_Time(time) {}
 
 		float GetSeconds() const
 		{
@@ -19,7 +15,8 @@ namespace ptl
 		{
 			return m_Time * 1000.0f;
 		}
+
 	private:
 		float m_Time;
 	};
-}
+} // namespace ptl
